@@ -762,7 +762,7 @@ class Blueprint {
     let nodeNum = 0;
     let buildingX = 0,
       buildingY = 0,
-      buildingZ = 0;
+      buildingZ = 10;
     for (let i = 0; i < inputData.length; i++) {
       if (direction < 0) {
         // 输入带不需要处理input，在最后加一个节点即可
@@ -771,7 +771,7 @@ class Blueprint {
       if (i === 0) {
         buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
         buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
+        buildingZ = 10;
         this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
       } else {
         buildingY += 1;
@@ -841,7 +841,7 @@ class Blueprint {
       if (direction < 0 && i === 0) {
         buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
         buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
+        buildingZ = 10;
         this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
       } else {
         buildingY += 1;
@@ -1563,7 +1563,7 @@ class Blueprint {
           this.occupiedArea[this.occupiedArea.length - 2].y2 +
           1 +
           buildingArea.centerPoint[0];
-        buildingZ = 0;
+        buildingZ = 10;
         this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x;
         if (
           buildingY + buildingArea.centerPoint[2] >
@@ -1584,7 +1584,7 @@ class Blueprint {
           buildingArea.centerPoint[0] +
           this.occupiedArea[this.occupiedArea.length - 1].y2 +
           1;
-        buildingZ = 0;
+        buildingZ = 10;
         this.occupiedArea.push({
           x1: 0,
           y1: buildingY - buildingArea.centerPoint[0],
