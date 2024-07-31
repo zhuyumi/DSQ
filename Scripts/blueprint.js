@@ -762,7 +762,7 @@ class Blueprint {
     let nodeNum = 0;
     let buildingX = 0,
       buildingY = 0,
-      buildingZ = 10;
+      buildingZ = 0;
     for (let i = 0; i < inputData.length; i++) {
       if (direction < 0) {
         // 输入带不需要处理input，在最后加一个节点即可
@@ -771,7 +771,7 @@ class Blueprint {
       if (i === 0) {
         buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
         buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 10;
+        buildingZ = 0;
         this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
       } else {
         buildingY += 1;
@@ -841,7 +841,7 @@ class Blueprint {
       if (direction < 0 && i === 0) {
         buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
         buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 10;
+        buildingZ = 0;
         this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
       } else {
         buildingY += 1;
@@ -1067,43 +1067,43 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y - 0.8, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y - 0.8, z: 0 },
+            { x: buildingOffset.x + 1, y: buildingOffset.y - 0.8, z: buildingOffset.z },
+            { x: buildingOffset.x + 2, y: buildingOffset.y - 0.8, z: buildingOffset.z },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y, z: 0 },
+            { x: buildingOffset.x + 1, y: buildingOffset.y, z: buildingOffset.z },
+            { x: buildingOffset.x + 2, y: buildingOffset.y, z: buildingOffset.z },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y + 0.8, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y + 0.8, z: 0 },
+            { x: buildingOffset.x + 1, y: buildingOffset.y + 0.8, z: buildingOffset.z },
+            { x: buildingOffset.x + 2, y: buildingOffset.y + 0.8, z: buildingOffset.z },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
@@ -1115,52 +1115,52 @@ class Blueprint {
         case 6:
           // data.offset = [{x: buildingOffset.x-1, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x-1, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 4:
           // data.offset = [{x: buildingOffset.x+1, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x+1, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 3:
           // data.offset = [{x: buildingOffset.x+2, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x+2, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
@@ -1171,50 +1171,50 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: 0 },
+            { x: buildingOffset.x - 3, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: buildingOffset.z },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y, z: 0 },
+            { x: buildingOffset.x - 3, y: buildingOffset.y, z: buildingOffset.z },
+            { x: buildingOffset.x - 4, y: buildingOffset.y, z: buildingOffset.z },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: 0 },
+            { x: buildingOffset.x - 3, y: buildingOffset.y + 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: buildingOffset.z },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y + 2, z: 0 },
+            { x: buildingOffset.x, y: buildingOffset.y + 1, z: buildingOffset.z },
+            { x: buildingOffset.x, y: buildingOffset.y + 2, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: 0 },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 1, z: buildingOffset.z },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1223,8 +1223,8 @@ class Blueprint {
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1233,8 +1233,8 @@ class Blueprint {
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1248,8 +1248,8 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 3, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 3, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1258,8 +1258,8 @@ class Blueprint {
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 3, z: 0 },
+            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 3, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1268,8 +1268,8 @@ class Blueprint {
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 3, z: 0 },
+            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 3, z: buildingOffset.z },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1278,8 +1278,8 @@ class Blueprint {
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y - 1, z: 0 },
+            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 5, y: buildingOffset.y - 1, z: buildingOffset.z },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1288,8 +1288,8 @@ class Blueprint {
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y, z: 0 },
+            { x: buildingOffset.x - 4, y: buildingOffset.y, z: buildingOffset.z },
+            { x: buildingOffset.x - 5, y: buildingOffset.y, z: buildingOffset.z },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1298,8 +1298,8 @@ class Blueprint {
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y + 1, z: 0 },
+            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: buildingOffset.z },
+            { x: buildingOffset.x - 5, y: buildingOffset.y + 1, z: buildingOffset.z },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1308,22 +1308,22 @@ class Blueprint {
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: 0 },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: buildingOffset.z },
+            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: buildingOffset.z },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
@@ -1502,27 +1502,27 @@ class Blueprint {
     let distance = 0;
     switch (category) {
       case productionCategory.smelter:
-        offset = { x: buildingOffset.x - 1, y: buildingOffset.y - 2, z: 0 };
+        offset = { x: buildingOffset.x - 1, y: buildingOffset.y - 2, z: buildingOffset.z };
         distance = 3;
         break;
       case productionCategory.assembling:
-        offset = { x: buildingOffset.x + 2, y: buildingOffset.y - 2, z: 0 };
+        offset = { x: buildingOffset.x + 2, y: buildingOffset.y - 2, z: buildingOffset.z };
         distance = 3;
         break;
       case productionCategory.plant:
-        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 2, z: 0 };
+        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 2, z: buildingOffset.z };
         distance = 7;
         break;
       case productionCategory.refinery:
-        offset = { x: buildingOffset.x - 3, y: buildingOffset.y - 2, z: 0 };
+        offset = { x: buildingOffset.x - 3, y: buildingOffset.y - 2, z: buildingOffset.z };
         distance = 7;
         break;
       case productionCategory.collider:
-        offset = { x: buildingOffset.x + 1, y: buildingOffset.y - 3, z: 0 };
+        offset = { x: buildingOffset.x + 1, y: buildingOffset.y - 3, z: buildingOffset.z };
         distance = 10;
         break;
       case productionCategory.lab:
-        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 3, z: 0 };
+        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 3, z: buildingOffset.z };
         distance = 6;
         break;
       default:
@@ -3818,3 +3818,6 @@ class Blueprint {
     return result;
   }
 }
+
+// todo:
+// buildingZ = 10; buildingZ = 0; 需要确定用什么
