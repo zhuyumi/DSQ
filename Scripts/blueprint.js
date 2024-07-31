@@ -1536,55 +1536,51 @@ class Blueprint {
   }
 
   newProductionBuilding(subRecipe) {
-    let hasTeslaTowerThisLine = false;
-    let teslaTowerDistance = 0;
-    for (let i = 0; i < subRecipe.building.num; i++) {
-      this.buildingIndex++;
+    let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
+    let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
+    for (let i = 0; i < subRecipe.building.num; i++) { // 遍历子配方中指定的建筑数量
+      this.buildingIndex++; // 建筑索引自增，用于追踪建筑数量
       this.lastProductionBuildingType =
-        buildingMap[subRecipe.building.name].category;
-      let buildingArea, buildingX, buildingY, buildingZ;
-      buildingArea = this.calculateBuildingArea(subRecipe);
-      // }
-      let needNewLine = false;
-      // console.log(this.occupiedArea)
-      // console.log(this.blueprintSize)
+        buildingMap[subRecipe.building.name].category; // 记录上一个生产建筑的类型
+      let buildingArea, buildingX, buildingY, buildingZ; // 声明变量用于存储建筑区域和坐标
+      buildingArea = this.calculateBuildingArea(subRecipe); // 根据子配方计算建筑面积
+      let needNewLine = false; // 标记是否需要换行开始新的建筑排列
       if (
         this.blueprintSize.x -
           this.occupiedArea[this.occupiedArea.length - 1].x2 >=
         buildingArea.x / 2
-      ) {
-        // 在当前行继续添加
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, sorterList: sorterList})
+      ) { // 检查当前行剩余空间是否足够放置新建筑
+        // 在当前行继续添加建筑
         buildingX =
           this.occupiedArea[this.occupiedArea.length - 1].x2 +
           1 +
-          buildingArea.centerPoint[3];
+          buildingArea.centerPoint[3]; // 计算建筑的X坐标
         buildingY =
           this.occupiedArea[this.occupiedArea.length - 2].y2 +
           1 +
-          buildingArea.centerPoint[0];
-        buildingZ = 10;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x;
+          buildingArea.centerPoint[0]; // 计算建筑的Y坐标
+        buildingZ = 10; // 设置建筑的Z坐标，默认为10
+        this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x; // 更新占用区域的x2坐标
         if (
           buildingY + buildingArea.centerPoint[2] >
           this.occupiedArea[this.occupiedArea.length - 1].y2
-        ) {
-          // 当一行中出现更宽（y轴方向为宽度）的建筑时，占地区域的y2需要更新
+        ) { // 如果建筑的宽度超出当前行的y2坐标
+          // 更新占地区域的y2坐标以适应更宽的建筑
           this.occupiedArea[this.occupiedArea.length - 1].y2 =
             buildingY + buildingArea.centerPoint[2];
         }
       } else {
-        // 新的一行
+        // 如果当前行空间不足，则开始新的一行
         needNewLine = true;
-        hasTeslaTowerThisLine = false;
-        teslaTowerDistance = 0;
-        // this.buildingArray.push([{index: this.buildingIndex, sorterList: sorterList}])
-        buildingX = buildingArea.centerPoint[3];
+        hasTeslaTowerThisLine = false; // 新行中尚未放置电力感应塔
+        teslaTowerDistance = 0; // 重置电力感应塔的距离计数
+        buildingX = buildingArea.centerPoint[3]; // 设置新行的建筑X坐标
         buildingY =
           buildingArea.centerPoint[0] +
           this.occupiedArea[this.occupiedArea.length - 1].y2 +
-          1;
-        buildingZ = 10;
+          1; // 设置新行的建筑Y坐标
+        buildingZ = 10; // 设置新行的建筑Z坐标
+        // 向占用区域数组中添加新行的信息
         this.occupiedArea.push({
           x1: 0,
           y1: buildingY - buildingArea.centerPoint[0],
@@ -1592,104 +1588,104 @@ class Blueprint {
           y2: buildingY + buildingArea.centerPoint[2],
         });
       }
-      let acceleratorMode = 0;
-      if (subRecipe.acceleratorMode === 1) {
-        acceleratorMode = 1;
+      let acceleratorMode = 0; // 初始化加速器模式标记
+      if (subRecipe.acceleratorMode === 1) { // 如果子配方中加速器模式被启用
+        acceleratorMode = 1; // 设置加速器模式
       }
-      let newBuilding = {
-        index: this.buildingIndex,
-        areaIndex: 0,
-        localOffset: [
+      let newBuilding = { // 创建新的建筑对象
+        index: this.buildingIndex, // 设置建筑索引
+        areaIndex: 0, // 区域索引，初始设置为0
+        localOffset: [ // 设置建筑的本地偏移坐标
           {
-            x: buildingX,
-            y: buildingY,
-            z: buildingZ,
+            x: buildingX, // 建筑的X坐标
+            y: buildingY, // 建筑的Y坐标
+            z: buildingZ, // 建筑的Z坐标
           },
           {
-            x: buildingX,
-            y: buildingY,
-            z: buildingZ,
+            x: buildingX, // 重复建筑的X坐标
+            y: buildingY, // 重复建筑的Y坐标
+            z: buildingZ, // 重复建筑的Z坐标
           },
         ],
-        yaw: buildingArea.yaw,
-        itemId: buildingMap[subRecipe.building.name].itemId,
-        modelIndex: buildingMap[subRecipe.building.name].modelIndex,
-        outputObjIdx: -1,
-        inputObjIdx: -1,
-        outputToSlot: 0,
-        inputFromSlot: 0,
-        outputFromSlot: 0,
-        inputToSlot: 0,
-        outputOffset: 0,
-        inputOffset: 0,
-        recipeId: parseInt(subRecipe.recipeID),
-        filterId: 0,
-        parameters: {
-          acceleratorMode: acceleratorMode,
+        yaw: buildingArea.yaw, // 设置建筑的偏航角
+        itemId: buildingMap[subRecipe.building.name].itemId, // 设置建筑的物品ID
+        modelIndex: buildingMap[subRecipe.building.name].modelIndex, // 设置建筑的模型索引
+        outputObjIdx: -1, // 输出对象索引，初始设置为-1
+        inputObjIdx: -1, // 输入对象索引，初始设置为-1
+        outputToSlot: 0, // 输出到槽位，初始设置为0
+        inputFromSlot: 0, // 从槽位输入，初始设置为0
+        outputFromSlot: 0, // 从槽位输出，初始设置为0
+        inputToSlot: 0, // 输入到槽位，初始设置为0
+        outputOffset: 0, // 输出偏移，初始设置为0
+        inputOffset: 0, // 输入偏移，初始设置为0
+        recipeId: parseInt(subRecipe.recipeID), // 解析并设置配方ID
+        filterId: 0, // 过滤器ID，初始设置为0
+        parameters: { // 设置额外参数
+          acceleratorMode: acceleratorMode, // 加速器模式
         },
       };
 
-      let stackLabBuildingIndexList = [];
-      let layers = 1;
+      let stackLabBuildingIndexList = []; // 声明堆叠实验室建筑索引列表
+      let layers = 1; // 初始化层数为1
       if (
         buildingMap[subRecipe.building.name].category === productionCategory.lab
-      ) {
-        // 堆叠处理研究站
+      ) { // 如果当前建筑是实验室类型
+        // 设置实验室建筑的输入输出槽位
         newBuilding.outputToSlot = 14;
         newBuilding.inputFromSlot = 15;
         newBuilding.outputFromSlot = 15;
         newBuilding.inputToSlot = 14;
-        newBuilding.parameters.researchMode = 1;
-        this.buildings.push(newBuilding);
+        newBuilding.parameters.researchMode = 1; // 设置研究模式
+        this.buildings.push(newBuilding); // 将新建筑添加到建筑列表
         for (
           i++;
           i < subRecipe.building.num && layers < this.config.maxLabLayers;
           i++, layers++
-        ) {
-          let labBuilding = this.getBuildingTemplate();
-          labBuilding.localOffset = [
+        ) { // 循环添加实验室建筑直到达到最大层数或建筑数
+          let labBuilding = this.getBuildingTemplate(); // 获取建筑模板
+          labBuilding.localOffset = [ // 设置实验室建筑的本地偏移
             { x: buildingX, y: buildingY, z: buildingZ },
             { x: buildingX, y: buildingY, z: buildingZ },
           ];
-          labBuilding.localOffset[0].z = buildingMap.lab.height * layers;
+          labBuilding.localOffset[0].z = buildingMap.lab.height * layers; // 设置堆叠的Z坐标
           labBuilding.localOffset[1].z = buildingMap.lab.height * layers;
-          labBuilding.yaw = newBuilding.yaw;
-          labBuilding.itemId = buildingMap[subRecipe.building.name].itemId;
-          labBuilding.modelIndex = buildingMap[subRecipe.building.name].modelIndex;
-          labBuilding.recipeId = parseInt(subRecipe.recipeID);
-          labBuilding.inputObjIdx = this.buildingIndex - 1;
-          labBuilding.outputToSlot = 14;
-          labBuilding.inputFromSlot = 15;
-          labBuilding.outputFromSlot = 15;
-          labBuilding.inputToSlot = 14;
-          labBuilding.parameters = {
-            acceleratorMode: acceleratorMode,
-            researchMode: 1,
+          labBuilding.yaw = newBuilding.yaw; // 设置堆叠建筑的偏航角
+          labBuilding.itemId = buildingMap[subRecipe.building.name].itemId; // 设置物品ID
+          labBuilding.modelIndex = buildingMap[subRecipe.building.name].modelIndex; // 设置模型索引
+          labBuilding.recipeId = parseInt(subRecipe.recipeID); // 设置配方ID
+          labBuilding.inputObjIdx = this.buildingIndex - 1; // 设置输入对象索引
+          labBuilding.outputToSlot = 14; // 设置输出到槽位
+          labBuilding.inputFromSlot = 15; // 设置从槽位输入
+          labBuilding.outputFromSlot = 15; // 设置从槽位输出
+          labBuilding.inputToSlot = 14; // 设置输入到槽位
+          labBuilding.parameters = { // 设置额外参数
+            acceleratorMode: acceleratorMode, // 加速器模式
+            researchMode: 1, // 研究模式
           };
-          this.buildings.push(labBuilding);
-          stackLabBuildingIndexList.push(this.buildingIndex);
+          this.buildings.push(labBuilding); // 将堆叠的实验室添加到建筑列表
+          stackLabBuildingIndexList.push(this.buildingIndex); // 将堆叠实验室的索引添加到列表
         }
-        i--;
+        i--; // 减少循环变量，以匹配外部循环的增加
       } else {
-        this.buildings.push(newBuilding);
+        this.buildings.push(newBuilding); // 如果不是实验室，直接添加新建筑到列表
       }
-      const nowBuildingIndex = newBuilding.index;
-      if (this.config.generateTeslaTower) {
+      const nowBuildingIndex = newBuilding.index; // 记录当前建筑的索引
+      if (this.config.generateTeslaTower) { // 如果配置中指定生成特斯拉塔
         if (
-          (this.config.teslaTowerLineInterval > 1 &&
+          (this.config.teslaTowerLineInterval > 1 && // 根据行间隔设置判断是否需要生成特斯拉塔
             ((this.buildingArray.length &&
               this.buildingArray.length % 2 === 0) ||
               (needNewLine && this.buildingArray.length % 2 === 1))) ||
           (this.config.teslaTowerLineInterval === 1 &&
             this.buildingArray.length)
         ) {
-          let teslaTowerOffset = this.calculateTeslaTowerOffset(
+          let teslaTowerOffset = this.calculateTeslaTowerOffset( // 计算特斯拉塔的偏移量
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category
           );
-          teslaTowerDistance += teslaTowerOffset.distance;
+          teslaTowerDistance += teslaTowerOffset.distance; // 累加到特斯拉塔的距离
           if (
-            (hasTeslaTowerThisLine &&
+            (hasTeslaTowerThisLine && // 判断是否放置特斯拉塔
               teslaTowerDistance >= this.config.teslaTowerInterval) ||
             (!hasTeslaTowerThisLine &&
               teslaTowerDistance >= this.config.teslaTowerInterval / 2) ||
@@ -1697,78 +1693,75 @@ class Blueprint {
               this.blueprintSize.x - buildingX < this.config.teslaTowerInterval)
           ) {
             // 生成电力感应塔
-            let teslaTower = this.getBuildingTemplate();
-            teslaTower.itemId = buildingMap.teslaTower.itemId;
-            teslaTower.modelIndex = buildingMap.teslaTower.modelIndex;
+            let teslaTower = this.getBuildingTemplate(); // 获取建筑模板
+            teslaTower.itemId = buildingMap.teslaTower.itemId; // 设置特斯拉塔的物品ID
+            teslaTower.modelIndex = buildingMap.teslaTower.modelIndex; // 设置特斯拉塔的模型索引
             teslaTower.localOffset = [
               teslaTowerOffset.offset,
               teslaTowerOffset.offset,
-            ];
-            teslaTowerDistance = 0;
-            hasTeslaTowerThisLine = true;
+            ]; // 设置特斯拉塔的本地偏移
+            teslaTowerDistance = 0; // 重置特斯拉塔距离
+            hasTeslaTowerThisLine = true; // 标记当前行已放置特斯拉塔
             this.buildingArray[this.buildingArray.length - 1].push({
               index: teslaTower.index,
               sorterList: [],
-            });
-            this.buildings.push(teslaTower);
+            }); // 将特斯拉塔添加到建筑数组中
+            this.buildings.push(teslaTower); // 将特斯拉塔添加到建筑列表
           }
         }
       }
 
       // 添加分拣器
-      let slotIndex = buildingMap[subRecipe.building.name].slotMaxIndex;
+      let slotIndex = buildingMap[subRecipe.building.name].slotMaxIndex; // 获取最大槽位索引
       let productionSpeed =
-        buildingMap[subRecipe.building.name].productionSpeed;
-      let sorterList = [];
-      let actual_building_num = Math.min(1, subRecipe.building.num - i); // 建筑不是整数的时候，最后一个建筑分拣器实际rate会更低
+        buildingMap[subRecipe.building.name].productionSpeed; // 获取生产速度
+      let sorterList = []; // 初始化分拣器列表
+      let actual_building_num = Math.min(1, subRecipe.building.num - i); // 计算实际的建筑数量，考虑到非整数情况
       if (
         buildingMap[subRecipe.building.name].category === productionCategory.lab
-      ) {
-        actual_building_num += stackLabBuildingIndexList.length;
+      ) { // 如果是实验室类型
+        actual_building_num += stackLabBuildingIndexList.length; // 增加堆叠实验室的数量
       }
 
-      let extra_rate = 1;
-      if (this.recipe.proliferator) {
-        if (subRecipe.acceleratorMode === 0) {
-          extra_rate += itemMap[this.recipe.proliferator].extra_rate;
-        } else if (subRecipe.acceleratorMode === 1) {
-          extra_rate += itemMap[this.recipe.proliferator].accelerate;
+      let extra_rate = 1; // 初始化额外增产比率
+      if (this.recipe.proliferator) { // 如果配方中有增产剂
+        if (subRecipe.acceleratorMode === 0) { // 如果没有启用加速模式
+          extra_rate += itemMap[this.recipe.proliferator].extra_rate; // 增加额外增产比率
+        } else if (subRecipe.acceleratorMode === 1) { // 如果启用了加速模式
+          extra_rate += itemMap[this.recipe.proliferator].accelerate; // 增加加速比率
         }
       }
 
-      for (let outputItem of subRecipe.output) {
+      for (let outputItem of subRecipe.output) { // 遍历所有输出项目
         let actual_rate =
-          outputItem.rate * productionSpeed * actual_building_num * extra_rate;
-        let sorter = buildingMap.sorterMk1;
-        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
-          // 一级分拣器不够用时直接使用三级分拣器，二级分拣器没太大价值，直接略过
-          sorter = buildingMap.sorterMk3;
+          outputItem.rate * productionSpeed * actual_building_num * extra_rate; // 计算实际产率
+        let sorter = buildingMap.sorterMk1; // 默认使用一级分拣器
+        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) { // 如果配置只使用三级分拣器或实际产率超过一级分拣器速度
+          sorter = buildingMap.sorterMk3; // 使用三级分拣器
         }
         if (buildingMap[subRecipe.building.name].category === productionCategory.lab &&
           actual_rate > buildingMap.sorterMk3.sortingSpeed
-        ) {
-          // 研究站层数过高时会出现一个3级分拣器无法满足运力的问题
-          let newSorter2 = this.getBuildingTemplate();
-          newSorter2.itemId = sorter.itemId;
-          newSorter2.modelIndex = sorter.modelIndex;
-          newSorter2.inputObjIdx = nowBuildingIndex;
-          newSorter2.outputToSlot = -1;
-          newSorter2.inputToSlot = 1;
-          newSorter2.inputFromSlot = slotIndex - 3;
-          newSorter2.filterId = itemMap[outputItem.name].iconId;
-          newSorter2.parameters = { length: 1 };
+        ) { // 如果是实验室且实际产率超过三级分拣器速度
+          let newSorter2 = this.getBuildingTemplate(); // 获取新的分拣器模板
+          newSorter2.itemId = sorter.itemId; // 设置分拣器的物品ID
+          newSorter2.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+          newSorter2.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+          newSorter2.outputToSlot = -1; // 设置输出到槽位
+          newSorter2.inputToSlot = 1; // 设置输入到槽位
+          newSorter2.inputFromSlot = slotIndex - 3; // 设置从槽位输入
+          newSorter2.filterId = itemMap[outputItem.name].iconId; // 设置过滤器ID
+          newSorter2.parameters = { length: 1 }; // 设置参数长度
           const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category,
             slotIndex - 3
-          );
-          newSorter2.localOffset = offsetInfo2.offset;
-          newSorter2.yaw = offsetInfo2.yaw;
-          this.buildings.push(newSorter2);
-          sorterList.push(this.buildingIndex);
-          if (this.sorters[outputItem.name]) {
-            // 已存在就append
-            if (this.sorters[outputItem.name].output) {
+          ); // 计算分拣器的本地偏移和偏航角
+          newSorter2.localOffset = offsetInfo2.offset; // 设置分拣器的本地偏移
+          newSorter2.yaw = offsetInfo2.yaw; // 设置分拣器的偏航角
+          this.buildings.push(newSorter2); // 将分拣器添加到建筑列表
+          sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
+          if (this.sorters[outputItem.name]) { // 如果输出项目已存在
+            if (this.sorters[outputItem.name].output) { // 如果输出列表存在
               this.sorters[outputItem.name].output.push({
                 index: newSorter2.index,
                 rate: buildingMap.sorterMk3.sortingSpeed,
@@ -1776,7 +1769,7 @@ class Blueprint {
                 ownerName: subRecipe.building.name,
                 ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                 recipeID: parseInt(subRecipe.recipeID),
-              });
+              }); // 添加到输出列表
             } else {
               this.sorters[outputItem.name].output = [
                 {
@@ -1787,10 +1780,10 @@ class Blueprint {
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                   recipeID: parseInt(subRecipe.recipeID),
                 },
-              ];
+              ]; // 创建新的输出列表
             }
           } else {
-            // 不存在就新建
+            // 如果不存在就新建
             this.sorters[outputItem.name] = {
               output: [
                 {
@@ -1804,30 +1797,28 @@ class Blueprint {
               ],
             };
           }
-          actual_rate -= buildingMap.sorterMk3.sortingSpeed;
+          actual_rate -= buildingMap.sorterMk3.sortingSpeed; // 减少实际产率
         }
-        let newSorter = this.getBuildingTemplate();
-        newSorter.itemId = sorter.itemId;
-        newSorter.modelIndex = sorter.modelIndex;
-        newSorter.inputObjIdx = nowBuildingIndex;
-        newSorter.outputToSlot = -1;
-        newSorter.inputToSlot = 1;
-        newSorter.inputFromSlot = slotIndex;
-        newSorter.filterId = itemMap[outputItem.name].iconId;
-        newSorter.parameters = { length: 1 };
+        let newSorter = this.getBuildingTemplate(); // 获取新的分拣器模板
+        newSorter.itemId = sorter.itemId; // 设置分拣器的物品ID
+        newSorter.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+        newSorter.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+        newSorter.outputToSlot = -1; // 设置输出到槽位
+        newSorter.inputToSlot = 1; // 设置输入到槽位
+        newSorter.inputFromSlot = slotIndex; // 设置从槽位输入
+        newSorter.filterId = itemMap[outputItem.name].iconId; // 设置过滤器ID
+        newSorter.parameters = { length: 1 }; // 设置参数长度
         const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
           { x: buildingX, y: buildingY, z: buildingZ },
           buildingMap[subRecipe.building.name].category,
           slotIndex
-        );
-        newSorter.localOffset = offsetInfo.offset;
-        newSorter.yaw = offsetInfo.yaw;
-        this.buildings.push(newSorter);
-        sorterList.push(this.buildingIndex);
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, type: buildingType.sorter})
-        if (this.sorters[outputItem.name]) {
-          // 已存在就append
-          if (this.sorters[outputItem.name].output) {
+        ); // 计算分拣器的本地偏移和偏航角
+        newSorter.localOffset = offsetInfo.offset; // 设置分拣器的本地偏移
+        newSorter.yaw = offsetInfo.yaw; // 设置分拣器的偏航角
+        this.buildings.push(newSorter); // 将分拣器添加到建筑列表
+        sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
+        if (this.sorters[outputItem.name]) { // 如果输出项目已存在
+          if (this.sorters[outputItem.name].output) { // 如果输出列表存在
             this.sorters[outputItem.name].output.push({
               index: newSorter.index,
               rate: actual_rate,
@@ -1835,7 +1826,7 @@ class Blueprint {
               ownerName: subRecipe.building.name,
               ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
               recipeID: parseInt(subRecipe.recipeID),
-            });
+            }); // 添加到输出列表
           } else {
             this.sorters[outputItem.name].output = [
               {
@@ -1846,10 +1837,10 @@ class Blueprint {
                 ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                 recipeID: parseInt(subRecipe.recipeID),
               },
-            ];
+            ]; // 创建新的输出列表
           }
         } else {
-          // 不存在就新建
+          // 如果不存在就新建
           this.sorters[outputItem.name] = {
             output: [
               {
@@ -1863,56 +1854,51 @@ class Blueprint {
             ],
           };
         }
-        slotIndex--;
-        if (!this.config.compactLayout) {
-          // 非紧凑布局，调整对撞机的分拣器连接点
+        slotIndex--; // 递减槽位索引
+        if (!this.config.compactLayout) { // 如果不是紧凑布局
           if (
             buildingMap[subRecipe.building.name].category ===
               productionCategory.collider &&
             slotIndex === 5
-          ) {
-            slotIndex = 2;
+          ) { // 如果是对撞机类别并且槽位索引为5
+            slotIndex = 2; // 将槽位索引设置为2
           }
         }
       }
-      for (let inputItem of subRecipe.input) {
+      for (let inputItem of subRecipe.input) { // 遍历所有输入项目
         let actual_rate =
-          inputItem.rate * productionSpeed * actual_building_num;
-        if (subRecipe.acceleratorMode === 1) {
-          // 加速时原料也要加速；增产时则不需要
-          actual_rate *= extra_rate;
+          inputItem.rate * productionSpeed * actual_building_num; // 计算输入项目的实际产率
+        if (subRecipe.acceleratorMode === 1) { // 如果启用了加速模式
+          actual_rate *= extra_rate; // 增加输入项目的实际产率
         }
-        let sorter = buildingMap.sorterMk1;
-        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
-          // 一级分拣器不够用时直接使用三级分拣器
-          sorter = buildingMap.sorterMk3;
+        let sorter = buildingMap.sorterMk1; // 默认使用一级分拣器
+        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) { // 如果配置只使用三级分拣器或实际产率超过一级分拣器速度
+          sorter = buildingMap.sorterMk3; // 使用三级分拣器
         }
 
         if (buildingMap[subRecipe.building.name].category === productionCategory.lab &&
           actual_rate > buildingMap.sorterMk3.sortingSpeed
-        ) {
-          // 研究站层数过高时会出现一个3级分拣器无法满足运力的问题
-          let newSorter2 = this.getBuildingTemplate();
-          newSorter2.itemId = sorter.itemId;
-          newSorter2.modelIndex = sorter.modelIndex;
-          newSorter2.inputObjIdx = nowBuildingIndex;
-          newSorter2.outputToSlot = slotIndex - 3;
-          newSorter2.inputToSlot = 1;
-          newSorter2.filterId = itemMap[inputItem.name].iconId;
-          newSorter2.parameters = { length: 1 };
+        ) { // 如果是实验室且实际产率超过三级分拣器速度
+          let newSorter2 = this.getBuildingTemplate(); // 获取新的分拣器模板
+          newSorter2.itemId = sorter.itemId; // 设置分拣器的物品ID
+          newSorter2.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+          newSorter2.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+          newSorter2.outputToSlot = slotIndex - 3; // 设置输出到槽位
+          newSorter2.inputToSlot = 1; // 设置输入到槽位
+          newSorter2.filterId = itemMap[inputItem.name].iconId; // 设置过滤器ID
+          newSorter2.parameters = { length: 1 }; // 设置参数长度
           const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category,
             slotIndex - 3,
             1
-          );
-          newSorter2.localOffset = offsetInfo2.offset;
-          newSorter2.yaw = offsetInfo2.yaw;
-          this.buildings.push(newSorter2);
-          sorterList.push(this.buildingIndex);
-          if (this.sorters[inputItem.name]) {
-            // 已存在就append
-            if (this.sorters[inputItem.name].output) {
+          ); // 计算分拣器的本地偏移和偏航角
+          newSorter2.localOffset = offsetInfo2.offset; // 设置分拣器的本地偏移
+          newSorter2.yaw = offsetInfo2.yaw; // 设置分拣器的偏航角
+          this.buildings.push(newSorter2); // 将分拣器添加到建筑列表
+          sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
+          if (this.sorters[inputItem.name]) { // 如果输入项目已存在
+            if (this.sorters[inputItem.name].output) { // 如果输出列表存在
               this.sorters[inputItem.name].output.push({
                 index: newSorter2.index,
                 rate: buildingMap.sorterMk3.sortingSpeed,
@@ -1920,7 +1906,7 @@ class Blueprint {
                 ownerName: subRecipe.building.name,
                 ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                 recipeID: parseInt(subRecipe.recipeID),
-              });
+              }); // 添加到输出列表
             } else {
               this.sorters[inputItem.name].output = [
                 {
@@ -1931,10 +1917,10 @@ class Blueprint {
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                   recipeID: parseInt(subRecipe.recipeID),
                 },
-              ];
+              ]; // 创建新的输出列表
             }
           } else {
-            // 不存在就新建
+            // 如果不存在就新建
             this.sorters[inputItem.name] = {
               output: [
                 {
@@ -1948,100 +1934,99 @@ class Blueprint {
               ],
             };
           }
-          actual_rate -= buildingMap.sorterMk3.sortingSpeed;
+          actual_rate -= buildingMap.sorterMk3.sortingSpeed; // 减少实际产率
         }
 
-        let newSorter = this.getBuildingTemplate();
-        newSorter.itemId = sorter.itemId;
-        newSorter.modelIndex = sorter.modelIndex;
-        newSorter.outputObjIdx = nowBuildingIndex;
-        newSorter.outputToSlot = slotIndex;
-        newSorter.inputToSlot = 1;
-        newSorter.filterId = itemMap[inputItem.name].iconId;
-        newSorter.parameters = { length: 1 };
+        let newSorter = this.getBuildingTemplate(); // 获取新的分拣器模板
+        newSorter.itemId = sorter.itemId; // 设置分拣器的物品ID
+        newSorter.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+        newSorter.outputObjIdx = nowBuildingIndex; // 设置输出对象索
+        newSorter.outputToSlot = slotIndex; // 设置输出到的槽位
+        newSorter.inputToSlot = 1; // 设置输入到的槽位
+        newSorter.filterId = itemMap[inputItem.name].iconId; // 设置过滤器ID，用于识别处理的特定物品
+        newSorter.parameters = { length: 1 }; // 设置参数，这里的长度用于定义分拣器的工作范围
         const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
           { x: buildingX, y: buildingY, z: buildingZ },
           buildingMap[subRecipe.building.name].category,
           slotIndex,
           1
-        );
-        newSorter.localOffset = offsetInfo.offset;
-        newSorter.yaw = offsetInfo.yaw;
-        this.buildings.push(newSorter);
-        sorterList.push(this.buildingIndex);
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, type: buildingType.sorter})
+        ); // 计算分拣器的位置偏移和偏航角度
+        newSorter.localOffset = offsetInfo.offset; // 设置分拣器的本地偏移
+        newSorter.yaw = offsetInfo.yaw; // 设置分拣器的偏航角
+        this.buildings.push(newSorter); // 将配置好的新分拣器添加到建筑列表中
+        sorterList.push(this.buildingIndex); // 将新分拣器的索引添加到分拣器列表中
+        // 如果存在对应物品的分拣器配置，则添加或更新分拣器配置
         if (this.sorters[inputItem.name]) {
-          // 已存在就append
-          if (this.sorters[inputItem.name].input) {
-            this.sorters[inputItem.name].input.push({
-              index: newSorter.index,
-              rate: actual_rate,
-              ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
-              ownerName: subRecipe.building.name,
-              ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-              recipeID: parseInt(subRecipe.recipeID),
-            });
-          } else {
-            this.sorters[inputItem.name].input = [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ];
-          }
+            if (this.sorters[inputItem.name].input) {
+                this.sorters[inputItem.name].input.push({
+                    index: newSorter.index,
+                    rate: actual_rate,
+                    ownerObjIdx: nowBuildingIndex, // 分拣器附属的建筑索引
+                    ownerName: subRecipe.building.name,
+                    ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                    recipeID: parseInt(subRecipe.recipeID),
+                });
+            } else {
+                this.sorters[inputItem.name].input = [
+                    {
+                        index: newSorter.index,
+                        rate: actual_rate,
+                        ownerObjIdx: nowBuildingIndex,
+                        ownerName: subRecipe.building.name,
+                        ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                        recipeID: parseInt(subRecipe.recipeID),
+                    },
+                ];
+            }
         } else {
-          // 不存在就新建
-          this.sorters[inputItem.name] = {
-            input: [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ],
-          };
+            // 如果不存在，则创建新的分拣器配置
+            this.sorters[inputItem.name] = {
+                input: [
+                    {
+                        index: newSorter.index,
+                        rate: actual_rate,
+                        ownerObjIdx: nowBuildingIndex,
+                        ownerName: subRecipe.building.name,
+                        ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                        recipeID: parseInt(subRecipe.recipeID),
+                    },
+                ],
+            };
         }
-        slotIndex--;
+        slotIndex--; // 更新槽位索引，为下一个分拣器配置做准备
         if (!this.config.compactLayout) {
-          // 非紧凑布局，调整对撞机的分拣器连接点
-          if (
-            buildingMap[subRecipe.building.name].category ===
-              productionCategory.collider &&
-            slotIndex === 5
-          ) {
-            slotIndex = 2;
-          }
+            // 如果不是紧凑布局，特别处理对撞机分拣器的连接点
+            if (
+                buildingMap[subRecipe.building.name].category ===
+                productionCategory.collider &&
+                slotIndex === 5
+            ) {
+                slotIndex = 2; // 调整对撞机分拣器的槽位索引
+            }
         }
       }
-
       if (needNewLine) {
-        // 新的一行
+        // 如果需要新的一行，将当前建筑和分拣器配置添加到新的行中
         this.buildingArray.push([
-          { index: nowBuildingIndex, sorterList: sorterList },
+            { index: nowBuildingIndex, sorterList: sorterList },
         ]);
       } else {
-        // 在当前行继续添加
+        // 否则，继续在当前行添加建筑和分拣器配置
         this.buildingArray[this.buildingArray.length - 1].push({
-          index: nowBuildingIndex,
-          sorterList: sorterList,
+            index: nowBuildingIndex,
+            sorterList: sorterList,
         });
       }
       for (let labIndex of stackLabBuildingIndexList) {
-        // 把堆叠的研究站加进去
+        // 遍历堆叠的实验室建筑索引列表，将它们也添加到当前行
         this.buildingArray[this.buildingArray.length - 1].push({
-          index: labIndex,
-          sorterList: [],
+            index: labIndex,
+            sorterList: [],
         });
       }
     }
   }
+
 
   init() {
     this.mapRecipeID();
