@@ -2030,10 +2030,10 @@ class Blueprint {
       // 针对this.buildings中的所有建筑, 进行封层堆叠
       for (let building of this.buildings){
         // 如果building的index是小于所有buildings一半, 就把localOffset.z设为10
-        if (building.index < this.buildings.length / 2){
-          building.localOffset.z = 10;
+        if (this.buildings.index < this.buildings.length / 2){
+          this.buildings.localOffset.z = 10;
       } else {
-        building.localOffset.z =20;
+        this.buildings.localOffset.z =20;
       }
     }
 
