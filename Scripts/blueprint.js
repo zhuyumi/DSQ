@@ -1559,7 +1559,7 @@ class Blueprint {
           this.occupiedArea[this.occupiedArea.length - 2].y2 +
           1 +
           buildingArea.centerPoint[0]; // 计算建筑的Y坐标
-        buildingZ = 10; // 设置建筑的Z坐标，默认为10
+        buildingZ = 0; // 设置建筑的Z坐标，默认为10
         this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x; // 更新占用区域的x2坐标
         if (
           buildingY + buildingArea.centerPoint[2] >
@@ -1579,7 +1579,7 @@ class Blueprint {
           buildingArea.centerPoint[0] +
           this.occupiedArea[this.occupiedArea.length - 1].y2 +
           1; // 设置新行的建筑Y坐标
-        buildingZ = 10; // 设置新行的建筑Z坐标
+        buildingZ = 0; // 设置新行的建筑Z坐标
         // 向占用区域数组中添加新行的信息
         this.occupiedArea.push({
           x1: 0,
@@ -1669,6 +1669,7 @@ class Blueprint {
       } else {
         this.buildings.push(newBuilding); // 如果不是实验室，直接添加新建筑到列表
       }
+
       const nowBuildingIndex = newBuilding.index; // 记录当前建筑的索引
       if (this.config.generateTeslaTower) { // 如果配置中指定生成特斯拉塔
         if (
@@ -2025,6 +2026,17 @@ class Blueprint {
         });
       }
     }
+    
+      // 针对this.buildings中的所有建筑, 进行封层堆叠
+      for (let building of this.buildings){
+        // 如果building的index是小于所有buildings一半, 就把localOffset.z设为10
+        if (building.index < this.buildings.length / 2){
+          building.localOffset.z = 10;
+      } else {
+        building.localOffset.z =20;
+      }
+    }
+
   }
 
 
