@@ -2031,9 +2031,13 @@ class Blueprint {
       for (let building of this.buildings){
         // 如果building的index是小于所有buildings一半, 就把localOffset.z设为10
         if (this.buildings.index < this.buildings.length / 2){
-          this.buildings.localOffset.z = 10;
+          for (let localOffset of building.localOffset){
+            localOffset.z = 10;
+          }
       } else {
-        this.buildings.localOffset.z =20;
+        for (let localOffset of building.localOffset){
+          localOffset.z = 20;
+        }
       }
     }
 
