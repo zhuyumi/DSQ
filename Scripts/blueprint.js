@@ -3596,7 +3596,7 @@ class Blueprint {
       let offset0Layer = building.localOffset[0].y / yPerLayer;
       let offset1Layer = building.localOffset[1].y / yPerLayer;
       let tmpLayer = (offset0Layer>offset1Layer) ? offset0Layer:offset1Layer
-      let layer = Math.floor(tmpLayer);
+      let layer = Math.ceil(tmpLayer);
       if (layer > 0) {
         console.log(`move layer before, itemIndex=${building.index}, layer=${layer}, localOffset=${JSON.stringify(building.localOffset)}`);
 
