@@ -2126,9 +2126,9 @@ class Blueprint {
 
       const nowBuildingIndex = newBuilding.index; // 记录当前建筑的索引
       if (this.config.generateTeslaTower) {
-        // 如果配置中指定生成特斯拉塔
+        // 如果配置中指定生成电力感应塔
         if (
-          (this.config.teslaTowerLineInterval > 1 && // 根据行间隔设置判断是否需要生成特斯拉塔
+          (this.config.teslaTowerLineInterval > 1 && // 根据行间隔设置判断是否需要生成电力感应塔
             ((this.buildingArray.length &&
               this.buildingArray.length % 2 === 0) ||
               (needNewLine && this.buildingArray.length % 2 === 1))) ||
@@ -2136,13 +2136,13 @@ class Blueprint {
             this.buildingArray.length)
         ) {
           let teslaTowerOffset = this.calculateTeslaTowerOffset(
-            // 计算特斯拉塔的偏移量
+            // 计算电力感应塔的偏移量
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category
           );
-          teslaTowerDistance += teslaTowerOffset.distance; // 累加到特斯拉塔的距离
+          teslaTowerDistance += teslaTowerOffset.distance; // 累加到电力感应塔的距离
           if (
-            (hasTeslaTowerThisLine && // 判断是否放置特斯拉塔
+            (hasTeslaTowerThisLine && // 判断是否放置电力感应塔
               teslaTowerDistance >= this.config.teslaTowerInterval) ||
             (!hasTeslaTowerThisLine &&
               teslaTowerDistance >= this.config.teslaTowerInterval / 2) ||
@@ -2151,19 +2151,19 @@ class Blueprint {
           ) {
             // 生成电力感应塔
             let teslaTower = this.getBuildingTemplate(); // 获取建筑模板
-            teslaTower.itemId = buildingMap.teslaTower.itemId; // 设置特斯拉塔的物品ID
-            teslaTower.modelIndex = buildingMap.teslaTower.modelIndex; // 设置特斯拉塔的模型索引
+            teslaTower.itemId = buildingMap.teslaTower.itemId; // 设置电力感应塔的物品ID
+            teslaTower.modelIndex = buildingMap.teslaTower.modelIndex; // 设置电力感应塔的模型索引
             teslaTower.localOffset = [
               teslaTowerOffset.offset,
               teslaTowerOffset.offset,
-            ]; // 设置特斯拉塔的本地偏移
-            teslaTowerDistance = 0; // 重置特斯拉塔距离
-            hasTeslaTowerThisLine = true; // 标记当前行已放置特斯拉塔
+            ]; // 设置电力感应塔的本地偏移
+            teslaTowerDistance = 0; // 重置电力感应塔距离
+            hasTeslaTowerThisLine = true; // 标记当前行已放置电力感应塔
             this.buildingArray[this.buildingArray.length - 1].push({
               index: teslaTower.index,
               sorterList: [],
-            }); // 将特斯拉塔添加到建筑数组中
-            this.buildings.push(teslaTower); // 将特斯拉塔添加到建筑列表
+            }); // 将电力感应塔添加到建筑数组中
+            this.buildings.push(teslaTower); // 将电力感应塔添加到建筑列表
           }
         }
       }
@@ -2569,99 +2569,115 @@ class Blueprint {
   }
 
   generateConveyorBelts() {
-    let itemSummary = {};
+    let itemSummary = {}; // 定义一个对象用于存储物料统计信息
     // 计算物料统计信息，每个物料的产出速率、从多少个建筑产出、供给多少个建筑使用
     for (let subRecipe of this.recipe.subRecipes) {
-      let extra_rate = 1;
+      // 遍历每个子配方
+      let extra_rate = 1; // 初始化额外速率为1
       if (this.recipe.proliferator) {
+        // 如果有增产剂
         if (subRecipe.acceleratorMode === 0) {
-          extra_rate += itemMap[this.recipe.proliferator].extra_rate;
+          // 加速模式为0
+          extra_rate += itemMap[this.recipe.proliferator].extra_rate; // 增加额外速率
         } else if (subRecipe.acceleratorMode === 1) {
-          extra_rate += itemMap[this.recipe.proliferator].accelerate;
+          // 加速模式为1
+          extra_rate += itemMap[this.recipe.proliferator].accelerate; // 增加加速速率
         }
       }
       for (let outputItem of subRecipe.output) {
-        let outputRate = 0;
-        let fromBuildingNum = 0;
+        // 遍历子配方的输出项目
+        let outputRate = 0; // 初始化输出速率
+        let fromBuildingNum = 0; // 初始化来源建筑数量
         if (subRecipe.input === null) {
-          outputRate = outputItem.rate;
+          // 如果没有输入
+          outputRate = outputItem.rate; // 直接使用输出速率
         } else {
+          // 如果有输入
           if (
             buildingMap[subRecipe.building.name].category ===
             productionCategory.lab
           ) {
-            // 研究站可堆叠，需特殊处理
+            // 如果是实验室，需特殊处理
             fromBuildingNum = Math.ceil(
               subRecipe.building.num / this.config.maxLabLayers
-            );
+            ); // 计算来源建筑数量
           } else {
-            fromBuildingNum = subRecipe.building.num;
+            fromBuildingNum = subRecipe.building.num; // 直接使用建筑数量
           }
           outputRate =
             outputItem.rate *
             buildingMap[subRecipe.building.name].productionSpeed *
             subRecipe.building.num *
-            extra_rate;
+            extra_rate; // 计算输出速率
         }
         if (itemSummary[outputItem.name]) {
-          itemSummary[outputItem.name].fromBuildingNum += fromBuildingNum;
-          itemSummary[outputItem.name].rate += outputRate;
+          // 如果物料已在统计信息中
+          itemSummary[outputItem.name].fromBuildingNum += fromBuildingNum; // 累加来源建筑数量
+          itemSummary[outputItem.name].rate += outputRate; // 累加输出速率
         } else {
+          // 如果物料不在统计信息中
           itemSummary[outputItem.name] = {
             rate: outputRate,
             fromBuildingNum: fromBuildingNum,
             toBuildingNum: 0,
-          };
+          }; // 创建新的物料统计信息
         }
       }
       if (subRecipe.input === null) {
+        // 如果没有输入，继续下一个子配方
         continue;
       }
       for (let inputItem of subRecipe.input) {
-        let toBuildingNum = 0;
+        // 遍历子配方的输入项目
+        let toBuildingNum = 0; // 初始化供给建筑数量
         if (
           buildingMap[subRecipe.building.name].category ===
           productionCategory.lab
         ) {
+          // 如果是实验室
           toBuildingNum = Math.ceil(
             subRecipe.building.num / this.config.maxLabLayers
-          );
+          ); // 计算供给建筑数量
         } else {
-          toBuildingNum = subRecipe.building.num;
+          toBuildingNum = subRecipe.building.num; // 直接使用建筑数量
         }
         if (itemSummary[inputItem.name]) {
-          itemSummary[inputItem.name].toBuildingNum += toBuildingNum;
+          // 如果物料已在统计信息中
+          itemSummary[inputItem.name].toBuildingNum += toBuildingNum; // 累加供给建筑数量
           if (
             !itemSummary[inputItem.name].needProliferator &&
             subRecipe.acceleratorMode !== -1
           ) {
-            itemSummary[inputItem.name].needProliferator = true;
+            // 如果不需要增产剂并且加速模式不为-1
+            itemSummary[inputItem.name].needProliferator = true; // 标记需要增产剂
           }
           if (subRecipe.acceleratorMode === 1) {
+            // 如果加速模式为1
             // 加速时原料额外消耗
             itemSummary[inputItem.name].inputRate +=
               inputItem.rate *
               buildingMap[subRecipe.building.name].productionSpeed *
               subRecipe.building.num *
-              extra_rate;
+              extra_rate; // 累加输入速率
           } else {
             // 无增产剂或增产时原料速率不变
             itemSummary[inputItem.name].inputRate +=
               inputItem.rate *
               buildingMap[subRecipe.building.name].productionSpeed *
-              subRecipe.building.num;
+              subRecipe.building.num; // 累加输入速率
           }
         } else {
+          // 如果物料不在统计信息中
           let itemInputRate =
             inputItem.rate *
             buildingMap[subRecipe.building.name].productionSpeed *
-            subRecipe.building.num;
+            subRecipe.building.num; // 计算输入速率
           if (subRecipe.acceleratorMode === 1) {
-            itemInputRate *= extra_rate;
+            itemInputRate *= extra_rate; // 如果加速模式为1，增加输入速率
           }
-          let needProliferator = false;
+          let needProliferator = false; // 初始化不需要增产剂
           if (subRecipe.acceleratorMode !== -1) {
-            needProliferator = true;
+            needProliferator = true; // 标记需要增产剂
           }
           itemSummary[inputItem.name] = {
             rate: 0,
@@ -2669,99 +2685,100 @@ class Blueprint {
             fromBuildingNum: 0,
             toBuildingNum: toBuildingNum,
             needProliferator: needProliferator,
-          };
+          }; // 创建新的物料统计信息
         }
       }
     }
     for (let key in itemSummary) {
       // rate为0（rate是按output计算的）但inputRate不为0，说明该物品是被排除的中间产物， 把inputRate赋值给rate，生成蓝图时该产物就会被当作原料
       if (itemSummary[key].rate === 0 && itemSummary[key].inputRate !== 0) {
-        itemSummary[key].rate = itemSummary[key].inputRate;
+        itemSummary[key].rate = itemSummary[key].inputRate; // 将inputRate赋值给rate
       }
     }
-    // console.log(itemSummary)
-    // throw `break`
-    itemSummary = this.sortItemSummary(itemSummary);
-    this.itemSummary = itemSummary;
+    itemSummary = this.sortItemSummary(itemSummary); // 对物料统计信息进行排序
+    this.itemSummary = itemSummary; // 将排序后的物料统计信息赋值给实例属性
 
-    this.conveyorStartOffsetX =
-      this.occupiedArea[this.occupiedArea.length - 1].x2;
-    this.occupiedArea[this.occupiedArea.length - 1].x2++; // x轴方向空一格用于喷涂剂走线
-    this.occupiedArea[this.occupiedArea.length - 2].y2++; // y轴方向空一格避免喷涂机和建筑碰撞
+    // this.conveyorStartOffsetX =
+    //   this.occupiedArea[this.occupiedArea.length - 1].x2; // 设置传送带起始的X偏移
+    // this.occupiedArea[this.occupiedArea.length - 1].x2++; // x轴方向空一格用于喷涂剂走线
+    // this.occupiedArea[this.occupiedArea.length - 2].y2++; // y轴方向空一格避免喷涂机和建筑碰撞
+    this.conveyorStartOffsetX = this.occupiedArea[0].x2+1; // 设置传送带起始的X偏移
+    this.occupiedArea[0].x2++; // x轴方向空一格用于喷涂剂走线
+
     // 生成传送带并连接到分拣器
     const zero = 0.0000000001; // rate是每秒生产量，除不尽时会有精度误差，小数点后16位都是准确的，取0.0000000001为判断标准足够了。
     for (let item in itemSummary) {
-      const itemName = item;
-      // console.log(itemName)
-      item = itemSummary[item];
+      const itemName = item; // 记录物料名称
+      item = itemSummary[item]; // 获取物料统计信息
 
-      let conveyorBelt = buildingMap.conveyorBeltMk1;
+      let conveyorBelt = buildingMap.conveyorBeltMk1; // 默认使用一级传送带
       if (this.config.onlyConveyorBeltMk3) {
-        conveyorBelt = buildingMap.conveyorBeltMK3;
+        // 如果配置只使用三级传送带
+        conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
       } else if (item.rate >= conveyorBelt.transportSpeed) {
+        // 如果物料速率大于等于一级传送带速度
         if (
           item.rate === conveyorBelt.transportSpeed &&
           this.config.upgradeConveyorBelt
         ) {
           conveyorBelt = buildingMap.conveyorBeltMK3; // 直接使用三级传送带，跳过二级
         } else if (item.rate > conveyorBelt.transportSpeed) {
-          conveyorBelt = buildingMap.conveyorBeltMK3;
+          conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
         }
       }
 
-      let maxTransportSpeed = buildingMap.conveyorBeltMK3.transportSpeed;
+      let maxTransportSpeed = buildingMap.conveyorBeltMK3.transportSpeed; // 获取三级传送带的最大运输速度
       if (item.fromBuildingNum === 0) {
         // 只有原料可以堆叠，中间产物不支持堆叠
         maxTransportSpeed =
           buildingMap.conveyorBeltMK3.transportSpeed *
-          this.config.conveyorBeltStackLayer;
+          this.config.conveyorBeltStackLayer; // 原料堆叠时的最大运输速度
       }
 
       for (let totalDoneRate = 0; item.rate - totalDoneRate > zero; ) {
-        let needSprayCoater = item.needProliferator;
-        let doneRate = 0;
-        let parameters = null;
-        let inputRate = Math.min(maxTransportSpeed, item.rate - totalDoneRate);
-        let inputData = [];
-        let outputData = [];
-        let doneSorterNum = 0;
+        let needSprayCoater = item.needProliferator; // 是否需要喷涂机
+        let doneRate = 0; // 初始化已完成速率
+        let parameters = null; // 初始化参数
+        let inputRate = Math.min(maxTransportSpeed, item.rate - totalDoneRate); // 计算输入速率
+        let inputData = []; // 初始化输入数据
+        let outputData = []; // 初始化输出数据
+        let doneSorterNum = 0; // 初始化已完成分拣器数量
         if (item.fromBuildingNum !== 0) {
+          // 如果不是原材料
           for (let j = this.sorters[itemName].output.length - 1; j >= 0; j--) {
+            // 遍历输出分拣器
             if (this.sorters[itemName].output[j].rate - inputRate > zero) {
               // if ((j>0)&&(i+1 >= Math.ceil(item.rate/maxTransportSpeed))){
               //     // 有分拣器还未连接 并且 不会再生成新的传送带了
               //     // 这种情况就是建筑非整数时计算误差导致的，继续处理未连接的分拣器就可以了
-
-              // 当前带接受运力不能满足分拣器，则该分拣器连接下一个带上的节点
-              break;
+              
+              break; // 当前带接受运力不能满足分拣器，则该分拣器连接下一个带上的节点
             }
             if (doneSorterNum % this.config.maxSorterNumOneBelt === 0) {
-              inputData.push([this.sorters[itemName].output[j].index]);
+              inputData.push([this.sorters[itemName].output[j].index]); // 添加分拣器索引到输入数据
             } else {
               inputData[inputData.length - 1].push(
                 this.sorters[itemName].output[j].index
               );
             }
-            inputRate -= this.sorters[itemName].output[j].rate;
-            doneRate += this.sorters[itemName].output[j].rate;
-            this.sorters[itemName].output.pop();
-            doneSorterNum++;
+            inputRate -= this.sorters[itemName].output[j].rate; // 减少输入速率
+            doneRate += this.sorters[itemName].output[j].rate; // 增加已完成速率
+            this.sorters[itemName].output.pop(); // 移除已处理的分拣器
+            doneSorterNum++; // 已完成分拣器数量增加
           }
         } else {
-          // 说明是原料
+          // 如果是原材料
           inputData.push([]);
           parameters = {
             iconId: itemMap[itemName].iconId,
             count: (inputRate * 60).toFixed(0),
           };
           doneRate += inputRate;
-          // inputRate = 0
         }
         totalDoneRate += doneRate;
         let outputRate = doneRate; // 当前传送带实际运力
         doneSorterNum = 0;
         let refineryNum = 0; // X射线裂解/重整精炼工厂数量
-        // 重新排序以提高输出传送带中，X射线裂解(氢)和重整精炼(精炼油)的输入优先级
         if (
           ["hydrogen", "refinedOil"].includes(itemName) &&
           item.toBuildingNum !== 0
@@ -2799,7 +2816,7 @@ class Blueprint {
               outputRate + zero < this.sorters[itemName].input[j].rate
             ) {
               // 当前带输出运力不能满足分拣器且还会生成新的传送带，则传送带新增一个节点单独该分拣器连接上，同时给对应建筑增加一个分拣器连到下一个节点
-              // console.log(`${itemName}: need add sorter`)
+              // console.log(`${itemName}: need add sorter`)              
               outputData.push([this.sorters[itemName].input[j].index]);
               const newSorterRate =
                 this.sorters[itemName].input[j].rate - outputRate;
@@ -2968,42 +2985,6 @@ class Blueprint {
         continue;
       }
       this.newProductionBuilding(subRecipe);
-    }
-
-    console.log(`got all buildings: ${JSON.stringify(this.buildings)}`);
-    // 拿到中间点index,进行分层.
-    // 如果halfIndex的建筑是分拣器,那么就跳到下一个.直到找到不是分拣器的建筑.
-    let halfIndex = Math.ceil(this.buildings.length / 2);
-    loop1: for (let i = halfIndex; i < this.buildings.length; i++) {
-      // 判断如果建筑类型是是分拣器,就跳到下一个
-      for (const key in buildingMap) {
-        if (buildingMap[key].itemId === this.buildings[i].itemId) {
-          if (
-            buildingMap[key].category !== 'undefined' &&
-            buildingMap[key].category === productionCategory.sorter
-          ) {
-            console.log(`Found sorter: ${key}`, buildingMap[key]);
-            continue loop1;
-          }
-        }
-      }
-      halfIndex = i;
-      break;
-    }
-    console.log(`got breakpoint index:`,halfIndex);
-    // 针对this.buildings中的所有建筑, 进行分层堆叠.
-    // 问题: 现在的buidings里面是先全部是生产建筑,然后才是连续分拣器,分拣器没有和对应的生产建筑连在一起.所以这里的halfIndex可能直接把连续的分拣器给隔断了,导致分拣器的堆叠不对.
-    for (let building of this.buildings) {
-      // 如果building的index是小于所有buildings一半, 就把localOffset.z设为10
-      if (building.index < halfIndex) {
-        for (let localOffset of building.localOffset) {
-          localOffset.z = 5;
-        }
-      } else {
-        for (let localOffset of building.localOffset) {
-          localOffset.z = 10;
-        }
-      }
     }
   }
 
@@ -3589,6 +3570,55 @@ class Blueprint {
         -1,
         null
       )
+    );
+  }
+
+  harryLogic() {
+    // Harry new logic starts
+
+    // 重新插入 电力感应塔 TODO
+
+    console.log(`got all buildings: ${JSON.stringify(this.buildings)}`);
+    console.log(`this.occupiedArea: ${JSON.stringify(this.occupiedArea)}`);
+    console.log(`this.blueprintSize: ${JSON.stringify(this.blueprintSize)}`);
+
+    // 针对this.buildings中的所有建筑, 进行分层堆叠. 暂时的解决方案是:x轴不变y轴缩短z轴往上堆叠缩小空间等于是竖向压扁升高了.
+    // 假设原始的建筑占地面积为100, (0,0,0 100,50,0) 需要分成2层, 那么第一层坐标是(0,0,0 100,25,0) 第二层坐标是(0,0,10 100,25,10)
+    let stackLayersMax = 3; // 最大堆叠层数
+    let yPerLayer = this.blueprintSize.y / stackLayersMax; // 每层的y轴长度
+    for (let building of this.buildings) {
+
+      // x轴不变
+      // 处理y轴,z轴:
+      // 1. 判断建筑的localOffset.y是处于哪个区间的,然后计算出是第几层
+      // 2. 根据在第几层,计算出新的localOffset.y. 把原来的localOffset.y减去 每层的y轴长度乘以层数.
+      // 2. 根据在第几层,计算出新的localOffset.z. 把原来的localOffset.z加上 每层高度5乘以层数.
+      let offset0Layer = building.localOffset[0].y / yPerLayer;
+      let offset1Layer = building.localOffset[1].y / yPerLayer;
+      let tmpLayer = (offset0Layer>offset1Layer) ? offset0Layer:offset1Layer
+      let layer = Math.floor(tmpLayer);
+      if (layer > 0) {
+        console.log(`move layer before, itemIndex=${building.index}, layer=${layer}, localOffset=${JSON.stringify(building.localOffset)}`);
+
+        building.localOffset[0].y =
+          building.localOffset[0].y - yPerLayer * (layer - 1);
+        building.localOffset[1].y =
+          building.localOffset[1].y - yPerLayer * (layer - 1);
+        building.localOffset[0].z = building.localOffset[0].z + 5 * (layer - 1);
+        building.localOffset[1].z = building.localOffset[1].z + 5 * (layer - 1);
+
+        console.log(`move layer after, itemIndex=${building.index}, layer=${layer}, localOffset=${JSON.stringify(building.localOffset)}`);
+
+      }
+
+      // // test
+      // if (2201 === building.itemId) {
+      //   console.log(`Found tesla tower:`, JSON.stringify(building));
+      // }
+    }
+
+    console.log(
+      `got all buildings after stack: ${JSON.stringify(this.buildings)}`
     );
   }
 

@@ -6502,10 +6502,10 @@ function getRecipe() {
 }
 
 function generateBlueprint() {
-  if (!location.href.startsWith("https")) {
-    cocoMessage.warning("请使用 https 协议访问以启用复制到剪切板功能");
-    return;
-  }
+  // if (!location.href.startsWith("https")) {
+  //   cocoMessage.warning("请使用 https 协议访问以启用复制到剪切板功能");
+  //   return;
+  // }
   const recipe = getRecipe();
   const outputRecipe = {
     proliferator: recipe.proliferator,
@@ -6546,6 +6546,7 @@ function generateBlueprint() {
   );
   b1.init();
   b1.generateBuildings();
+  b1.harryLogic();
   b1.generateConveyorBelts();
   b1.generateConveyorBeltsForSprayCoater();
   b1.blueprintTemplate.buildings = b1.buildings;
