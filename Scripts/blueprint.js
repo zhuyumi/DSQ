@@ -917,77 +917,75 @@ class Blueprint {
   }
 
   newConveyor(
-    conveyor,
-    direction,
-    inputData,
-    outputData,
-    parameters = null,
-    needSprayCoater = false
+    conveyor, // 传送带对象
+    direction, // 传送带方向，-1 表示负方向，1 表示正方向
+    inputData, // 输入数据
+    outputData, // 输出数据
+    parameters = null, // 传送带节点的参数，默认为空
+    needSprayCoater = false // 是否需要喷涂机，默认为否
   ) {
-    // needSprayCoater = false
-    // 在y轴方向生成一条长度为length的传送带, direction = -1 表示y轴负方向， 1表示y轴正方向
+    // 检查传送带类型是否正确
     if (conveyor.type !== buildingType.conveyor) {
-      throw `newConveyor error: error conveyor - ${conveyor}`;
+      throw `newConveyor error: error conveyor - ${conveyor}`; // 抛出错误信息
     }
-    let nodeNum = 0;
-    let buildingX = 0,
-      buildingY = 0,
-      buildingZ = 0;
-    for (let i = 0; i < inputData.length; i++) {
-      if (direction < 0) {
-        // 输入带不需要处理input，在最后加一个节点即可
-        break;
+    let nodeNum = 0; // 节点数量初始化为0
+    let buildingX = 0, // 传送带节点的X坐标
+      buildingY = 0, // 传送带节点的Y坐标
+      buildingZ = 0; // 传送带节点的Z坐标
+    for (let i = 0; i < inputData.length; i++) { // 遍历输入数据
+      if (direction < 0) { // 如果方向为负，不处理输入数据
+        break; // 直接跳出循环
       }
-      if (i === 0) {
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
+      if (i === 0) { // 如果是第一个输入数据
+        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1; // 计算X坐标
+        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1; // 计算Y坐标
+        buildingZ = 0; // Z坐标为0
+        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1; // 更新占用区域的X坐标
       } else {
-        buildingY += 1;
+        buildingY += 1; // 其他情况下，Y坐标加1
       }
-      let outputObjIdx = this.buildingIndex + 2;
-      let outputToSlot = 1;
+      let outputObjIdx = this.buildingIndex + 2; // 输出对象索引
+      let outputToSlot = 1; // 输出到槽位
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          [0, 0],
-          conveyor,
-          outputObjIdx,
-          outputToSlot,
-          null
+          { x: buildingX, y: buildingY, z: buildingZ }, // 节点坐标
+          [0, 0], // 节点方向
+          conveyor, // 传送带对象
+          outputObjIdx, // 输出对象索引
+          outputToSlot, // 输出到槽位
+          null // 节点参数为空
         )
       );
-      nodeNum++;
+      nodeNum++; // 节点数量加1
       // 修改分拣器指向这个传送带节点
-      let toChangeNum = inputData[i].length;
-      for (let b of this.buildings) {
-        if (toChangeNum <= 0) {
-          break;
+      let toChangeNum = inputData[i].length; // 需要修改的数量
+      for (let b of this.buildings) { // 遍历建筑物
+        if (toChangeNum <= 0) { // 如果需要修改的数量为0
+          break; // 跳出循环
         }
-        if (inputData[i].includes(b.index)) {
-          b.outputObjIdx = this.buildingIndex;
-          toChangeNum--;
+        if (inputData[i].includes(b.index)) { // 如果输入数据包含当前建筑物索引
+          b.outputObjIdx = this.buildingIndex; // 修改输出对象索引
+          toChangeNum--; // 需要修改的数量减1
         }
       }
     }
-    let sprayCoaterOffset = {};
-    if (needSprayCoater && direction > 0) {
+    let sprayCoaterOffset = {}; // 喷涂机偏移量
+    if (needSprayCoater && direction > 0) { // 如果需要喷涂机且方向为正
       // 添加节点用于放置喷涂机
       // 为避免供料口被堵，喷涂机只放在第偶数个节点上
-      if (nodeNum % 2 === 0) {
+      if (nodeNum % 2 === 0) { // 如果节点数量为偶数
         this.buildings.push(
           this.newConveyorNode(
-            { x: buildingX, y: ++buildingY, z: buildingZ },
-            [0, 0],
-            conveyor,
-            this.buildingIndex + 2,
-            1,
-            null
+            { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+            [0, 0], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex + 2, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
       }
-      sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ };
+      sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ }; // 计算喷涂机偏移量
       this.sprayCoaterOffsetList.push({
         x: buildingX,
         y: buildingY - 1,
@@ -995,83 +993,83 @@ class Blueprint {
       });
       this.buildings.push(
         this.newConveyorNode(
-          sprayCoaterOffset,
-          [0, 0],
-          conveyor,
-          this.buildingIndex + 2,
-          1,
-          null
+          sprayCoaterOffset, // 喷涂机偏移量
+          [0, 0], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex + 2, // 输出对象索引
+          1, // 输出到槽位
+          null // 节点参数为空
         )
       );
     }
 
-    for (let i = 0; i < outputData.length; i++) {
-      let outputObjIdx = -1;
-      let outputToSlot = 0;
-      if (direction < 0 && i === 0) {
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
+    for (let i = 0; i < outputData.length; i++) { // 遍历输出数据
+      let outputObjIdx = -1; // 输出对象索引初始化为-1
+      let outputToSlot = 0; // 输出到槽位初始化为0
+      if (direction < 0 && i === 0) { // 如果方向为负且是第一个输出数据
+        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1; // 计算X坐标
+        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1; // 计算Y坐标
+        buildingZ = 0; // Z坐标为0
+        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1; // 更新占用区域的X坐标
       } else {
-        buildingY += 1;
+        buildingY += 1; // 其他情况下，Y坐标加1
       }
-      if (!(direction > 0 && i === outputData.length - 1)) {
-        if (!(direction < 0 && i === 0)) {
-          outputObjIdx = this.buildingIndex + 1 + direction;
+      if (!(direction > 0 && i === outputData.length - 1)) { // 如果方向为正且不是最后一个输出数据
+        if (!(direction < 0 && i === 0)) { // 如果方向为负且不是第一个输出数据
+          outputObjIdx = this.buildingIndex + 1 + direction; // 计算输出对象索引
         }
       }
-      let nodeParameters = null;
-      if (direction > 0 && i === outputData.length - 1) {
-        nodeParameters = parameters;
+      let nodeParameters = null; // 节点参数初始化为空
+      if (direction > 0 && i === outputData.length - 1) { // 如果方向为正且是最后一个输出数据
+        nodeParameters = parameters; // 设置节点参数
       }
-      if (outputObjIdx !== -1) {
-        outputToSlot = 1;
+      if (outputObjIdx !== -1) { // 如果输出对象索引不为-1
+        outputToSlot = 1; // 输出到槽位设置为1
       }
-      let nodeYaw = [0, 0];
-      if (direction < 0) {
-        nodeYaw = [180, 180];
+      let nodeYaw = [0, 0]; // 节点方向初始化为[0, 0]
+      if (direction < 0) { // 如果方向为负
+        nodeYaw = [180, 180]; // 节点方向设置为[180, 180]
       }
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          nodeYaw,
-          conveyor,
-          outputObjIdx,
-          outputToSlot,
-          nodeParameters
+          { x: buildingX, y: buildingY, z: buildingZ }, // 节点坐标
+          nodeYaw, // 节点方向
+          conveyor, // 传送带对象
+          outputObjIdx, // 输出对象索引
+          outputToSlot, // 输出到槽位
+          nodeParameters // 节点参数
         )
       );
-      nodeNum++;
+      nodeNum++; // 节点数量加1
       // 修改分拣器指向这个传送带节点
-      let toChangeNum = outputData[i].length;
-      for (let b of this.buildings) {
-        if (toChangeNum <= 0) {
-          break;
+      let toChangeNum = outputData[i].length; // 需要修改的数量
+      for (let b of this.buildings) { // 遍历建筑物
+        if (toChangeNum <= 0) { // 如果需要修改的数量为0
+          break; // 跳出循环
         }
-        if (outputData[i].includes(b.index)) {
-          b.inputObjIdx = this.buildingIndex;
-          b.inputFromSlot = -1;
-          toChangeNum--;
+        if (outputData[i].includes(b.index)) { // 如果输出数据包含当前建筑物索引
+          b.inputObjIdx = this.buildingIndex; // 修改输入对象索引
+          b.inputFromSlot = -1; // 修改输入槽位
+          toChangeNum--; // 需要修改的数量减1
         }
       }
     }
-    if (direction < 0) {
+    if (direction < 0) { // 如果方向为负
       // let outputObjIdx = this.buildingIndex
-      if (needSprayCoater) {
-        if (nodeNum % 2 === 0) {
+      if (needSprayCoater) { // 如果需要喷涂机
+        if (nodeNum % 2 === 0) { // 如果节点数量为偶数
           this.buildings.push(
             this.newConveyorNode(
-              { x: buildingX, y: ++buildingY, z: buildingZ },
-              [0, 0],
-              conveyor,
-              this.buildingIndex,
-              1,
-              null
+              { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+              [0, 0], // 节点方向
+              conveyor, // 传送带对象
+              this.buildingIndex, // 输出对象索引
+              1, // 输出到槽位
+              null // 节点参数为空
             )
           );
         }
-        sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ };
+        sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ }; // 计算喷涂机偏移量
         this.sprayCoaterOffsetList.push({
           x: buildingX,
           y: buildingY + 1,
@@ -1079,52 +1077,52 @@ class Blueprint {
         });
         this.buildings.push(
           this.newConveyorNode(
-            sprayCoaterOffset,
-            [180, 180],
-            conveyor,
-            this.buildingIndex,
-            1,
-            null
+            sprayCoaterOffset, // 喷涂机偏移量
+            [180, 180], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
         this.buildings.push(
           this.newConveyorNode(
-            { x: buildingX, y: ++buildingY, z: buildingZ },
-            [180, 180],
-            conveyor,
-            this.buildingIndex,
-            1,
-            null
+            { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+            [180, 180], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
       }
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: ++buildingY, z: buildingZ },
-          [180, 180],
-          conveyor,
-          this.buildingIndex,
-          1,
-          null
+          { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+          [180, 180], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex, // 输出对象索引
+          1, // 输出到槽位
+          null // 节点参数为空
         )
       );
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: ++buildingY, z: buildingZ },
-          [180, 180],
-          conveyor,
-          this.buildingIndex,
-          1,
-          parameters
+          { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+          [180, 180], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex, // 输出对象索引
+          1, // 输出到槽位
+          parameters // 节点参数
         )
       );
     }
-    if (needSprayCoater) {
-      let sprayYaw = [0, 0];
-      if (direction < 0) {
-        sprayYaw = [180, 180];
+    if (needSprayCoater) { // 如果需要喷涂机
+      let sprayYaw = [0, 0]; // 喷涂机方向初始化为[0, 0]
+      if (direction < 0) { // 如果方向为负
+        sprayYaw = [180, 180]; // 喷涂机方向设置为[180, 180]
       }
-      this.buildings.push(this.newSprayCoater(sprayCoaterOffset, sprayYaw));
+      this.buildings.push(this.newSprayCoater(sprayCoaterOffset, sprayYaw)); // 添加喷涂机
     }
   }
 
@@ -3584,7 +3582,7 @@ class Blueprint {
 
     // 针对this.buildings中的所有建筑, 进行分层堆叠. 暂时的解决方案是:x轴不变y轴缩短z轴往上堆叠缩小空间等于是竖向压扁升高了.
     // 假设原始的建筑占地面积为100, (0,0,0 100,50,0) 需要分成2层, 那么第一层坐标是(0,0,0 100,25,0) 第二层坐标是(0,0,10 100,25,10)
-    let stackLayersMax = 3; // 最大堆叠层数
+    let stackLayersMax = 2; // 最大堆叠层数
     let yPerLayer = this.blueprintSize.y / stackLayersMax; // 每层的y轴长度
     for (let building of this.buildings) {
 
