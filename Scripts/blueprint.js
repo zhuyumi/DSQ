@@ -1,3 +1,4 @@
+// (???) 代表了我自己的理解, 待确认//
 //蓝图转JSON https://github.com/cying314/edit-dspblue-print
 const itemMap = {
   water: { name: "沙土", iconId: 1099, remark: "沙土" },
@@ -370,7 +371,7 @@ const buildingMap = {
     size: { x: 3, y: 3 },
     type: buildingType.production,
     category: productionCategory.smelter,
-    slotMaxIndex: 7,
+    slotMaxIndex: 7,  // 最大有12个呀?
   },
   planeSmelter: {
     remark: "位面熔炉",
@@ -403,7 +404,7 @@ const buildingMap = {
     size: { x: 3, y: 3 },
     type: buildingType.production,
     category: productionCategory.assembling,
-    slotMaxIndex: 8,
+    slotMaxIndex: 8,  // 最大有12个呀?
   },
   assemblingMachineMk2: {
     remark: "制造台MkⅡ",
@@ -446,7 +447,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.plant,
-    slotMaxIndex: 6,
+    slotMaxIndex: 6,  // 最大有8个呀?
   },
   量子化工厂: {
     remark: "量子化工厂",
@@ -466,7 +467,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.refinery,
-    slotMaxIndex: 5,
+    slotMaxIndex: 5,  // 最大有9个呀?
   },
   微型粒子对撞机: {
     remark: "粒子对撞机",
@@ -476,7 +477,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.collider,
-    slotMaxIndex: 8,
+    slotMaxIndex: 8,  // 最大有9个
   },
   lab: {
     remark: "矩阵研究站",
@@ -487,7 +488,7 @@ const buildingMap = {
     type: buildingType.production,
     category: productionCategory.lab,
     height: 3,
-    slotMaxIndex: 11,
+    slotMaxIndex: 11, // 最大有12个
   },
   自演化研究站: {
     remark: "自演化研究站",
@@ -498,7 +499,7 @@ const buildingMap = {
     type: buildingType.production,
     category: productionCategory.lab,
     height: 3,
-    slotMaxIndex: 11,
+    slotMaxIndex: 11,  
   },
   sorterMk1: {
     name: "sorterMk1",
@@ -754,7 +755,23 @@ class Blueprint {
     // this.name = target.name
     this.recipe = recipe;
     this.buildingIndex = -1;
-    this.blueprintSize = { x: 0, y: 0 };
+
+    /**
+     * blueprintSize 蓝图面积(不是建筑面积):将配方需要的建筑需要的总面积除以长宽比例（x_y_ratio），然后取平方根来计算y的值。这是为了确保蓝图的高度（y）和宽度（x）符合指定的比例
+     * @property {number} x 蓝图宽度
+     * @property {number} y 蓝图高度
+     */
+    this.blueprintSize = { x: 0, y: 0 }; // 根据所有生产建筑大小总和算出来的y值, x等于y.ceil() * x_y_ratio
+
+
+    /**
+       * occupiedArea 蓝图中每一行建筑的起点和终点坐标
+       * @type {object[]}
+       * @property {number} x1 起点x坐标
+       * @property {number} y1 起点y坐标
+       * @property {number} x2 终点x坐标
+       * @property {number} y2 终点y坐标
+       */
     this.occupiedArea = [];
     this.buildings = [];
     // this.config = {
@@ -769,6 +786,11 @@ class Blueprint {
     //     selfSpray: true,  // 增产剂是否自喷涂
     // }
     this.config = config;
+
+    /**
+     * buildingArray 二维数组，每个子数组代表一行建筑(???)
+     * buildingArray[this.buildingArray.length - 1] 表示最后一个子数组，即当前正在处理的行
+     */
     this.buildingArray = [];
     this.sorters = {};
     this.sprayCoaterOffsetList = [];
@@ -1126,6 +1148,15 @@ class Blueprint {
     }
   }
 
+/**
+ * 计算建筑的面积和其他属性。
+ * @param {Object} subRecipe - 子配方对象。
+ * @returns {number} return.area - 建筑面积。
+ * @returns {number} return.x - x轴方向长度。
+ * @returns {number} return.y - y轴方向长度。
+ * @returns {number[]} return.centerPoint -  centerPoint中数值依次为中心点到y轴负边界、x轴正边界、y轴正边界和x轴负边界的距离
+ * @returns {number[]} return.yaw - 偏航角度数组。
+ */
   calculateBuildingArea(subRecipe) {
     // 计算某个配方中单个生产建筑的占地面积
     if (!subRecipe.building) {
@@ -1150,8 +1181,8 @@ class Blueprint {
             yaw: [0, 0],
           };
         }
-      case productionCategory.assembling:
-        return { area: 16, x: 4, y: 4, centerPoint: [2, 2, 1, 1], yaw: [0, 0] };
+      case productionCategory.assembling: 
+        return { area: 16, x: 4, y: 4, centerPoint: [2, 2, 1, 1], yaw: [0, 0] }; // 为什么是2,2,1,1???
       case productionCategory.plant:
         return { area: 48, x: 8, y: 6, centerPoint: [2, 4, 3, 3], yaw: [0, 0] };
       case productionCategory.refinery:
@@ -1205,25 +1236,32 @@ class Blueprint {
       }
       totalArea +=
         this.calculateBuildingArea(subRecipe).area *
-        Math.ceil(subRecipe.building.num);
+        Math.ceil(subRecipe.building.num); // 每个配方需要的生产建筑都是一样的, 用单个建筑的占地面积乘以建筑数量ceil就是这个配方的总面积
     }
     // console.log(`total area ${totalArea}`)
-    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio));
+    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio)); // 将总面积除以长宽比例（x_y_ratio），然后取平方根来计算y的值。这是为了确保蓝图的高度（y）和宽度（x）符合指定的比例
     // let x = Math.ceil(Math.sqrt(totalArea))
     this.blueprintSize = {
       x: Math.ceil(this.config.x_y_ratio * y),
       y: y,
-    };
+    }; // 由于 y 是向上取整的，所以 blueprintSize 应该会大于等于 totalArea。这是为了确保蓝图的尺寸能够容纳所有建筑物的总面积。
     this.occupiedArea = [{ x1: -1, y1: -1, x2: this.blueprintSize.x, y2: -1 }];
   }
 
+  /**
+   * 
+   * @param {*} buildingOffset [{x, y, z}, {x, y, z}]==[起始坐标,结束坐标]
+   * @param {*} type 建筑的category
+   * @param {*} slotIndex 
+   * @param {*} rotate  0 表示分拣器出货， 1 表示进货
+   * @returns 
+   */
   calculateSorterLocalOffsetAndYaw(
     buildingOffset,
     type,
     slotIndex,
     rotate = 0
   ) {
-    // rotate = 0 表示分拣器出货， 1 表示进货
     let data = {
       offset: [],
       yaw: [],
@@ -1978,13 +2016,38 @@ class Blueprint {
   newProductionBuilding(subRecipe) {
     let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
     let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
+
+    // 当前配方中需要几个生产建筑数量, 就循环几次
     for (let i = 0; i < subRecipe.building.num; i++) {
       // 遍历子配方中指定的建筑数量
       this.buildingIndex++; // 建筑索引自增，用于追踪建筑数量
       this.lastProductionBuildingType =
         buildingMap[subRecipe.building.name].category; // 记录上一个生产建筑的类型
-      let buildingArea, buildingX, buildingY, buildingZ; // 声明变量用于存储建筑区域和坐标
-      buildingArea = this.calculateBuildingArea(subRecipe); // 根据子配方计算建筑面积
+
+      /**
+       * buildingArea 当前配方的建筑面积(不是蓝图面积)
+       * @property {number} area - 面积大小
+       * @property {number} x - x轴方向长度
+       * @property {number} y - y轴方向长度
+       * @property {number} y - z轴方向长度.harry
+       * @property {number[]} centerPoint - 比如[2, 1, 1, 1]数值依次为中心点到y轴负边界、x轴正边界、y轴正边界和x轴负边界的距离
+       * @property {number[]} yaw - 偏航角度数组
+       */
+      let buildingArea;
+
+      /**
+       * 建筑中心点坐标 x (???)
+       */
+      let buildingX;
+      /**
+       * 建筑中心点坐标 y (???)
+       */
+      let buildingY;
+      /**
+       * 建筑中心点坐标 z (???)
+       */
+      let buildingZ; 
+      buildingArea = this.calculateBuildingArea(subRecipe); // 这里应该是先把当前配方的单个建筑的面积信息计算出来. 后面再复用这个变量,来存放着一行的建筑面积信息(???)
       let needNewLine = false; // 标记是否需要换行开始新的建筑排列
       if (
         this.blueprintSize.x -
@@ -2017,11 +2080,11 @@ class Blueprint {
         needNewLine = true;
         hasTeslaTowerThisLine = false; // 新行中尚未放置电力感应塔
         teslaTowerDistance = 0; // 重置电力感应塔的距离计数
-        buildingX = buildingArea.centerPoint[3]; // 设置新行的建筑X坐标
+        buildingX = buildingArea.centerPoint[3]; // 当前建筑中心点到x轴负边界的距离.  当做
         buildingY =
           buildingArea.centerPoint[0] +
           this.occupiedArea[this.occupiedArea.length - 1].y2 +
-          1; // 设置新行的建筑Y坐标
+          1; // 当前建筑中心点到y轴负边界距离 + 整个蓝图倒数第二行区域的结束高度 + 1. (???)
         buildingZ = 0; // 设置新行的建筑Z坐标
         // 向占用区域数组中添加新行的信息
         this.occupiedArea.push({
@@ -2031,11 +2094,13 @@ class Blueprint {
           y2: buildingY + buildingArea.centerPoint[2],
         });
       }
+
       let acceleratorMode = 0; // 初始化加速器模式标记
       if (subRecipe.acceleratorMode === 1) {
         // 如果子配方中加速器模式被启用
         acceleratorMode = 1; // 设置加速器模式
       }
+
       let newBuilding = {
         // 创建新的建筑对象
         index: this.buildingIndex, // 设置建筑索引
@@ -2048,9 +2113,9 @@ class Blueprint {
             z: buildingZ, // 建筑的Z坐标
           },
           {
-            x: buildingX, // 重复建筑的X坐标
-            y: buildingY, // 重复建筑的Y坐标
-            z: buildingZ, // 重复建筑的Z坐标
+            x: buildingX, // 
+            y: buildingY, // 
+            z: buildingZ, // 
           },
         ],
         yaw: buildingArea.yaw, // 设置建筑的偏航角
@@ -2140,12 +2205,12 @@ class Blueprint {
           );
           teslaTowerDistance += teslaTowerOffset.distance; // 累加到电力感应塔的距离
           if (
-            (hasTeslaTowerThisLine && // 判断是否放置电力感应塔
+            (hasTeslaTowerThisLine && // 如果当前行已经放置了电力感应塔，并且距离已经达到或超过配置的间隔距离，则需要在当前行生成新的电力感应塔。(???)
               teslaTowerDistance >= this.config.teslaTowerInterval) ||
             (!hasTeslaTowerThisLine &&
-              teslaTowerDistance >= this.config.teslaTowerInterval / 2) ||
+              teslaTowerDistance >= this.config.teslaTowerInterval / 2) || // 如果当前行尚未放置电力感应塔，并且距离已经达到或超过配置间隔距离的一半，则需要在当前行生成电力感应塔。这是为了确保在每行的中间位置至少有一个电力感应塔，保证电力覆盖范围。(???)
             (teslaTowerDistance >= this.config.teslaTowerInterval / 2 &&
-              this.blueprintSize.x - buildingX < this.config.teslaTowerInterval)
+              this.blueprintSize.x - buildingX < this.config.teslaTowerInterval) // 如果当前行的电力感应塔距离已经达到或超过配置间隔距离的一半，并且当前建筑位置到蓝图末端的距离小于配置的间隔距离，则需要在当前行生成电力感应塔。这是为了确保在接近蓝图末端时，电力感应塔的覆盖范围能够覆盖到蓝图的边缘。(???)
           ) {
             // 生成电力感应塔
             let teslaTower = this.getBuildingTemplate(); // 获取建筑模板
@@ -2160,18 +2225,18 @@ class Blueprint {
             this.buildingArray[this.buildingArray.length - 1].push({
               index: teslaTower.index,
               sorterList: [],
-            }); // 将电力感应塔添加到建筑数组中
+            }); // 将电力感应塔添加到 buildingArray的当前处理行的建筑数组中
             this.buildings.push(teslaTower); // 将电力感应塔添加到建筑列表
           }
         }
       }
 
-      // 添加分拣器
+      // 添加分拣器的逻辑
       let slotIndex = buildingMap[subRecipe.building.name].slotMaxIndex; // 获取最大槽位索引
       let productionSpeed =
         buildingMap[subRecipe.building.name].productionSpeed; // 获取生产速度
       let sorterList = []; // 初始化分拣器列表
-      let actual_building_num = Math.min(1, subRecipe.building.num - i); // 计算实际的建筑数量，考虑到非整数情况
+      let actual_building_num = Math.min(1, subRecipe.building.num - i); // 确保 actual_building_num 的值不会超过 1，防止处理超过一个建筑或负值的情况。(???)不能直接给1吗?
       if (
         buildingMap[subRecipe.building.name].category === productionCategory.lab
       ) {
@@ -2191,15 +2256,16 @@ class Blueprint {
         }
       }
 
+      // 遍历所有输出项目. 一个配方可能有多个输出物品
       for (let outputItem of subRecipe.output) {
-        // 遍历所有输出项目
         let actual_rate =
-          outputItem.rate * productionSpeed * actual_building_num * extra_rate; // 计算实际产率
+          outputItem.rate * productionSpeed * actual_building_num * extra_rate; // 计算实际产率. 多层lab会增大actual_building_num
         let sorter = buildingMap.sorterMk1; // 默认使用一级分拣器
         if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
           // 如果配置只使用三级分拣器或实际产率超过一级分拣器速度
           sorter = buildingMap.sorterMk3; // 使用三级分拣器
         }
+
         if (
           buildingMap[subRecipe.building.name].category ===
             productionCategory.lab &&
@@ -2265,6 +2331,7 @@ class Blueprint {
           }
           actual_rate -= buildingMap.sorterMk3.sortingSpeed; // 减少实际产率
         }
+
         let newSorter = this.getBuildingTemplate(); // 获取新的分拣器模板
         newSorter.itemId = sorter.itemId; // 设置分拣器的物品ID
         newSorter.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
@@ -2335,8 +2402,9 @@ class Blueprint {
           }
         }
       }
+
+      // 遍历所有输入项目
       for (let inputItem of subRecipe.input) {
-        // 遍历所有输入项目
         let actual_rate =
           inputItem.rate * productionSpeed * actual_building_num; // 计算输入项目的实际产率
         if (subRecipe.acceleratorMode === 1) {
@@ -2483,6 +2551,7 @@ class Blueprint {
           }
         }
       }
+
       if (needNewLine) {
         // 如果需要新的一行，将当前建筑和分拣器配置添加到新的行中
         this.buildingArray.push([
@@ -2495,6 +2564,7 @@ class Blueprint {
           sorterList: sorterList,
         });
       }
+
       for (let labIndex of stackLabBuildingIndexList) {
         // 遍历堆叠的实验室建筑索引列表，将它们也添加到当前行
         this.buildingArray[this.buildingArray.length - 1].push({
@@ -2506,7 +2576,7 @@ class Blueprint {
   }
 
   init() {
-    this.mapRecipeID();
+    this.mapRecipeID(); // 拿到recipe列表. 比如处理器的配方在网页UI上就是9个"操作", 就包含了9个子配方(处理器,电路板,铁块,铁矿,铜块,铜矿,微晶芯片,硅块,硅矿). 每个子配方不一定有数输入和输出, 比如铁矿就是没有输入的在将来也不会被算作需要生产设备的"空配方"
     this.calculateBlueprintArea();
     if (this.config.onlyConveyorBeltMk3Downgrade) {
       buildingMap.conveyorBeltMK3.transportSpeed = 28;
