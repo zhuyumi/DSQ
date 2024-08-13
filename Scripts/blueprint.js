@@ -773,7 +773,12 @@ class Blueprint {
        * @property {number} y2 终点y坐标
        */
     this.occupiedArea = [];
+
+    /**
+     * buildings 建筑列表. 包含了所有的建筑
+     */
     this.buildings = [];
+
     // this.config = {
     //     maxSorterNumOneBelt: 8,  // 一个传送带节点连接的最大分拣器数量
     //     conveyorBeltStackLayer: 4,  // 传送带物品最大堆叠层数
@@ -788,11 +793,16 @@ class Blueprint {
     this.config = config;
 
     /**
-     * buildingArray 二维数组，每个子数组代表一行建筑(???)
+     * buildingArray 二维数组，每个子数组代表一行建筑
      * buildingArray[this.buildingArray.length - 1] 表示最后一个子数组，即当前正在处理的行
      */
     this.buildingArray = [];
+
+    /**
+     * sorters 分拣器列表. 包含了产物list,每个产物下还包括输入和输出方向,每个方向下包括了owner建筑的中心offset坐标,rate,recipeId等等
+     */
     this.sorters = {};
+
     this.sprayCoaterOffsetList = [];
     this.itemSummary = {};
     this.conveyorStartOffsetX = 0;
@@ -2013,7 +2023,7 @@ class Blueprint {
     };
   }
 
-  newProductionBuilding(subRecipe) {
+    newProductionBuilding(subRecipe) {
     let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
     let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
 
@@ -2256,7 +2266,7 @@ class Blueprint {
         }
       }
 
-      // 遍历所有输出项目. 一个配方可能有多个输出物品
+      // 先遍历所有输出项目. 一个配方可能有多个输出物品
       for (let outputItem of subRecipe.output) {
         let actual_rate =
           outputItem.rate * productionSpeed * actual_building_num * extra_rate; // 计算实际产率. 多层lab会增大actual_building_num
@@ -2361,7 +2371,7 @@ class Blueprint {
               ownerName: subRecipe.building.name,
               ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
               recipeID: parseInt(subRecipe.recipeID),
-            }); // 添加到输出列表
+            }); // 把所有相同的输出产物,添加到输出列表
           } else {
             this.sorters[outputItem.name].output = [
               {
@@ -2403,7 +2413,7 @@ class Blueprint {
         }
       }
 
-      // 遍历所有输入项目
+      // 再遍历所有输入项目
       for (let inputItem of subRecipe.input) {
         let actual_rate =
           inputItem.rate * productionSpeed * actual_building_num; // 计算输入项目的实际产率

@@ -6522,6 +6522,7 @@ function generateBlueprint() {
       document.getElementById("conveyorBeltStackLayer").value
     ), // 传送带物品最大堆叠层数
     x_y_ratio: parseFloat(document.getElementById("x_y_ratio").value), // 长宽比
+    magic_layer_cnt: parseFloat(document.getElementById("magic_layer_cnt").value), // 仙术蓝图的堆叠层数
     // compactLayout: document.getElementById('compactLayout').checked,  // 是否采用紧凑布局（紧凑布局的蓝图中炼油厂、化工厂和对撞机在布局上会更紧凑，适合摆放在赤道带，在高纬度可能会出现碰撞问题）
     compactLayout: false,
     upgradeConveyorBelt: false, // 360/min的运力时使用3级传送带（无带流情况下，原料的需求和供应都是集中处理，1级传送带满运力情况下可能会有运送不及时问题导致产量低于预期
