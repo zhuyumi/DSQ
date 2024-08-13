@@ -6547,7 +6547,7 @@ function generateBlueprint() {
   );
   b1.init();
   b1.generateBuildings();
-  b1.harryLogic();
+  // b1.harryLogic();
   b1.generateConveyorBelts();
   b1.generateConveyorBeltsForSprayCoater();
   b1.blueprintTemplate.buildings = b1.buildings;

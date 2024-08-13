@@ -766,30 +766,25 @@ class Blueprint {
 
     /**
        * occupiedArea 蓝图中每一行建筑的起点和终点坐标
+       * 更新: 每个元素是一层中 每一行建筑的起点和终点坐标.
        * @type {object[]}
        * @property {number} x1 起点x坐标
        * @property {number} y1 起点y坐标
        * @property {number} x2 终点x坐标
        * @property {number} y2 终点y坐标
        */
-    this.occupiedArea = [];
+    // this.occupiedArea = [];
+    this.occupiedArea = Array.from({ length: config.magic_layer_cnt }, () => []);
+
+
+    // this.TEST_occupiedArea = []; // 临时测试使用
+    // this.TEST_blueprintSize = { x: 0, y: 0 };  // 临时测试使用
 
     /**
      * buildings 建筑列表. 包含了所有的建筑
      */
     this.buildings = [];
 
-    // this.config = {
-    //     maxSorterNumOneBelt: 8,  // 一个传送带节点连接的最大分拣器数量
-    //     conveyorBeltStackLayer: 4,  // 传送带物品最大堆叠层数
-    //     x_y_ratio: 2,  // 长宽比
-    //     compactLayout: false,  // 是否采用紧凑布局（紧凑布局的蓝图中炼油厂、化工厂和对撞机在布局上会更紧凑，适合摆放在赤道带，在高纬度可能会出现碰撞问题）
-    //     upgradeConveyorBelt: false,  // 360/min的运力时使用3级传送带（无带流情况下，原料的需求和供应都是集中处理，1级传送带满运力情况下可能会有运送不及时问题导致产量低于预期
-    //     onlyConveyorBeltMk3: false,  // 是否只使用三级传送带
-    //     onlySorterMk3: false,  // 是否只使用三级分拣器
-    //     maxLabLayers: 15,  // 研究站最大层数
-    //     selfSpray: true,  // 增产剂是否自喷涂
-    // }
     this.config = config;
 
     /**
@@ -969,10 +964,10 @@ class Blueprint {
         break; // 直接跳出循环
       }
       if (i === 0) { // 如果是第一个输入数据
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1; // 计算X坐标
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1; // 计算Y坐标
+        buildingX = this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
+        buildingY = this.occupiedArea[0][this.occupiedArea[0].length - 2].y2 + 1; // 计算Y坐标
         buildingZ = 0; // Z坐标为0
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1; // 更新占用区域的X坐标
+        this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
       } else {
         buildingY += 1; // 其他情况下，Y坐标加1
       }
@@ -1039,10 +1034,10 @@ class Blueprint {
       let outputObjIdx = -1; // 输出对象索引初始化为-1
       let outputToSlot = 0; // 输出到槽位初始化为0
       if (direction < 0 && i === 0) { // 如果方向为负且是第一个输出数据
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1; // 计算X坐标
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1; // 计算Y坐标
+        buildingX = this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
+        buildingY = this.occupiedArea[0][this.occupiedArea[0].length - 2].y2 + 1; // 计算Y坐标
         buildingZ = 0; // Z坐标为0
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1; // 更新占用区域的X坐标
+        this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
       } else {
         buildingY += 1; // 其他情况下，Y坐标加1
       }
@@ -1159,7 +1154,7 @@ class Blueprint {
   }
 
 /**
- * 计算建筑的面积和其他属性。
+ * 计算某个配方中单个生产建筑的占地面积
  * @param {Object} subRecipe - 子配方对象。
  * @returns {number} return.area - 建筑面积。
  * @returns {number} return.x - x轴方向长度。
@@ -1240,6 +1235,7 @@ class Blueprint {
 
   calculateBlueprintArea() {
     let totalArea = 0;
+    // 先计算所有配方需要的总面积
     for (let subRecipe of this.recipe.subRecipes) {
       if (!subRecipe.building) {
         continue;
@@ -1248,8 +1244,9 @@ class Blueprint {
         this.calculateBuildingArea(subRecipe).area *
         Math.ceil(subRecipe.building.num); // 每个配方需要的生产建筑都是一样的, 用单个建筑的占地面积乘以建筑数量ceil就是这个配方的总面积
     }
+
     // console.log(`total area ${totalArea}`)
-    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio)); // 将总面积除以长宽比例（x_y_ratio），然后取平方根来计算y的值。这是为了确保蓝图的高度（y）和宽度（x）符合指定的比例
+    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio)); // 将总面积除以长宽比例，然后取平方根来计算y的值。这是为了确保蓝图的宽度（y）和宽度（x）符合指定的比例
     // let x = Math.ceil(Math.sqrt(totalArea))
     this.blueprintSize = {
       x: Math.ceil(this.config.x_y_ratio * y),
@@ -1257,6 +1254,39 @@ class Blueprint {
     }; // 由于 y 是向上取整的，所以 blueprintSize 应该会大于等于 totalArea。这是为了确保蓝图的尺寸能够容纳所有建筑物的总面积。
     this.occupiedArea = [{ x1: -1, y1: -1, x2: this.blueprintSize.x, y2: -1 }];
   }
+  calculateBlueprintArea2(n) {
+    let totalArea = 0;
+    // 先计算所有配方需要的总面积
+    for (let subRecipe of this.recipe.subRecipes) {
+        if (!subRecipe.building) {
+            continue;
+        }
+        totalArea +=
+            this.calculateBuildingArea(subRecipe).area *
+            Math.ceil(subRecipe.building.num); // 每个配方需要的生产建筑都是一样的, 用单个建筑的占地面积乘以建筑数量ceil就是这个配方的总面积
+    }
+
+    // 计算每层的最小面积，确保每层的面积乘以层数不小于总面积
+    let averageLayerArea = Math.ceil(totalArea / n);
+
+    // 初始化多层的尺寸
+    for (let i = 0; i < n; i++) {
+        let y = Math.ceil(Math.sqrt(averageLayerArea / this.config.x_y_ratio));
+        let x = Math.ceil(this.config.x_y_ratio * y);
+
+        // 更新每层的尺寸
+        this.blueprintSize = { x: x, y: y};
+        // 更新每层的占用区域
+        for (let j = 0; j < this.config.magic_layer_cnt; j++) {
+           this.occupiedArea[j] = [{ x1: -1, y1: -1, x2: this.blueprintSize.x, y2: -1 }];
+        }
+
+        // // 更新每层的尺寸. 第一层layer=1
+        // this.blueprintSize.push({ x: x, y: y, layer: i + 1 });
+        // // 更新每层的占用区域. 第一层layer=1
+        // this.occupiedArea.push({ x1: -1, y1: -1, x2: x, y2: -1, layer: i + 1 });
+    }
+}
 
   /**
    * 
@@ -2026,6 +2056,7 @@ class Blueprint {
     newProductionBuilding(subRecipe) {
     let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
     let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
+    let levelHeight = 4.5; // 单层的高度
 
     // 当前配方中需要几个生产建筑数量, 就循环几次
     for (let i = 0; i < subRecipe.building.num; i++) {
@@ -2033,6 +2064,11 @@ class Blueprint {
       this.buildingIndex++; // 建筑索引自增，用于追踪建筑数量
       this.lastProductionBuildingType =
         buildingMap[subRecipe.building.name].category; // 记录上一个生产建筑的类型
+
+      let placed = false; // 标记当前的生产建筑是否已放置
+      // 对于仙术的每一层
+      for (let j = 0; j < this.config.magic_layer_cnt; j++) {
+        if (placed) break; // 如果建筑已放置，跳出循环
 
       /**
        * buildingArea 当前配方的建筑面积(不是蓝图面积)
@@ -2056,53 +2092,62 @@ class Blueprint {
       /**
        * 建筑中心点坐标 z (???)
        */
-      let buildingZ; 
+      let buildingZ;
+
       buildingArea = this.calculateBuildingArea(subRecipe); // 这里应该是先把当前配方的单个建筑的面积信息计算出来. 后面再复用这个变量,来存放着一行的建筑面积信息(???)
       let needNewLine = false; // 标记是否需要换行开始新的建筑排列
       if (
         this.blueprintSize.x -
-          this.occupiedArea[this.occupiedArea.length - 1].x2 >=
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 >=
         buildingArea.x / 2
       ) {
         // 检查当前行剩余空间是否足够放置新建筑
         // 在当前行继续添加建筑
         buildingX =
-          this.occupiedArea[this.occupiedArea.length - 1].x2 +
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 +
           1 +
           buildingArea.centerPoint[3]; // 计算建筑的X坐标
         buildingY =
-          this.occupiedArea[this.occupiedArea.length - 2].y2 +
+          this.occupiedArea[j][this.occupiedArea[j].length - 2].y2 +
           1 +
           buildingArea.centerPoint[0]; // 计算建筑的Y坐标
-        buildingZ = 0; // 设置建筑的Z坐标，默认为10
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x; // 更新占用区域的x2坐标
+        buildingZ = levelHeight * j; // 设置建筑的Z坐标
+        this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 += buildingArea.x; // 更新占用区域的x2坐标
         if (
           buildingY + buildingArea.centerPoint[2] >
-          this.occupiedArea[this.occupiedArea.length - 1].y2
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].y2
         ) {
           // 如果建筑的宽度超出当前行的y2坐标
           // 更新占地区域的y2坐标以适应更宽的建筑
-          this.occupiedArea[this.occupiedArea.length - 1].y2 =
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 =
             buildingY + buildingArea.centerPoint[2];
         }
-      } else {
-        // 如果当前行空间不足，则开始新的一行
+        placed = true; // 标记建筑已放置
+      } else if(this.blueprintSize.y -
+        this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 >=
+      buildingArea.y / 2) {
+        // 如果当前行空间不足，并且新的一行没有超出本层的范围,则开始新的一行
         needNewLine = true;
         hasTeslaTowerThisLine = false; // 新行中尚未放置电力感应塔
         teslaTowerDistance = 0; // 重置电力感应塔的距离计数
         buildingX = buildingArea.centerPoint[3]; // 当前建筑中心点到x轴负边界的距离.  当做
         buildingY =
           buildingArea.centerPoint[0] +
-          this.occupiedArea[this.occupiedArea.length - 1].y2 +
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 +
           1; // 当前建筑中心点到y轴负边界距离 + 整个蓝图倒数第二行区域的结束高度 + 1. (???)
-        buildingZ = 0; // 设置新行的建筑Z坐标
+        buildingZ = levelHeight * j; // 设置新行的建筑Z坐标
+
         // 向占用区域数组中添加新行的信息
-        this.occupiedArea.push({
+        this.occupiedArea[j].push({
           x1: 0,
           y1: buildingY - buildingArea.centerPoint[0],
           x2: buildingX + buildingArea.centerPoint[1],
           y2: buildingY + buildingArea.centerPoint[2],
         });
+        placed = true; // 标记建筑已放置
+      } else{
+        placed = false; // 当层放不下了,则放到下一层
+        continue;
       }
 
       let acceleratorMode = 0; // 初始化加速器模式标记
@@ -2582,12 +2627,18 @@ class Blueprint {
           sorterList: [],
         });
       }
+      }
+      if (!placed) {
+        // 如果所有层都放不下，则报错或处理异常情况
+        throw new Error("无法放置所有建筑，建筑面积超出所有层的总面积");
+    }
     }
   }
 
   init() {
     this.mapRecipeID(); // 拿到recipe列表. 比如处理器的配方在网页UI上就是9个"操作", 就包含了9个子配方(处理器,电路板,铁块,铁矿,铜块,铜矿,微晶芯片,硅块,硅矿). 每个子配方不一定有数输入和输出, 比如铁矿就是没有输入的在将来也不会被算作需要生产设备的"空配方"
-    this.calculateBlueprintArea();
+    // this.calculateBlueprintArea();
+    this.calculateBlueprintArea2(this.config.magic_layer_cnt);
     if (this.config.onlyConveyorBeltMk3Downgrade) {
       buildingMap.conveyorBeltMK3.transportSpeed = 28;
     } else {
@@ -2780,8 +2831,8 @@ class Blueprint {
     //   this.occupiedArea[this.occupiedArea.length - 1].x2; // 设置传送带起始的X偏移
     // this.occupiedArea[this.occupiedArea.length - 1].x2++; // x轴方向空一格用于喷涂剂走线
     // this.occupiedArea[this.occupiedArea.length - 2].y2++; // y轴方向空一格避免喷涂机和建筑碰撞
-    this.conveyorStartOffsetX = this.occupiedArea[0].x2+1; // 设置传送带起始的X偏移
-    this.occupiedArea[0].x2++; // x轴方向空一格用于喷涂剂走线
+    this.conveyorStartOffsetX = this.occupiedArea[0][0].x2+1; // 设置传送带起始的X偏移
+    this.occupiedArea[0][0].x2++; // x轴方向空一格用于喷涂剂走线
 
     // 生成传送带并连接到分拣器
     const zero = 0.0000000001; // rate是每秒生产量，除不尽时会有精度误差，小数点后16位都是准确的，取0.0000000001为判断标准足够了。
