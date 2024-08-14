@@ -2056,7 +2056,7 @@ class Blueprint {
     newProductionBuilding(subRecipe) {
     let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
     let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
-    let levelHeight = 4.5; // 单层的高度
+    let levelHeight = this.config.magic_layer_height; // 单层的高度
 
     // 当前配方中需要几个生产建筑数量, 就循环几次
     for (let i = 0; i < subRecipe.building.num; i++) {
