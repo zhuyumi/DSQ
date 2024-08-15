@@ -877,6 +877,19 @@ class Blueprint {
     }
   }
 
+  /**
+   * 给配方排序. 如果是用到了很高的建筑比如原油精炼厂等的配方, 就放到最后,这样使用仙术的时候就可以最后建造这些建筑放在最顶层
+   */
+  sortRecipeId(){
+    for (let subRecipe of this.recipe.subRecipes) {
+        // 如果是精炼油, 就把这个配方移动到整个数组的最后
+        if (subRecipe.recipeID === 16){
+          this.recipe.subRecipes.push(this.recipe.subRecipes.splice(this.recipe.subRecipes.indexOf(subRecipe), 1)[0]);
+          break;
+        }
+    }
+  }
+
   getBuildingTemplate() {
     this.buildingIndex++;
     return {
@@ -2637,6 +2650,9 @@ class Blueprint {
 
   init() {
     this.mapRecipeID(); // 拿到recipe列表. 比如处理器的配方在网页UI上就是9个"操作", 就包含了9个子配方(处理器,电路板,铁块,铁矿,铜块,铜矿,微晶芯片,硅块,硅矿). 每个子配方不一定有数输入和输出, 比如铁矿就是没有输入的在将来也不会被算作需要生产设备的"空配方"
+
+    this.sortRecipeId();
+
     // this.calculateBlueprintArea();
     this.calculateBlueprintArea2(this.config.magic_layer_cnt);
     if (this.config.onlyConveyorBeltMk3Downgrade) {
