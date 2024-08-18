@@ -2407,8 +2407,8 @@ class Blueprint {
             let labBuilding = this.getBuildingTemplate(); // 获取建筑模板
             labBuilding.localOffset = [
               // 设置实验室建筑的本地偏移
-              { x: buildingX, y: buildingY, z: buildingZ },
-              { x: buildingX, y: buildingY, z: buildingZ },
+              { x: buildingX, y: -buildingY-1, z: buildingZ },
+              { x: buildingX, y: -buildingY-1, z: buildingZ },
             ];
             labBuilding.localOffset[0].z = buildingMap.lab.height * layers; // 设置堆叠的Z坐标
             labBuilding.localOffset[1].z = buildingMap.lab.height * layers;

@@ -6549,11 +6549,15 @@ function generateBlueprint() {
   );
   b1.init();
   b1.generateBuildings();
-  // b1.harryLogic();
   b1.generateConveyorBelts();
   b1.generateConveyorBeltsForSprayCoater();
   b1.blueprintTemplate.buildings = b1.buildings;
+  if (config.magic_layer_cnt > 0){
+    recipe.blueprintDesc += `仙术蓝图堆叠层数: ${config.magic_layer_cnt}\n` + `每层高度: ${config.magic_layer_height}\n`;
+  }
   b1.blueprintTemplate.header.desc = recipe.blueprintDesc.trimEnd();
+
+
   switch (recipe.blueprintIcon.length) {
     case 1:
       b1.blueprintTemplate.header.layout = 10;
