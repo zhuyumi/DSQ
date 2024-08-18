@@ -816,8 +816,20 @@ class Blueprint {
 
     /**
      * 给中间产物传送带的放置位置偏移量.针对第一个输入输出的传送带的便宜
+     * @property {number} x x轴偏移量
+     * @property {number} y y轴偏移量
+     * @property {number} z z轴偏移量
+     * @property {boolean} hasValue 是否被设置过值. 这个值一次计算只会被设置一次
+     * @property {number} layerHeight 早期没有垂直传送带的时候, 不同产物平铺带子之间的间隔高度
      */
-    this.conveyorTempProductOffset = 0;
+    this.conveyorTempProductOffset = {
+      x: 0,
+      y: 0,
+      z: 0,
+      hasValue: false,
+      layerHeight: 0.5,
+    };
+
     this.lastProductionBuildingType = -1;
     this.blueprintTemplate = {
       header: {
@@ -1015,25 +1027,37 @@ class Blueprint {
         // 如果是第一个输入数据
 
         if (this.newConveyor_isTempProduct(inputData, outputData)) {
-          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 就向Z轴竖起来,放到建筑区域的左上方
-
+          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 放到建筑区域的左下方
           // 第一次遇到中间产物传送带的时候, 记录下这个传送带的建造偏移量, 后面所有的中间产物传送带都会用这个偏移量
-          if (this.conveyorTempProductOffset === 0) {
+
+          if (!this.conveyorTempProductOffset.hasValue) {
             // 如果中间产物传送点的建造偏移量为0
-            this.conveyorTempProductOffset =
-              this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.x =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.hasValue = true;
           }
 
-          buildingX =
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            // 如果当前科技不支持垂直传送带, 那就单个产物的带子水平放置, 但是不同产物的带子向上堆叠.
+            buildingX = 0; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0 + (this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+              1 -
+              this.conveyorTempProductOffset.x) * this.conveyorTempProductOffset.layerHeight; // 在支持垂直传送带的情况下, 不同中间产物的带子是x轴方向堆叠的, 但是不支持垂直传送带的情况下, 堆叠的是z轴方向. offset.x用作堆叠位置的计数了就
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          } else{
+            buildingX =
             this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
             1 -
-            this.conveyorTempProductOffset; // 计算X坐标
-          buildingY = -1; // 计算Y坐标
-          buildingZ = 0; // Z坐标为0
+            this.conveyorTempProductOffset.x; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0; // Z坐标为0
 
-          this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          }
         } else {
-          //
+          // 如果是最终产物或者原料
           buildingX =
             this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
           buildingY =
@@ -1045,7 +1069,11 @@ class Blueprint {
       } else {
         // 如果inputData和outputData都不为空, 那么认为这个带子是给中间产物使用的. 就给它朝着Z轴方向扩展
         if (this.newConveyor_isTempProduct(inputData, outputData)) {
-          buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            buildingX += 1; // 尝试往X轴方向移动
+          } else{
+            buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          }
         } else {
           buildingY += 1; // 其他情况下，Y坐标加1
         }
@@ -1123,25 +1151,37 @@ class Blueprint {
       if (direction < 0 && i === 0) {
         // 如果方向为负且是第一个输出数据
         if (this.newConveyor_isTempProduct(inputData, outputData)) {
-          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 就向Z轴竖起来,放到建筑区域的左下方. 左上方太高了可能会和建筑有碰撞.
-
+          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 放到建筑区域的左下方
           // 第一次遇到中间产物传送带的时候, 记录下这个传送带的建造偏移量, 后面所有的中间产物传送带都会用这个偏移量
-          if (this.conveyorTempProductOffset === 0) {
+
+          if (!this.conveyorTempProductOffset.hasValue) {
             // 如果中间产物传送点的建造偏移量为0
-            this.conveyorTempProductOffset =
-              this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.x =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.hasValue = true;
           }
 
-          buildingX =
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            // 如果当前科技不支持垂直传送带, 那就单个产物的带子水平放置, 但是不同产物的带子向上堆叠.
+            buildingX = 0; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0 + (this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+              1 -
+              this.conveyorTempProductOffset.x) * this.conveyorTempProductOffset.layerHeight; // 在支持垂直传送带的情况下, 不同中间产物的带子是x轴方向堆叠的, 但是不支持垂直传送带的情况下, 堆叠的是z轴方向. offset.x用作堆叠位置的计数了就
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          } else{
+            buildingX =
             this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
             1 -
-            this.conveyorTempProductOffset; // 计算X坐标
-          buildingY = -1; // 计算Y坐标
-          buildingZ = 0; // Z坐标为0
+            this.conveyorTempProductOffset.x; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0; // Z坐标为0
 
-          this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          }
         } else {
-          //
+          // 如果是最终产物或者原料
           buildingX =
             this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
           buildingY =
@@ -1153,7 +1193,11 @@ class Blueprint {
       } else {
         // 如果inputData和outputData都不为空, 那么认为这个带子是给中间产物使用的. 就给它朝着Z轴方向扩展
         if (this.newConveyor_isTempProduct(inputData, outputData)) {
-          buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            buildingX += 1; // 尝试往X轴方向移动
+          } else{
+            buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          }
         } else {
           buildingY += 1; // 其他情况下，Y坐标加1
         }
