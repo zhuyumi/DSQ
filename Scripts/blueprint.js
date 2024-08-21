@@ -910,18 +910,25 @@ class Blueprint {
    * 给配方排序. 如果是用到了很高的建筑比如原油精炼厂等的配方, 就放到最后,这样使用仙术的时候就可以最后建造这些建筑放在最顶层
    */
   sortRecipeId() {
+    // 如果是精炼油16,塑料23,硫酸24,石墨烯31,氢石墨烯32,  就把这个配方移动到整个数组的最后
+
+    // 目标配方ID
+    const targetRecipeIDs = [16, 23, 24, 31, 32];
+
+    // 分离目标配方和非目标配方
+    let nonTargetRecipes = [];
+    let targetRecipes = [];
+
     for (let subRecipe of this.recipe.subRecipes) {
-      // 如果是精炼油, 就把这个配方移动到整个数组的最后
-      if (subRecipe.recipeID === 16) {
-        this.recipe.subRecipes.push(
-          this.recipe.subRecipes.splice(
-            this.recipe.subRecipes.indexOf(subRecipe),
-            1
-          )[0]
-        );
-        break;
+      if (targetRecipeIDs.includes(subRecipe.recipeID)) {
+        targetRecipes.push(subRecipe);
+      } else {
+        nonTargetRecipes.push(subRecipe);
       }
     }
+
+    // 合并非目标配方和目标配方
+    this.recipe.subRecipes = [...nonTargetRecipes, ...targetRecipes];
   }
 
   getBuildingTemplate() {
