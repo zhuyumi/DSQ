@@ -913,7 +913,7 @@ class Blueprint {
     // 如果是精炼油16,塑料23,硫酸24,石墨烯31,氢石墨烯32,  就把这个配方移动到整个数组的最后
 
     // 目标配方ID
-    const targetRecipeIDs = [16, 23, 24, 31, 32];
+    const targetRecipeIDs = [16,23,24,31,32,33,35];
 
     // 分离目标配方和非目标配方
     let nonTargetRecipes = [];
