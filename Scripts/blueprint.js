@@ -3106,12 +3106,12 @@ class Blueprint {
         } else {
           // 如果是原材料
           inputData.push([]);
-          parameters = {
-            iconId: itemMap[itemName].iconId,
-            count: (inputRate * 60).toFixed(0),
-          };
           doneRate += inputRate;
         }
+        parameters = {
+          iconId: itemMap[itemName].iconId,
+          count: (inputRate * 60).toFixed(0),
+        };
         totalDoneRate += doneRate;
         let outputRate = doneRate; // 当前传送带实际运力
         doneSorterNum = 0;
