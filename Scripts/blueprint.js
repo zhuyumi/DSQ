@@ -827,7 +827,7 @@ class Blueprint {
       y: 0,
       z: 0,
       hasValue: false,
-      layerHeight: 0.5,
+      layerHeight: 1,
     };
 
     this.lastProductionBuildingType = -1;
