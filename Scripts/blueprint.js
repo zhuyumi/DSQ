@@ -2417,8 +2417,8 @@ class Blueprint {
               { x: buildingX, y: -buildingY-1, z: buildingZ },
               { x: buildingX, y: -buildingY-1, z: buildingZ },
             ];
-            labBuilding.localOffset[0].z = buildingMap.lab.height * layers; // 设置堆叠的Z坐标
-            labBuilding.localOffset[1].z = buildingMap.lab.height * layers;
+            labBuilding.localOffset[0].z = buildingMap.lab.height * (layers-1); // 设置堆叠的Z坐标
+            labBuilding.localOffset[1].z = buildingMap.lab.height * (layers-1);
             labBuilding.yaw = newBuilding.yaw; // 设置堆叠建筑的偏航角
             labBuilding.itemId = buildingMap[subRecipe.building.name].itemId; // 设置物品ID
             labBuilding.modelIndex =
