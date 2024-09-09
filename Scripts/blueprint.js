@@ -3053,15 +3053,15 @@ class Blueprint {
         // 如果配置只使用三级传送带
         conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
       } else if (item.rate >= conveyorBelt.transportSpeed) {
-        // 如果物料速率大于等于一级传送带速度
-        if (
-          item.rate === conveyorBelt.transportSpeed &&
-          this.config.upgradeConveyorBelt
-        ) {
-          conveyorBelt = buildingMap.conveyorBeltMK3; // 直接使用三级传送带，跳过二级
-        } else if (item.rate > conveyorBelt.transportSpeed) {
-          conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
-        }
+        // // 如果物料速率大于等于一级传送带速度
+        // if (
+        //   item.rate === conveyorBelt.transportSpeed &&
+        //   this.config.upgradeConveyorBelt
+        // ) {
+        //   conveyorBelt = buildingMap.conveyorBeltMK3; // 直接使用三级传送带，跳过二级
+        // } else if (item.rate > conveyorBelt.transportSpeed) {
+        //   conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
+        // }
       }
 
       let maxTransportSpeed = buildingMap.conveyorBeltMK3.transportSpeed; // 获取三级传送带的最大运输速度

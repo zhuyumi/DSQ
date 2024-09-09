@@ -10,3 +10,29 @@
 - conveyor需要优化, 一些中转的传送带不需要一路排开. done
 - 中间产物带子上贴上产物icon. done
 
+
+歪曲的爪子例子:
+    {
+      "index": 135,
+      "areaIndex": 0,
+      "localOffset": [
+        { "x": 23, "y": 0.3375, "z": 0 },
+        { "x": 23, "y": -1, "z": 0 }
+      ],
+      "yaw": [180, 180],
+      "tilt": 0,
+      "itemId": 2013,
+      "modelIndex": 43,
+      "outputObjIdx": 298,
+      "inputObjIdx": 163,
+      "outputToSlot": -1,
+      "inputFromSlot": 4,
+      "outputFromSlot": 0,
+      "inputToSlot": 1,
+      "outputOffset": 0,
+      "inputOffset": 0,
+      "recipeId": 0,
+      "filterId": 5205,
+      "parameters": { "length": 1 },
+      "itemName": "极速分拣器"
+    },
