@@ -827,7 +827,7 @@ class Blueprint {
       y: 0,
       z: 0,
       hasValue: false,
-      layerHeight: 1,
+      layerHeight: this.config.magic_vertical_conveyor_belt_gap_height,
     };
 
     this.lastProductionBuildingType = -1;
