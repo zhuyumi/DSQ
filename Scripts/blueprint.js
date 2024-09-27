@@ -1,181 +1,352 @@
+// (???) 代表了我自己的理解, 待确认//
 //蓝图转JSON https://github.com/cying314/edit-dspblue-print
 const itemMap = {
-	water: { name: "沙土", iconId: 1099, remark: "沙土" },
-    water: { name: "water", iconId: 1000, remark: "水" },
-    ironOre: { name: "ironOre", iconId: 1001, remark: "铁矿" },
-    copperOre: { name: "copperOre", iconId: 1002, remark: "铜矿" },
-    siliconOre: { name: "siliconOre", iconId: 1003, remark: "硅石" },
-    titaniumOre: { name: "titaniumOre", iconId: 1004, remark: "钛石" },
-    coal: { name: "coal", iconId: 1006, remark: "煤矿" },
-    ironIngot: { name: "ironIngot", iconId: 1101, remark: "铁块" },
-    titaniumIngot: { name: "titaniumIngot", iconId: 1106, remark: "钛块" },
-    energeticGraphite: { name: "energeticGraphite", iconId: 1109, remark: "高级石墨" },
-    diamond: { name: "diamond", iconId: 1112, remark: "金刚石" },
-    proliferatorMk1: { name: "proliferatorMk1", iconId: 1141,extra_rate:0.125,accelerate:0.25, remark: "增产剂Mk.Ⅰ" },
-    proliferatorMk2: { name: "proliferatorMk2", iconId: 1142,extra_rate:0.2,accelerate:0.5, remark: "增产剂Mk.Ⅱ" },
-    proliferatorMk3: { name: "proliferatorMk3", iconId: 1143,extra_rate:0.25,accelerate:1, remark: "增产剂Mk.Ⅲ" },
-    gear: { name: "gear", iconId: 1201, remark: "齿轮" },
-    stone: { name: "stone", iconId: 1005, remark: "石矿" },
-    oil: { name: "oil", iconId: 1007, remark: "原油" },
-    refinedOil: { name: "refinedOil", iconId: 1114, remark: "精炼油" },
-    sulfuricAcid: { name: "sulfuricAcid", iconId: 1116, remark: "硫酸" },
-    hydrogen: { name: "hydrogen", iconId: 1120, remark: "氢" },
-    hydrogenOutput: { name: "hydrogenOutput", iconId: 1120, remark: "氢" },
-    fireIce: { name: "fireIce", iconId: 1011, remark: "可燃冰" },
-    //wood: { name: 'wood', iconId: 1030, remark: '木材' },
-    //plant_fuel: { name: 'plant_fuel', iconId: 1031, remark: '植物燃料' },
-    kimberliteOre: { name: "kimberliteOre", iconId: 1012, remark: "金伯利矿石" },
-    fractalSilicon: { name: "fractalSilicon", iconId: 1013, remark: "分形硅石" },
-    opticalGratingCrystal: { name: "opticalGratingCrystal", iconId: 1014, remark: "光栅石" },
-    spiniformStalagmiteCrystal: { name: "spiniformStalagmiteCrystal", iconId: 1015, remark: "刺笋结晶" },
-    unipolarMagnet: { name: "unipolarMagnet", iconId: 1016, remark: "单极磁石" },
-    copperIngot: { name: "copperIngot", iconId: 1104, remark: "铜块" },
-    highPuritySilicon: { name: "highPuritySilicon", iconId: 1105, remark: "高纯硅块" },
-    stoneBrick: { name: "stoneBrick", iconId: 1108, remark: "石材" },
-    steel: { name: "steel", iconId: 1103, remark: "钢材" },
-    titaniumAlloy: { name: "titaniumAlloy", iconId: 1107, remark: "钛合金" },
-    glass: { name: "glass", iconId: 1110, remark: "玻璃" },
-    titaniumGlass: { name: "titaniumGlass", iconId: 1119, remark: "钛化玻璃" },
-    prism: { name: "prism", iconId: 1111, remark: "棱镜" },
-    crystalSilicon: { name: "crystalSilicon", iconId: 1113, remark: "晶格硅" },
-    magnet: { name: "magnet", iconId: 1102, remark: "磁铁" },
-    magneticCoil: { name: "magneticCoil", iconId: 1202, remark: "磁线圈" },
-    electricMotor: { name: "electricMotor", iconId: 1203, remark: "电动机" },
-    electromagneticTurbine: { name: "electromagneticTurbine", iconId: 1204, remark: "电磁涡轮" },
-    superMagneticRing: { name: "superMagneticRing", iconId: 1205, remark: "超级磁场环" },
-    particleContainer: { name: "particleContainer", iconId: 1206, remark: "粒子容器" },
-    strangeMatter: { name: "strangeMatter", iconId: 1127, remark: "奇异物质" },
-    circuitBoard: { name: "circuitBoard", iconId: 1301, remark: "电路板" },
-    processor: { name: "processor", iconId: 1303, remark: "处理器" },
-    quantumChip: { name: "quantumChip", iconId: 1305, remark: "量子芯片" },
-    microcrystallineComponent: { name: "microcrystallineComponent", iconId: 1302, remark: "微晶元件" },
-    planeFilter: { name: "planeFilter", iconId: 1304, remark: "位面过滤器" },
-    particleBroadband: { name: "particleBroadband", iconId: 1402, remark: "粒子带宽" },
-    plasmaExciter: { name: "plasmaExciter", iconId: 1401, remark: "电浆激发器" },
-    photonCombiner: { name: "photonCombiner", iconId: 1404, remark: "光子合并器" },
-    solarSail: { name: "solarSail", iconId: 1501, remark: "太阳帆" },
-    deuterium: { name: "deuterium", iconId: 1121, remark: "重氢" },
-    antimatter: { name: "antimatter", iconId: 1122, remark: "反物质" },
-    criticalPhoton: { name: "criticalPhoton", iconId: 1208, remark: "临界光子" },
-    hydrogenFuelRod: { name: "hydrogenFuelRod", iconId: 1801, remark: "液氢燃料棒" },
-    deuteriumFuelRod: { name: "deuteriumFuelRod", iconId: 1802, remark: "氘核燃料棒" },
-    antimatterFuelRod: { name: "antimatterFuelRod", iconId: 1803, remark: "反物质燃烧棒" },
-    plastic: { name: "plastic", iconId: 1115, remark: "塑料" },
-    graphene: { name: "graphene", iconId: 1123, remark: "石墨烯" },
-    carbonNanotube: { name: "carbonNanotube", iconId: 1124, remark: "碳纳米管" },
-    organicCrystal: { name: "organicCrystal", iconId: 1117, remark: "有机晶体" },
-    titaniumCrystal: { name: "titaniumCrystal", iconId: 1118, remark: "钛晶石" },
-    casimirCrystal: { name: "casimirCrystal", iconId: 1126, remark: "卡西米尔晶片" },
-    gravitonLens: { name: "gravitonLens", iconId: 1209, remark: "引力透镜" },
-    spaceWarper: { name: "spaceWarper", iconId: 1210, remark: "空间翘曲器" },
-    annihilationConstraintSphere: { name: "annihilationConstraintSphere", iconId: 1403, remark: "湮灭约束球" },
-    thruster: { name: "thruster", iconId: 1405, remark: "推进器" },
-    reinforcedThruster: { name: "reinforcedThruster", iconId: 1406, remark: "加力推进器" },
-    logisticDrone: { name: "logisticDrone", iconId: 5001, remark: "物流运输机" },
-    logisticVessel: { name: "logisticVessel", iconId: 5002, remark: "星际物流运输机" },
-    frameMaterial: { name: "frameMaterial", iconId: 1125, remark: "框架材料" },
-    dysonSphereComponent: { name: "dysonSphereComponent", iconId: 1502, remark: "戴森球组件" },
-    smallCarrierRocket: { name: "smallCarrierRocket", iconId: 1503, remark: "小型运载火箭" },
-    foundation: { name: "foundation", iconId: 1131, remark: "地基" },
-    conveyorBeltMk1: { name: "conveyorBeltMk1", iconId: 2001, remark: "传送带" },
-    conveyorBeltMk2: { name: "conveyorBeltMk2", iconId: 2002, remark: "高速传送带" },
-    conveyorBeltMk3: { name: "conveyorBeltMk3", iconId: 2003, remark: "极速传送带" },
-    sorterMk1: { name: "sorterMk1", iconId: 2011, remark: "分拣器" },
-    sorterMk2: { name: "sorterMk2", iconId: 2012, remark: "高速分拣器" },
-    sorterMk3: { name: "sorterMk3", iconId: 2013, remark: "极速分拣器" },
-	sorterMk4: { name: "sorterMk4", iconId: 2014, remark: "集装分拣器" },
-    splitter: { name: "splitter", iconId: 2020, remark: "四向分流器" },
-    autoPiler: { name: "autoPiler", iconId: 2040, remark: "自动集装机" },
-    trafficMonitor: { name: "trafficMonitor", iconId: 2030, remark: "流速监测器" },
-    sprayCoater: { name: "sprayCoater", iconId: 2313, remark: "喷涂机" },
-    storageMk1: { name: "storageMk1", iconId: 2101, remark: "小型储物仓" },
-    storageMk2: { name: "storageMk2", iconId: 2102, remark: "大型储物仓" },
-    storageTank: { name: "storageTank", iconId: 2106, remark: "储液灌" },
-    assemblingMachineMk1: { name: "assemblingMachineMk1", iconId: 2303, remark: "制作台Mk.Ⅰ" },
-    assemblingMachineMk2: { name: "assemblingMachineMk2", iconId: 2304, remark: "制作台Mk.Ⅱ" },
-    assemblingMachineMk3: { name: "assemblingMachineMk3", iconId: 2305, remark: "制作台Mk.Ⅲ" },
-    teslaTower: { name: "teslaTower", iconId: 2201, remark: "电力感应塔" },
-    wirelessPowerTower: { name: "wirelessPowerTower", iconId: 2202, remark: "无线输电塔" },
-    satelliteSubstation: { name: "satelliteSubstation", iconId: 2212, remark: "卫星配电站" },
-    windTurbine: { name: "windTurbine", iconId: 2203, remark: "风力涡轮机" },
-    thermalPowerPlant: { name: "thermalPowerPlant", iconId: 2204, remark: "火力发电机" },
-    miniFusionPowerPlant: { name: "miniFusionPowerPlant", iconId: 2211, remark: "微型聚变发电站" },
-    geothermalPowerStation: { name: "geothermalPowerStation", iconId: 2213, remark: "地热发电站" },
-    miningMachine: { name: "miningMachine", iconId: 2301, remark: "采矿机" },
-    advancedMiningMachine: { name: "advancedMiningMachine", iconId: 2316, remark: "大型采矿机" },
-    waterPump: { name: "waterPump", iconId: 2306, remark: "抽水机" },
-    arcSmelter: { name: "arcSmelter", iconId: 2302, remark: "电弧熔炉" },
-    planeSmelter: { name: "planeSmelter", iconId: 2315, remark: "位面熔炉" },
-    oilExtractor: { name: "oilExtractor", iconId: 2307, remark: "原油萃取站" },
-    oilRefinery: { name: "oilRefinery", iconId: 2308, remark: "原油精炼厂" },
-    chemicalPlant: { name: "chemicalPlant", iconId: 2309, remark: "化工厂" },
-    fractionator: { name: "fractionator", iconId: 2314, remark: "分馏塔" },
-    量子化工厂: { name: "量子化工厂", iconId: 2317, remark: "量子化工厂" },
-    太阳能板: { name: "太阳能板", iconId: 2205, remark: "太阳能板" },
-    蓄电池: { name: "蓄电池", iconId: 2206, remark: "蓄电池" },
-    蓄电池满: { name: "蓄电池满", iconId: 2207, remark: "蓄电池满" },
-    电磁轨道弹射器: { name: "电磁轨道弹射器", iconId: 2311, remark: "电磁轨道弹射器" },
-    射线接收站: { name: "射线接收站", iconId: 2208, remark: "射线接收站" },
-    垂直发射井: { name: "垂直发射井", iconId: 2312, remark: "垂直发射井" },
-    energyExchanger: { name: "energyExchanger", iconId: 2209, remark: "能量枢纽" },
-    微型粒子对撞机: { name: "微型粒子对撞机", iconId: 2310, remark: "微型粒子对撞机" },
-    人造恒星: { name: "人造恒星", iconId: 2210, remark: "人造恒星" },
-    物流配送器: { name: "物流配送器", iconId: 2107, remark: "物流配送器" },
-    行星内物流运输站: { name: "行星内物流运输站", iconId: 2103, remark: "行星内物流运输站" },
-    星际物流运输站: { name: "星际物流运输站", iconId: 2104, remark: "星际物流运输站" },
-    轨道采集器: { name: "轨道采集器", iconId: 2105, remark: "轨道采集器" },
-    lab: { name: "lab", iconId: 2901, remark: "矩阵研究站" },
-    蓝矩阵: { name: "蓝矩阵", iconId: 6001, remark: "蓝矩阵" },
-    红矩阵: { name: "红矩阵", iconId: 6002, remark: "红矩阵" },
-    黄矩阵: { name: "黄矩阵", iconId: 6003, remark: "黄矩阵" },
-    紫矩阵: { name: "紫矩阵", iconId: 6004, remark: "紫矩阵" },
-    绿矩阵: { name: "绿矩阵", iconId: 6005, remark: "绿矩阵" },
-    宇宙矩阵: { name: "宇宙矩阵", iconId: 6006, remark: "宇宙矩阵" },
-    配送运输机: { name: "配送运输机", iconId: 5003, remark: "配送运输机" },
-    燃烧单元: { name: "燃烧单元", iconId: 1128, remark: "燃烧单元" },
-    爆破单元: { name: "爆破单元", iconId: 1129, remark: "爆破单元" },
-    晶石爆破单元: { name: "晶石爆破单元", iconId: 1130, remark: "晶石爆破单元" },
-    机枪弹箱: { name: "机枪弹箱", iconId: 1601, remark: "机枪弹箱" },
-    钛化弹箱: { name: "钛化弹箱", iconId: 1602, remark: "钛化弹箱" },
-    超合金弹箱: { name: "超合金弹箱", iconId: 1603, remark: "超合金弹箱" },
-    导弹组: { name: "导弹组", iconId: 1609, remark: "导弹组" },
-    超音速导弹组: { name: "超音速导弹组", iconId: 1610, remark: "超音速导弹组" },
-    引力导弹组: { name: "引力导弹组", iconId: 1611, remark: "引力导弹组" },
-    炮弹组: { name: "炮弹组", iconId: 1604, remark: "炮弹组" },
-    高爆炮弹组: { name: "高爆炮弹组", iconId: 1605, remark: "高爆炮弹组" },
-    晶石炮弹组: { name: "晶石炮弹组", iconId: 1606, remark: "晶石炮弹组" },
-    原型机: { name: "原型机", iconId: 5101, remark: "原型机" },
-    精准无人机: { name: "精准无人机", iconId: 5102, remark: "精准无人机" },
-    攻击无人机: { name: "攻击无人机", iconId: 5103, remark: "攻击无人机" },
-    护卫舰: { name: "护卫舰", iconId: 5111, remark: "护卫舰" },
-    驱逐舰: { name: "驱逐舰", iconId: 5112, remark: "驱逐舰" },
-    等离子胶囊: { name: "等离子胶囊", iconId: 1607, remark: "等离子胶囊" },
-    反物质胶囊: { name: "反物质胶囊", iconId: 1608, remark: "反物质胶囊" },
-    重组式制造台: { name: "重组式制造台", iconId: 2318, remark: "重组式制造台" },
-    自演化研究站: { name: "自演化研究站", iconId: 2902, remark: "自演化研究站" },
-    负熵熔炉: { name: "负熵熔炉", iconId: 2319, remark: "负熵熔炉" },
-    高斯机枪塔: { name: "高斯机枪塔", iconId: 3001, remark: "高斯机枪塔" },
-    导弹防御塔: { name: "导弹防御塔", iconId: 3005, remark: "导弹防御塔" },
-    聚爆加农炮: { name: "聚爆加农炮", iconId: 3003, remark: "聚爆加农炮" },
-    高频激光塔: { name: "高频激光塔", iconId: 3002, remark: "高频激光塔" },
-    磁化电浆炮: { name: "磁化电浆炮", iconId: 3004, remark: "磁化电浆炮" },
-    战场分析基站: { name: "战场分析基站", iconId: 3009, remark: "战场分析基站" },
-    信号塔: { name: "信号塔", iconId: 3007, remark: "信号塔" },
-    行星护盾发生器: { name: "行星护盾发生器", iconId: 3008, remark: "行星护盾发生器" },
-    动力引擎: { name: "动力引擎", iconId: 1407, remark: "动力引擎" },
-    奇异湮灭燃料棒: { name: "奇异湮灭燃料棒", iconId: 1804, remark: "奇异湮灭燃料棒" },
-    黑雾矩阵: { name: "黑雾矩阵", iconId: 5201, remark: "黑雾矩阵" },
-    硅基神经元: { name: "硅基神经元", iconId: 5202, remark: "硅基神经元" },
-    物质重组器: { name: "物质重组器", iconId: 5203, remark: "物质重组器" },
-    核心素: { name: "核心素", iconId: 5205, remark: "核心素" },
-    负熵奇点: { name: "负熵奇点", iconId: 5204, remark: "负熵奇点" },
-    能量碎片: { name: "能量碎片", iconId: 5206, remark: "能量碎片" },
-    干扰胶囊: { name: "干扰胶囊", iconId: 1612, remark: "干扰胶囊" },
-    压制胶囊: { name: "压制胶囊", iconId: 1613, remark: "压制胶囊" },
-	近程电浆炮: { name: "近程电浆炮", iconId: 3010, remark: "近程电浆炮" },
-	干扰塔: { name: "干扰塔", iconId: 3006, remark: "干扰塔" },
-    templateItem: { name: "templateItem", iconId: 0, remark: "模板" },
-	//itemId是在传送带中设置这个产物，然后转换成json来提取
+  water: { name: "沙土", iconId: 1099, remark: "沙土" },
+  water: { name: "water", iconId: 1000, remark: "水" },
+  ironOre: { name: "ironOre", iconId: 1001, remark: "铁矿" },
+  copperOre: { name: "copperOre", iconId: 1002, remark: "铜矿" },
+  siliconOre: { name: "siliconOre", iconId: 1003, remark: "硅石" },
+  titaniumOre: { name: "titaniumOre", iconId: 1004, remark: "钛石" },
+  coal: { name: "coal", iconId: 1006, remark: "煤矿" },
+  ironIngot: { name: "ironIngot", iconId: 1101, remark: "铁块" },
+  titaniumIngot: { name: "titaniumIngot", iconId: 1106, remark: "钛块" },
+  energeticGraphite: {
+    name: "energeticGraphite",
+    iconId: 1109,
+    remark: "高级石墨",
+  },
+  diamond: { name: "diamond", iconId: 1112, remark: "金刚石" },
+  proliferatorMk1: {
+    name: "proliferatorMk1",
+    iconId: 1141,
+    extra_rate: 0.125,
+    accelerate: 0.25,
+    remark: "增产剂Mk.Ⅰ",
+  },
+  proliferatorMk2: {
+    name: "proliferatorMk2",
+    iconId: 1142,
+    extra_rate: 0.2,
+    accelerate: 0.5,
+    remark: "增产剂Mk.Ⅱ",
+  },
+  proliferatorMk3: {
+    name: "proliferatorMk3",
+    iconId: 1143,
+    extra_rate: 0.25,
+    accelerate: 1,
+    remark: "增产剂Mk.Ⅲ",
+  },
+  gear: { name: "gear", iconId: 1201, remark: "齿轮" },
+  stone: { name: "stone", iconId: 1005, remark: "石矿" },
+  oil: { name: "oil", iconId: 1007, remark: "原油" },
+  refinedOil: { name: "refinedOil", iconId: 1114, remark: "精炼油" },
+  sulfuricAcid: { name: "sulfuricAcid", iconId: 1116, remark: "硫酸" },
+  hydrogen: { name: "hydrogen", iconId: 1120, remark: "氢" },
+  hydrogenOutput: { name: "hydrogenOutput", iconId: 1120, remark: "氢" },
+  fireIce: { name: "fireIce", iconId: 1011, remark: "可燃冰" },
+  //wood: { name: 'wood', iconId: 1030, remark: '木材' },
+  //plant_fuel: { name: 'plant_fuel', iconId: 1031, remark: '植物燃料' },
+  kimberliteOre: { name: "kimberliteOre", iconId: 1012, remark: "金伯利矿石" },
+  fractalSilicon: { name: "fractalSilicon", iconId: 1013, remark: "分形硅石" },
+  opticalGratingCrystal: {
+    name: "opticalGratingCrystal",
+    iconId: 1014,
+    remark: "光栅石",
+  },
+  spiniformStalagmiteCrystal: {
+    name: "spiniformStalagmiteCrystal",
+    iconId: 1015,
+    remark: "刺笋结晶",
+  },
+  unipolarMagnet: { name: "unipolarMagnet", iconId: 1016, remark: "单极磁石" },
+  copperIngot: { name: "copperIngot", iconId: 1104, remark: "铜块" },
+  highPuritySilicon: {
+    name: "highPuritySilicon",
+    iconId: 1105,
+    remark: "高纯硅块",
+  },
+  stoneBrick: { name: "stoneBrick", iconId: 1108, remark: "石材" },
+  steel: { name: "steel", iconId: 1103, remark: "钢材" },
+  titaniumAlloy: { name: "titaniumAlloy", iconId: 1107, remark: "钛合金" },
+  glass: { name: "glass", iconId: 1110, remark: "玻璃" },
+  titaniumGlass: { name: "titaniumGlass", iconId: 1119, remark: "钛化玻璃" },
+  prism: { name: "prism", iconId: 1111, remark: "棱镜" },
+  crystalSilicon: { name: "crystalSilicon", iconId: 1113, remark: "晶格硅" },
+  magnet: { name: "magnet", iconId: 1102, remark: "磁铁" },
+  magneticCoil: { name: "magneticCoil", iconId: 1202, remark: "磁线圈" },
+  electricMotor: { name: "electricMotor", iconId: 1203, remark: "电动机" },
+  electromagneticTurbine: {
+    name: "electromagneticTurbine",
+    iconId: 1204,
+    remark: "电磁涡轮",
+  },
+  superMagneticRing: {
+    name: "superMagneticRing",
+    iconId: 1205,
+    remark: "超级磁场环",
+  },
+  particleContainer: {
+    name: "particleContainer",
+    iconId: 1206,
+    remark: "粒子容器",
+  },
+  strangeMatter: { name: "strangeMatter", iconId: 1127, remark: "奇异物质" },
+  circuitBoard: { name: "circuitBoard", iconId: 1301, remark: "电路板" },
+  processor: { name: "processor", iconId: 1303, remark: "处理器" },
+  quantumChip: { name: "quantumChip", iconId: 1305, remark: "量子芯片" },
+  microcrystallineComponent: {
+    name: "microcrystallineComponent",
+    iconId: 1302,
+    remark: "微晶元件",
+  },
+  planeFilter: { name: "planeFilter", iconId: 1304, remark: "位面过滤器" },
+  particleBroadband: {
+    name: "particleBroadband",
+    iconId: 1402,
+    remark: "粒子带宽",
+  },
+  plasmaExciter: { name: "plasmaExciter", iconId: 1401, remark: "电浆激发器" },
+  photonCombiner: {
+    name: "photonCombiner",
+    iconId: 1404,
+    remark: "光子合并器",
+  },
+  solarSail: { name: "solarSail", iconId: 1501, remark: "太阳帆" },
+  deuterium: { name: "deuterium", iconId: 1121, remark: "重氢" },
+  antimatter: { name: "antimatter", iconId: 1122, remark: "反物质" },
+  criticalPhoton: { name: "criticalPhoton", iconId: 1208, remark: "临界光子" },
+  hydrogenFuelRod: {
+    name: "hydrogenFuelRod",
+    iconId: 1801,
+    remark: "液氢燃料棒",
+  },
+  deuteriumFuelRod: {
+    name: "deuteriumFuelRod",
+    iconId: 1802,
+    remark: "氘核燃料棒",
+  },
+  antimatterFuelRod: {
+    name: "antimatterFuelRod",
+    iconId: 1803,
+    remark: "反物质燃烧棒",
+  },
+  plastic: { name: "plastic", iconId: 1115, remark: "塑料" },
+  graphene: { name: "graphene", iconId: 1123, remark: "石墨烯" },
+  carbonNanotube: { name: "carbonNanotube", iconId: 1124, remark: "碳纳米管" },
+  organicCrystal: { name: "organicCrystal", iconId: 1117, remark: "有机晶体" },
+  titaniumCrystal: { name: "titaniumCrystal", iconId: 1118, remark: "钛晶石" },
+  casimirCrystal: {
+    name: "casimirCrystal",
+    iconId: 1126,
+    remark: "卡西米尔晶片",
+  },
+  gravitonLens: { name: "gravitonLens", iconId: 1209, remark: "引力透镜" },
+  spaceWarper: { name: "spaceWarper", iconId: 1210, remark: "空间翘曲器" },
+  annihilationConstraintSphere: {
+    name: "annihilationConstraintSphere",
+    iconId: 1403,
+    remark: "湮灭约束球",
+  },
+  thruster: { name: "thruster", iconId: 1405, remark: "推进器" },
+  reinforcedThruster: {
+    name: "reinforcedThruster",
+    iconId: 1406,
+    remark: "加力推进器",
+  },
+  logisticDrone: { name: "logisticDrone", iconId: 5001, remark: "物流运输机" },
+  logisticVessel: {
+    name: "logisticVessel",
+    iconId: 5002,
+    remark: "星际物流运输机",
+  },
+  frameMaterial: { name: "frameMaterial", iconId: 1125, remark: "框架材料" },
+  dysonSphereComponent: {
+    name: "dysonSphereComponent",
+    iconId: 1502,
+    remark: "戴森球组件",
+  },
+  smallCarrierRocket: {
+    name: "smallCarrierRocket",
+    iconId: 1503,
+    remark: "小型运载火箭",
+  },
+  foundation: { name: "foundation", iconId: 1131, remark: "地基" },
+  conveyorBeltMk1: { name: "conveyorBeltMk1", iconId: 2001, remark: "传送带" },
+  conveyorBeltMk2: {
+    name: "conveyorBeltMk2",
+    iconId: 2002,
+    remark: "高速传送带",
+  },
+  conveyorBeltMk3: {
+    name: "conveyorBeltMk3",
+    iconId: 2003,
+    remark: "极速传送带",
+  },
+  sorterMk1: { name: "sorterMk1", iconId: 2011, remark: "分拣器" },
+  sorterMk2: { name: "sorterMk2", iconId: 2012, remark: "高速分拣器" },
+  sorterMk3: { name: "sorterMk3", iconId: 2013, remark: "极速分拣器" },
+  sorterMk4: { name: "sorterMk4", iconId: 2014, remark: "集装分拣器" },
+  splitter: { name: "splitter", iconId: 2020, remark: "四向分流器" },
+  autoPiler: { name: "autoPiler", iconId: 2040, remark: "自动集装机" },
+  trafficMonitor: {
+    name: "trafficMonitor",
+    iconId: 2030,
+    remark: "流速监测器",
+  },
+  sprayCoater: { name: "sprayCoater", iconId: 2313, remark: "喷涂机" },
+  storageMk1: { name: "storageMk1", iconId: 2101, remark: "小型储物仓" },
+  storageMk2: { name: "storageMk2", iconId: 2102, remark: "大型储物仓" },
+  storageTank: { name: "storageTank", iconId: 2106, remark: "储液灌" },
+  assemblingMachineMk1: {
+    name: "assemblingMachineMk1",
+    iconId: 2303,
+    remark: "制作台Mk.Ⅰ",
+  },
+  assemblingMachineMk2: {
+    name: "assemblingMachineMk2",
+    iconId: 2304,
+    remark: "制作台Mk.Ⅱ",
+  },
+  assemblingMachineMk3: {
+    name: "assemblingMachineMk3",
+    iconId: 2305,
+    remark: "制作台Mk.Ⅲ",
+  },
+  teslaTower: { name: "teslaTower", iconId: 2201, remark: "电力感应塔" },
+  wirelessPowerTower: {
+    name: "wirelessPowerTower",
+    iconId: 2202,
+    remark: "无线输电塔",
+  },
+  satelliteSubstation: {
+    name: "satelliteSubstation",
+    iconId: 2212,
+    remark: "卫星配电站",
+  },
+  windTurbine: { name: "windTurbine", iconId: 2203, remark: "风力涡轮机" },
+  thermalPowerPlant: {
+    name: "thermalPowerPlant",
+    iconId: 2204,
+    remark: "火力发电机",
+  },
+  miniFusionPowerPlant: {
+    name: "miniFusionPowerPlant",
+    iconId: 2211,
+    remark: "微型聚变发电站",
+  },
+  geothermalPowerStation: {
+    name: "geothermalPowerStation",
+    iconId: 2213,
+    remark: "地热发电站",
+  },
+  miningMachine: { name: "miningMachine", iconId: 2301, remark: "采矿机" },
+  advancedMiningMachine: {
+    name: "advancedMiningMachine",
+    iconId: 2316,
+    remark: "大型采矿机",
+  },
+  waterPump: { name: "waterPump", iconId: 2306, remark: "抽水机" },
+  arcSmelter: { name: "arcSmelter", iconId: 2302, remark: "电弧熔炉" },
+  planeSmelter: { name: "planeSmelter", iconId: 2315, remark: "位面熔炉" },
+  oilExtractor: { name: "oilExtractor", iconId: 2307, remark: "原油萃取站" },
+  oilRefinery: { name: "oilRefinery", iconId: 2308, remark: "原油精炼厂" },
+  chemicalPlant: { name: "chemicalPlant", iconId: 2309, remark: "化工厂" },
+  fractionator: { name: "fractionator", iconId: 2314, remark: "分馏塔" },
+  量子化工厂: { name: "量子化工厂", iconId: 2317, remark: "量子化工厂" },
+  太阳能板: { name: "太阳能板", iconId: 2205, remark: "太阳能板" },
+  蓄电池: { name: "蓄电池", iconId: 2206, remark: "蓄电池" },
+  蓄电池满: { name: "蓄电池满", iconId: 2207, remark: "蓄电池满" },
+  电磁轨道弹射器: {
+    name: "电磁轨道弹射器",
+    iconId: 2311,
+    remark: "电磁轨道弹射器",
+  },
+  射线接收站: { name: "射线接收站", iconId: 2208, remark: "射线接收站" },
+  垂直发射井: { name: "垂直发射井", iconId: 2312, remark: "垂直发射井" },
+  energyExchanger: {
+    name: "energyExchanger",
+    iconId: 2209,
+    remark: "能量枢纽",
+  },
+  微型粒子对撞机: {
+    name: "微型粒子对撞机",
+    iconId: 2310,
+    remark: "微型粒子对撞机",
+  },
+  人造恒星: { name: "人造恒星", iconId: 2210, remark: "人造恒星" },
+  物流配送器: { name: "物流配送器", iconId: 2107, remark: "物流配送器" },
+  行星内物流运输站: {
+    name: "行星内物流运输站",
+    iconId: 2103,
+    remark: "行星内物流运输站",
+  },
+  星际物流运输站: {
+    name: "星际物流运输站",
+    iconId: 2104,
+    remark: "星际物流运输站",
+  },
+  轨道采集器: { name: "轨道采集器", iconId: 2105, remark: "轨道采集器" },
+  lab: { name: "lab", iconId: 2901, remark: "矩阵研究站" },
+  蓝矩阵: { name: "蓝矩阵", iconId: 6001, remark: "蓝矩阵" },
+  红矩阵: { name: "红矩阵", iconId: 6002, remark: "红矩阵" },
+  黄矩阵: { name: "黄矩阵", iconId: 6003, remark: "黄矩阵" },
+  紫矩阵: { name: "紫矩阵", iconId: 6004, remark: "紫矩阵" },
+  绿矩阵: { name: "绿矩阵", iconId: 6005, remark: "绿矩阵" },
+  宇宙矩阵: { name: "宇宙矩阵", iconId: 6006, remark: "宇宙矩阵" },
+  配送运输机: { name: "配送运输机", iconId: 5003, remark: "配送运输机" },
+  燃烧单元: { name: "燃烧单元", iconId: 1128, remark: "燃烧单元" },
+  爆破单元: { name: "爆破单元", iconId: 1129, remark: "爆破单元" },
+  晶石爆破单元: { name: "晶石爆破单元", iconId: 1130, remark: "晶石爆破单元" },
+  机枪弹箱: { name: "机枪弹箱", iconId: 1601, remark: "机枪弹箱" },
+  钛化弹箱: { name: "钛化弹箱", iconId: 1602, remark: "钛化弹箱" },
+  超合金弹箱: { name: "超合金弹箱", iconId: 1603, remark: "超合金弹箱" },
+  导弹组: { name: "导弹组", iconId: 1609, remark: "导弹组" },
+  超音速导弹组: { name: "超音速导弹组", iconId: 1610, remark: "超音速导弹组" },
+  引力导弹组: { name: "引力导弹组", iconId: 1611, remark: "引力导弹组" },
+  炮弹组: { name: "炮弹组", iconId: 1604, remark: "炮弹组" },
+  高爆炮弹组: { name: "高爆炮弹组", iconId: 1605, remark: "高爆炮弹组" },
+  晶石炮弹组: { name: "晶石炮弹组", iconId: 1606, remark: "晶石炮弹组" },
+  原型机: { name: "原型机", iconId: 5101, remark: "原型机" },
+  精准无人机: { name: "精准无人机", iconId: 5102, remark: "精准无人机" },
+  攻击无人机: { name: "攻击无人机", iconId: 5103, remark: "攻击无人机" },
+  护卫舰: { name: "护卫舰", iconId: 5111, remark: "护卫舰" },
+  驱逐舰: { name: "驱逐舰", iconId: 5112, remark: "驱逐舰" },
+  等离子胶囊: { name: "等离子胶囊", iconId: 1607, remark: "等离子胶囊" },
+  反物质胶囊: { name: "反物质胶囊", iconId: 1608, remark: "反物质胶囊" },
+  重组式制造台: { name: "重组式制造台", iconId: 2318, remark: "重组式制造台" },
+  自演化研究站: { name: "自演化研究站", iconId: 2902, remark: "自演化研究站" },
+  负熵熔炉: { name: "负熵熔炉", iconId: 2319, remark: "负熵熔炉" },
+  高斯机枪塔: { name: "高斯机枪塔", iconId: 3001, remark: "高斯机枪塔" },
+  导弹防御塔: { name: "导弹防御塔", iconId: 3005, remark: "导弹防御塔" },
+  聚爆加农炮: { name: "聚爆加农炮", iconId: 3003, remark: "聚爆加农炮" },
+  高频激光塔: { name: "高频激光塔", iconId: 3002, remark: "高频激光塔" },
+  磁化电浆炮: { name: "磁化电浆炮", iconId: 3004, remark: "磁化电浆炮" },
+  战场分析基站: { name: "战场分析基站", iconId: 3009, remark: "战场分析基站" },
+  信号塔: { name: "信号塔", iconId: 3007, remark: "信号塔" },
+  行星护盾发生器: {
+    name: "行星护盾发生器",
+    iconId: 3008,
+    remark: "行星护盾发生器",
+  },
+  动力引擎: { name: "动力引擎", iconId: 1407, remark: "动力引擎" },
+  奇异湮灭燃料棒: {
+    name: "奇异湮灭燃料棒",
+    iconId: 1804,
+    remark: "奇异湮灭燃料棒",
+  },
+  黑雾矩阵: { name: "黑雾矩阵", iconId: 5201, remark: "黑雾矩阵" },
+  硅基神经元: { name: "硅基神经元", iconId: 5202, remark: "硅基神经元" },
+  物质重组器: { name: "物质重组器", iconId: 5203, remark: "物质重组器" },
+  核心素: { name: "核心素", iconId: 5205, remark: "核心素" },
+  负熵奇点: { name: "负熵奇点", iconId: 5204, remark: "负熵奇点" },
+  能量碎片: { name: "能量碎片", iconId: 5206, remark: "能量碎片" },
+  干扰胶囊: { name: "干扰胶囊", iconId: 1612, remark: "干扰胶囊" },
+  压制胶囊: { name: "压制胶囊", iconId: 1613, remark: "压制胶囊" },
+  近程电浆炮: { name: "近程电浆炮", iconId: 3010, remark: "近程电浆炮" },
+  干扰塔: { name: "干扰塔", iconId: 3006, remark: "干扰塔" },
+  templateItem: { name: "templateItem", iconId: 0, remark: "模板" },
+  //itemId是在传送带中设置这个产物，然后转换成json来提取
 };
 const productionCategory = {
   smelter: 0,
@@ -200,7 +371,7 @@ const buildingMap = {
     size: { x: 3, y: 3 },
     type: buildingType.production,
     category: productionCategory.smelter,
-    slotMaxIndex: 7,
+    slotMaxIndex: 7, // 最大有12个呀?
   },
   planeSmelter: {
     remark: "位面熔炉",
@@ -233,7 +404,7 @@ const buildingMap = {
     size: { x: 3, y: 3 },
     type: buildingType.production,
     category: productionCategory.assembling,
-    slotMaxIndex: 8,
+    slotMaxIndex: 8, // 最大有12个呀?
   },
   assemblingMachineMk2: {
     remark: "制造台MkⅡ",
@@ -276,7 +447,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.plant,
-    slotMaxIndex: 6,
+    slotMaxIndex: 6, // 最大有8个呀?
   },
   量子化工厂: {
     remark: "量子化工厂",
@@ -296,7 +467,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.refinery,
-    slotMaxIndex: 5,
+    slotMaxIndex: 5, // 最大有9个呀?
   },
   微型粒子对撞机: {
     remark: "粒子对撞机",
@@ -306,7 +477,7 @@ const buildingMap = {
     productionSpeed: 1,
     type: buildingType.production,
     category: productionCategory.collider,
-    slotMaxIndex: 8,
+    slotMaxIndex: 8, // 最大有9个
   },
   lab: {
     remark: "矩阵研究站",
@@ -317,7 +488,7 @@ const buildingMap = {
     type: buildingType.production,
     category: productionCategory.lab,
     height: 3,
-    slotMaxIndex: 11,
+    slotMaxIndex: 11, // 最大有12个
   },
   自演化研究站: {
     remark: "自演化研究站",
@@ -358,7 +529,7 @@ const buildingMap = {
     type: buildingType.sorter,
     remark: "分拣器MK.Ⅳ",
   },
-  
+
   conveyorBeltMk1: {
     name: "conveyorBeltMk1",
     itemId: 2001,
@@ -570,9 +741,9 @@ const recipeMap = {
   "steel+circuitBoard+microcrystallineComponent+动力引擎=战场分析基站": 152, //战场分析基站
   "wirelessPowerTower+steel+crystalSilicon=信号塔": 131, //信号塔
   "steel+electromagneticTurbine+superMagneticRing+particleContainer=行星护盾发生器": 132, //行星护盾发生器
-  "antimatterFuelRod+核心素+strangeMatter+frameMaterial=奇异湮灭燃料棒": 156,//奇异湮灭燃料棒
-  "electromagneticTurbine+plasmaExciter+hydrogen=干扰胶囊": 158,//干扰胶囊
-  "干扰胶囊+superMagneticRing+titaniumGlass=压制胶囊": 159,//压制胶囊
+  "antimatterFuelRod+核心素+strangeMatter+frameMaterial=奇异湮灭燃料棒": 156, //奇异湮灭燃料棒
+  "electromagneticTurbine+plasmaExciter+hydrogen=干扰胶囊": 158, //干扰胶囊
+  "干扰胶囊+superMagneticRing+titaniumGlass=压制胶囊": 159, //压制胶囊
   "sorterMk3+superMagneticRing+processor=sorterMk4": 160, // 集装分拣器
   "steel+superMagneticRing+plasmaExciter+processor=近程电浆炮": 157, // 近程电浆炮
   "copperIngot+plasmaExciter+diamond+processor=干扰塔": 130, // 干扰塔
@@ -584,26 +755,81 @@ class Blueprint {
     // this.name = target.name
     this.recipe = recipe;
     this.buildingIndex = -1;
-    this.blueprintSize = { x: 0, y: 0 };
-    this.occupiedArea = [];
+
+    /**
+     * blueprintSize 蓝图面积(不是建筑面积):将配方需要的建筑需要的总面积除以长宽比例（x_y_ratio），然后取平方根来计算y的值。这是为了确保蓝图的高度（y）和宽度（x）符合指定的比例
+     * @property {number} x 蓝图宽度
+     * @property {number} y 蓝图高度
+     */
+    this.blueprintSize = { x: 0, y: 0 }; // 根据所有生产建筑大小总和算出来的y值, x等于y.ceil() * x_y_ratio
+
+    /**
+     * occupiedArea 蓝图中每一行建筑的起点和终点坐标
+     * 更新: 每个元素是一层中 每一行建筑的起点和终点坐标.
+     * @type {object[]}
+     * @property {number} x1 起点x坐标
+     * @property {number} y1 起点y坐标
+     * @property {number} x2 终点x坐标
+     * @property {number} y2 终点y坐标
+     */
+    // this.occupiedArea = [];
+    this.occupiedArea = Array.from(
+      { length: config.magic_layer_cnt },
+      () => []
+    );
+
+    // this.TEST_occupiedArea = []; // 临时测试使用
+    // this.TEST_blueprintSize = { x: 0, y: 0 };  // 临时测试使用
+
+    /**
+     * buildings 建筑列表. 包含了所有的建筑
+     */
     this.buildings = [];
-    // this.config = {
-    //     maxSorterNumOneBelt: 8,  // 一个传送带节点连接的最大分拣器数量
-    //     conveyorBeltStackLayer: 4,  // 传送带物品最大堆叠层数
-    //     x_y_ratio: 2,  // 长宽比
-    //     compactLayout: false,  // 是否采用紧凑布局（紧凑布局的蓝图中炼油厂、化工厂和对撞机在布局上会更紧凑，适合摆放在赤道带，在高纬度可能会出现碰撞问题）
-    //     upgradeConveyorBelt: false,  // 360/min的运力时使用3级传送带（无带流情况下，原料的需求和供应都是集中处理，1级传送带满运力情况下可能会有运送不及时问题导致产量低于预期
-    //     onlyConveyorBeltMk3: false,  // 是否只使用三级传送带
-    //     onlySorterMk3: false,  // 是否只使用三级分拣器
-    //     maxLabLayers: 15,  // 研究站最大层数
-    //     selfSpray: true,  // 增产剂是否自喷涂
-    // }
+
     this.config = config;
+
+    /**
+     * buildingArray 二维数组，每个子数组代表一行建筑
+     * buildingArray[this.buildingArray.length - 1] 表示最后一个子数组，即当前正在处理的行
+     */
     this.buildingArray = [];
+
+    /**
+     * sorters 分拣器列表. 包含了产物list,每个产物下还包括输入和输出方向,每个方向下包括了owner建筑的中心offset坐标,rate,recipeId等等
+     * @property {sorterItem[]} sorterItem 产物list
+     * @property {sorter[]} sorterItem.input 每个产物的输入
+     * @property {sorter[]} sorterItem.output 每个产物的输出
+     * @property {object} sorter 分拣器
+     * @property {number} sorter.index 分拣器序号
+     * @property {number} sorter.rate
+     * @property {number} sorter.ownerObjIdx  分拣器附属生产建筑的index
+     * @property {number} sorter.ownerName  分拣器附属生产建筑的名字
+     * @property {number} sorter.ownerOffset  分拣器附属生产建筑的中心{x,y,z}坐标
+     * @property {number} sorter.recipeId 配方ID
+     *
+     */
     this.sorters = {};
+
     this.sprayCoaterOffsetList = [];
     this.itemSummary = {};
     this.conveyorStartOffsetX = 0;
+
+    /**
+     * 给中间产物传送带的放置位置偏移量.针对第一个输入输出的传送带的便宜
+     * @property {number} x x轴偏移量
+     * @property {number} y y轴偏移量
+     * @property {number} z z轴偏移量
+     * @property {boolean} hasValue 是否被设置过值. 这个值一次计算只会被设置一次
+     * @property {number} layerHeight 早期没有垂直传送带的时候, 不同产物平铺带子之间的间隔高度
+     */
+    this.conveyorTempProductOffset = {
+      x: 0,
+      y: 0,
+      z: 0,
+      hasValue: false,
+      layerHeight: this.config.magic_vertical_conveyor_belt_gap_height,
+    };
+
     this.lastProductionBuildingType = -1;
     this.blueprintTemplate = {
       header: {
@@ -680,6 +906,31 @@ class Blueprint {
     }
   }
 
+  /**
+   * 给配方排序. 如果是用到了很高的建筑比如原油精炼厂等的配方, 就放到最后,这样使用仙术的时候就可以最后建造这些建筑放在最顶层
+   */
+  sortRecipeId() {
+    // 如果是精炼油16,塑料23,硫酸24,石墨烯31,氢石墨烯32,奇异物质104  就把这个配方移动到整个数组的最后.这样子就可以最后建造这些建筑放在最顶层
+
+    // 目标配方ID
+    const targetRecipeIDs = [16,23,24,25,31,32,33,35,104,74,42];
+
+    // 分离目标配方和非目标配方
+    let nonTargetRecipes = [];
+    let targetRecipes = [];
+
+    for (let subRecipe of this.recipe.subRecipes) {
+      if (targetRecipeIDs.includes(subRecipe.recipeID)) {
+        targetRecipes.push(subRecipe);
+      } else {
+        nonTargetRecipes.push(subRecipe);
+      }
+    }
+
+    // 合并非目标配方和目标配方
+    this.recipe.subRecipes = [...nonTargetRecipes, ...targetRecipes];
+  }
+
   getBuildingTemplate() {
     this.buildingIndex++;
     return {
@@ -746,78 +997,142 @@ class Blueprint {
     };
   }
 
+  /**
+   *
+   * @param {object} conveyor 传送带对象
+   * @param {*} direction 传送带方向，-1 表示负方向，1 表示正方向
+   * @param {*} inputData 举例:输入原矿的时候,inputData是空,outputData是原矿
+   * @param {*} outputData 举例:输出cpu的时候,inputData是cpu,outputData是空
+   * @param {*} parameters 传送带节点的参数，默认为空
+   * @param {*} needSprayCoater 是否需要喷涂机，默认为否
+   */
   newConveyor(
-    conveyor,
-    direction,
-    inputData,
-    outputData,
-    parameters = null,
-    needSprayCoater = false
+    conveyor, // 传送带对象
+    direction, // 传送带方向，-1 表示负方向，1 表示正方向
+    inputData, // 输入数据
+    outputData, // 输出数据
+    parameters = null, // 传送带节点的参数，默认为空
+    needSprayCoater = false // 是否需要喷涂机，默认为否
   ) {
-    // needSprayCoater = false
-    // 在y轴方向生成一条长度为length的传送带, direction = -1 表示y轴负方向， 1表示y轴正方向
+    // 检查传送带类型是否正确
     if (conveyor.type !== buildingType.conveyor) {
-      throw `newConveyor error: error conveyor - ${conveyor}`;
+      throw `newConveyor error: error conveyor - ${conveyor}`; // 抛出错误信息
     }
-    let nodeNum = 0;
-    let buildingX = 0,
-      buildingY = 0,
-      buildingZ = 0;
+    let nodeNum = 0; // 节点数量初始化为0
+    let buildingX = 0, // 传送带节点的X坐标
+      buildingY = 0, // 传送带节点的Y坐标
+      buildingZ = 0; // 传送带节点的Z坐标
+
     for (let i = 0; i < inputData.length; i++) {
+      // 遍历输入数据
       if (direction < 0) {
-        // 输入带不需要处理input，在最后加一个节点即可
-        break;
+        // 如果方向为负，不处理输入数据
+        break; // 直接跳出循环
       }
+
       if (i === 0) {
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
+        // 如果是第一个输入数据
+
+        if (this.newConveyor_isTempProduct(inputData, outputData)) {
+          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 放到建筑区域的左下方
+          // 第一次遇到中间产物传送带的时候, 记录下这个传送带的建造偏移量, 后面所有的中间产物传送带都会用这个偏移量
+
+          if (!this.conveyorTempProductOffset.hasValue) {
+            // 如果中间产物传送点的建造偏移量为0
+            this.conveyorTempProductOffset.x =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.hasValue = true;
+          }
+
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            // 如果当前科技不支持垂直传送带, 那就单个产物的带子水平放置, 但是不同产物的带子向上堆叠.
+            buildingX = 0; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0 + (this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+              1 -
+              this.conveyorTempProductOffset.x) * this.conveyorTempProductOffset.layerHeight; // 在支持垂直传送带的情况下, 不同中间产物的带子是x轴方向堆叠的, 但是不支持垂直传送带的情况下, 堆叠的是z轴方向. offset.x用作堆叠位置的计数了就
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          } else{
+            buildingX =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+            1 -
+            this.conveyorTempProductOffset.x; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0; // Z坐标为0
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          }
+        } else {
+          // 如果是最终产物或者原料
+          buildingX =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
+          buildingY =
+            this.occupiedArea[0][this.occupiedArea[0].length - 2].y2 + 1; // 计算Y坐标
+          buildingZ = 0; // Z坐标为0
+
+          this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+        }
       } else {
-        buildingY += 1;
+        // 如果inputData和outputData都不为空, 那么认为这个带子是给中间产物使用的. 就给它朝着Z轴方向扩展
+        if (this.newConveyor_isTempProduct(inputData, outputData)) {
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            buildingX += 1; // 尝试往X轴方向移动
+          } else{
+            buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          }
+        } else {
+          buildingY += 1; // 其他情况下，Y坐标加1
+        }
       }
-      let outputObjIdx = this.buildingIndex + 2;
-      let outputToSlot = 1;
+      let outputObjIdx = this.buildingIndex + 2; // 输出对象索引
+      let outputToSlot = 1; // 输出到槽位
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          [0, 0],
-          conveyor,
-          outputObjIdx,
-          outputToSlot,
-          null
+          { x: buildingX, y: buildingY, z: buildingZ }, // 节点坐标
+          [0, 0], // 节点方向
+          conveyor, // 传送带对象
+          outputObjIdx, // 输出对象索引
+          outputToSlot, // 输出到槽位
+          null // 节点参数为空
         )
       );
-      nodeNum++;
+      nodeNum++; // 节点数量加1
       // 修改分拣器指向这个传送带节点
-      let toChangeNum = inputData[i].length;
+      let toChangeNum = inputData[i].length; // 需要修改的数量
       for (let b of this.buildings) {
+        // 遍历建筑物
         if (toChangeNum <= 0) {
-          break;
+          // 如果需要修改的数量为0
+          break; // 跳出循环
         }
         if (inputData[i].includes(b.index)) {
-          b.outputObjIdx = this.buildingIndex;
-          toChangeNum--;
+          // 如果输入数据包含当前建筑物索引
+          b.outputObjIdx = this.buildingIndex; // 修改输出对象索引
+          toChangeNum--; // 需要修改的数量减1
         }
       }
     }
-    let sprayCoaterOffset = {};
+
+    let sprayCoaterOffset = {}; // 喷涂机偏移量
     if (needSprayCoater && direction > 0) {
+      // 如果需要喷涂机且方向为正
       // 添加节点用于放置喷涂机
       // 为避免供料口被堵，喷涂机只放在第偶数个节点上
       if (nodeNum % 2 === 0) {
+        // 如果节点数量为偶数
         this.buildings.push(
           this.newConveyorNode(
-            { x: buildingX, y: ++buildingY, z: buildingZ },
-            [0, 0],
-            conveyor,
-            this.buildingIndex + 2,
-            1,
-            null
+            { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+            [0, 0], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex + 2, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
       }
-      sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ };
+      sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ }; // 计算喷涂机偏移量
       this.sprayCoaterOffsetList.push({
         x: buildingX,
         y: buildingY - 1,
@@ -825,83 +1140,142 @@ class Blueprint {
       });
       this.buildings.push(
         this.newConveyorNode(
-          sprayCoaterOffset,
-          [0, 0],
-          conveyor,
-          this.buildingIndex + 2,
-          1,
-          null
+          sprayCoaterOffset, // 喷涂机偏移量
+          [0, 0], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex + 2, // 输出对象索引
+          1, // 输出到槽位
+          null // 节点参数为空
         )
       );
     }
 
     for (let i = 0; i < outputData.length; i++) {
-      let outputObjIdx = -1;
-      let outputToSlot = 0;
+      // 遍历输出数据
+      let outputObjIdx = -1; // 输出对象索引初始化为-1
+      let outputToSlot = 0; // 输出到槽位初始化为0
+
       if (direction < 0 && i === 0) {
-        buildingX = this.occupiedArea[this.occupiedArea.length - 1].x2 + 1;
-        buildingY = this.occupiedArea[this.occupiedArea.length - 2].y2 + 1;
-        buildingZ = 0;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += 1;
+        // 如果方向为负且是第一个输出数据
+        if (this.newConveyor_isTempProduct(inputData, outputData)) {
+          // 只有输入输出的传送带放在建筑区域右上方, 如果是中间产物的传送带, 放到建筑区域的左下方
+          // 第一次遇到中间产物传送带的时候, 记录下这个传送带的建造偏移量, 后面所有的中间产物传送带都会用这个偏移量
+
+          if (!this.conveyorTempProductOffset.hasValue) {
+            // 如果中间产物传送点的建造偏移量为0
+            this.conveyorTempProductOffset.x =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2; // 中间产物传送点的建造偏移量
+            this.conveyorTempProductOffset.hasValue = true;
+          }
+
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            // 如果当前科技不支持垂直传送带, 那就单个产物的带子水平放置, 但是不同产物的带子向上堆叠.
+            buildingX = 0; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0 + (this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+              1 -
+              this.conveyorTempProductOffset.x) * this.conveyorTempProductOffset.layerHeight; // 在支持垂直传送带的情况下, 不同中间产物的带子是x轴方向堆叠的, 但是不支持垂直传送带的情况下, 堆叠的是z轴方向. offset.x用作堆叠位置的计数了就
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          } else{
+            buildingX =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 +
+            1 -
+            this.conveyorTempProductOffset.x; // 计算X坐标
+            buildingY = -1; // 计算Y坐标
+            buildingZ = 0; // Z坐标为0
+
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+          }
+        } else {
+          // 如果是最终产物或者原料
+          buildingX =
+            this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 + 1; // 计算X坐标
+          buildingY =
+            this.occupiedArea[0][this.occupiedArea[0].length - 2].y2 + 1; // 计算Y坐标
+          buildingZ = 0; // Z坐标为0
+
+          this.occupiedArea[0][this.occupiedArea[0].length - 1].x2 += 1; // 更新占用区域的X坐标
+        }
       } else {
-        buildingY += 1;
-      }
-      if (!(direction > 0 && i === outputData.length - 1)) {
-        if (!(direction < 0 && i === 0)) {
-          outputObjIdx = this.buildingIndex + 1 + direction;
+        // 如果inputData和outputData都不为空, 那么认为这个带子是给中间产物使用的. 就给它朝着Z轴方向扩展
+        if (this.newConveyor_isTempProduct(inputData, outputData)) {
+          if (!this.config.magic_vertical_conveyor_belt_enabled) {
+            buildingX += 1; // 尝试往X轴方向移动
+          } else{
+            buildingZ += 1; // 尝试往Z轴方向移动, 节省空间
+          }
+        } else {
+          buildingY += 1; // 其他情况下，Y坐标加1
         }
       }
-      let nodeParameters = null;
+      if (!(direction > 0 && i === outputData.length - 1)) {
+        // 如果方向为正且不是最后一个输出数据
+        if (!(direction < 0 && i === 0)) {
+          // 如果方向为负且不是第一个输出数据
+          outputObjIdx = this.buildingIndex + 1 + direction; // 计算输出对象索引
+        }
+      }
+      let nodeParameters = null; // 节点参数初始化为空
       if (direction > 0 && i === outputData.length - 1) {
-        nodeParameters = parameters;
+        // 如果方向为正且是最后一个输出数据
+        nodeParameters = parameters; // 设置节点参数
       }
       if (outputObjIdx !== -1) {
-        outputToSlot = 1;
+        // 如果输出对象索引不为-1
+        outputToSlot = 1; // 输出到槽位设置为1
       }
-      let nodeYaw = [0, 0];
+      let nodeYaw = [0, 0]; // 节点方向初始化为[0, 0]
       if (direction < 0) {
-        nodeYaw = [180, 180];
+        // 如果方向为负
+        nodeYaw = [180, 180]; // 节点方向设置为[180, 180]
       }
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          nodeYaw,
-          conveyor,
-          outputObjIdx,
-          outputToSlot,
-          nodeParameters
+          { x: buildingX, y: buildingY, z: buildingZ }, // 节点坐标
+          nodeYaw, // 节点方向
+          conveyor, // 传送带对象
+          outputObjIdx, // 输出对象索引
+          outputToSlot, // 输出到槽位
+          nodeParameters // 节点参数
         )
       );
-      nodeNum++;
+      nodeNum++; // 节点数量加1
       // 修改分拣器指向这个传送带节点
-      let toChangeNum = outputData[i].length;
+      let toChangeNum = outputData[i].length; // 需要修改的数量
       for (let b of this.buildings) {
+        // 遍历建筑物
         if (toChangeNum <= 0) {
-          break;
+          // 如果需要修改的数量为0
+          break; // 跳出循环
         }
         if (outputData[i].includes(b.index)) {
-          b.inputObjIdx = this.buildingIndex;
-          b.inputFromSlot = -1;
-          toChangeNum--;
+          // 如果输出数据包含当前建筑物索引
+          b.inputObjIdx = this.buildingIndex; // 修改输入对象索引
+          b.inputFromSlot = -1; // 修改输入槽位
+          toChangeNum--; // 需要修改的数量减1
         }
       }
     }
     if (direction < 0) {
+      // 如果方向为负
       // let outputObjIdx = this.buildingIndex
       if (needSprayCoater) {
+        // 如果需要喷涂机
         if (nodeNum % 2 === 0) {
+          // 如果节点数量为偶数
           this.buildings.push(
             this.newConveyorNode(
-              { x: buildingX, y: ++buildingY, z: buildingZ },
-              [0, 0],
-              conveyor,
-              this.buildingIndex,
-              1,
-              null
+              { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+              [0, 0], // 节点方向
+              conveyor, // 传送带对象
+              this.buildingIndex, // 输出对象索引
+              1, // 输出到槽位
+              null // 节点参数为空
             )
           );
         }
-        sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ };
+        sprayCoaterOffset = { x: buildingX, y: ++buildingY, z: buildingZ }; // 计算喷涂机偏移量
         this.sprayCoaterOffsetList.push({
           x: buildingX,
           y: buildingY + 1,
@@ -909,55 +1283,79 @@ class Blueprint {
         });
         this.buildings.push(
           this.newConveyorNode(
-            sprayCoaterOffset,
-            [180, 180],
-            conveyor,
-            this.buildingIndex,
-            1,
-            null
+            sprayCoaterOffset, // 喷涂机偏移量
+            [180, 180], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
         this.buildings.push(
           this.newConveyorNode(
-            { x: buildingX, y: ++buildingY, z: buildingZ },
-            [180, 180],
-            conveyor,
-            this.buildingIndex,
-            1,
-            null
+            { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+            [180, 180], // 节点方向
+            conveyor, // 传送带对象
+            this.buildingIndex, // 输出对象索引
+            1, // 输出到槽位
+            null // 节点参数为空
           )
         );
       }
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: ++buildingY, z: buildingZ },
-          [180, 180],
-          conveyor,
-          this.buildingIndex,
-          1,
-          null
+          { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+          [180, 180], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex, // 输出对象索引
+          1, // 输出到槽位
+          null // 节点参数为空
         )
       );
       this.buildings.push(
         this.newConveyorNode(
-          { x: buildingX, y: ++buildingY, z: buildingZ },
-          [180, 180],
-          conveyor,
-          this.buildingIndex,
-          1,
-          parameters
+          { x: buildingX, y: ++buildingY, z: buildingZ }, // 节点坐标
+          [180, 180], // 节点方向
+          conveyor, // 传送带对象
+          this.buildingIndex, // 输出对象索引
+          1, // 输出到槽位
+          parameters // 节点参数
         )
       );
     }
     if (needSprayCoater) {
-      let sprayYaw = [0, 0];
+      // 如果需要喷涂机
+      let sprayYaw = [0, 0]; // 喷涂机方向初始化为[0, 0]
       if (direction < 0) {
-        sprayYaw = [180, 180];
+        // 如果方向为负
+        sprayYaw = [180, 180]; // 喷涂机方向设置为[180, 180]
       }
-      this.buildings.push(this.newSprayCoater(sprayCoaterOffset, sprayYaw));
+      this.buildings.push(this.newSprayCoater(sprayCoaterOffset, sprayYaw)); // 添加喷涂机
     }
   }
 
+  /**
+   * 如果inputData和outputData都不为空, 那么认为这个带子是给中间产物使用的.
+   * @param {*} inputData
+   * @param {*} outputData
+   * @returns true: 是中间产物带子, false: 不是中间产物带子
+   */
+  newConveyor_isTempProduct(inputData, outputData) {
+    if (inputData[0].length > 0 && outputData[0].length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * 计算某个配方中单个生产建筑的占地面积
+   * @param {Object} subRecipe - 子配方对象。
+   * @returns {number} return.area - 建筑面积。
+   * @returns {number} return.x - x轴方向长度。
+   * @returns {number} return.y - y轴方向长度。
+   * @returns {number[]} return.centerPoint -  centerPoint中数值依次为中心点到y轴负边界、x轴正边界、y轴正边界和x轴负边界的距离
+   * @returns {number[]} return.yaw - 偏航角度数组。
+   */
   calculateBuildingArea(subRecipe) {
     // 计算某个配方中单个生产建筑的占地面积
     if (!subRecipe.building) {
@@ -983,7 +1381,7 @@ class Blueprint {
           };
         }
       case productionCategory.assembling:
-        return { area: 16, x: 4, y: 4, centerPoint: [2, 2, 1, 1], yaw: [0, 0] };
+        return { area: 16, x: 4, y: 4, centerPoint: [2, 2, 1, 1], yaw: [0, 0] }; // 为什么是2,2,1,1???
       case productionCategory.plant:
         return { area: 48, x: 8, y: 6, centerPoint: [2, 4, 3, 3], yaw: [0, 0] };
       case productionCategory.refinery:
@@ -1031,31 +1429,75 @@ class Blueprint {
 
   calculateBlueprintArea() {
     let totalArea = 0;
+    // 先计算所有配方需要的总面积
     for (let subRecipe of this.recipe.subRecipes) {
       if (!subRecipe.building) {
         continue;
       }
       totalArea +=
         this.calculateBuildingArea(subRecipe).area *
-        Math.ceil(subRecipe.building.num);
+        Math.ceil(subRecipe.building.num); // 每个配方需要的生产建筑都是一样的, 用单个建筑的占地面积乘以建筑数量ceil就是这个配方的总面积
     }
+
     // console.log(`total area ${totalArea}`)
-    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio));
+    let y = Math.ceil(Math.sqrt(totalArea / this.config.x_y_ratio)); // 将总面积除以长宽比例，然后取平方根来计算y的值。这是为了确保蓝图的宽度（y）和宽度（x）符合指定的比例
     // let x = Math.ceil(Math.sqrt(totalArea))
     this.blueprintSize = {
       x: Math.ceil(this.config.x_y_ratio * y),
       y: y,
-    };
+    }; // 由于 y 是向上取整的，所以 blueprintSize 应该会大于等于 totalArea。这是为了确保蓝图的尺寸能够容纳所有建筑物的总面积。
     this.occupiedArea = [{ x1: -1, y1: -1, x2: this.blueprintSize.x, y2: -1 }];
   }
+  calculateBlueprintArea2(n) {
+    let totalArea = 0;
+    // 先计算所有配方需要的总面积
+    for (let subRecipe of this.recipe.subRecipes) {
+      if (!subRecipe.building) {
+        continue;
+      }
+      totalArea +=
+        this.calculateBuildingArea(subRecipe).area *
+        Math.ceil(subRecipe.building.num); // 每个配方需要的生产建筑都是一样的, 用单个建筑的占地面积乘以建筑数量ceil就是这个配方的总面积
+    }
 
+    // 计算每层的最小面积，确保每层的面积乘以层数不小于总面积
+    let averageLayerArea = Math.ceil(totalArea / n);
+
+    // 初始化多层的尺寸
+    for (let i = 0; i < n; i++) {
+      let y = Math.ceil(Math.sqrt(averageLayerArea / this.config.x_y_ratio));
+      let x = Math.ceil(this.config.x_y_ratio * y);
+
+      // 更新每层的尺寸
+      this.blueprintSize = { x: x, y: y };
+      // 更新每层的占用区域
+      for (let j = 0; j < this.config.magic_layer_cnt; j++) {
+        this.occupiedArea[j] = [
+          { x1: -1, y1: -1, x2: this.blueprintSize.x, y2: -1 },
+        ];
+      }
+
+      // // 更新每层的尺寸. 第一层layer=1
+      // this.blueprintSize.push({ x: x, y: y, layer: i + 1 });
+      // // 更新每层的占用区域. 第一层layer=1
+      // this.occupiedArea.push({ x1: -1, y1: -1, x2: x, y2: -1, layer: i + 1 });
+    }
+  }
+
+  /**
+   *
+   * @param {*} buildingOffset [{x, y, z}, {x, y, z}]==[起始坐标,结束坐标]
+   * @param {*} type 建筑的category
+   * @param {*} slotIndex
+   * @param {*} rotate  0 表示分拣器出货， 1 表示进货
+   * @returns
+   */
   calculateSorterLocalOffsetAndYaw(
     buildingOffset,
     type,
     slotIndex,
     rotate = 0
   ) {
-    // rotate = 0 表示分拣器出货， 1 表示进货
     let data = {
       offset: [],
       yaw: [],
@@ -1067,43 +1509,91 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.9, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x - 0.9,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.9,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.9, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x + 0.9,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 0.9,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y - 0.8, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y - 0.8, z: 0 },
+            {
+              x: buildingOffset.x + 1,
+              y: buildingOffset.y - 0.8,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 2,
+              y: buildingOffset.y - 0.8,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y, z: 0 },
+            {
+              x: buildingOffset.x + 1,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 2,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x + 1, y: buildingOffset.y + 0.8, z: 0 },
-            { x: buildingOffset.x + 2, y: buildingOffset.y + 0.8, z: 0 },
+            {
+              x: buildingOffset.x + 1,
+              y: buildingOffset.y + 0.8,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 2,
+              y: buildingOffset.y + 0.8,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(90 + rotate * 180) % 360, (90 + rotate * 180) % 360];
           break;
@@ -1115,52 +1605,108 @@ class Blueprint {
         case 6:
           // data.offset = [{x: buildingOffset.x-1, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x-1, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 4:
           // data.offset = [{x: buildingOffset.x+1, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x+1, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 3:
           // data.offset = [{x: buildingOffset.x+2, y: buildingOffset.y-1, z: 0}, {x: buildingOffset.x+2, y: buildingOffset.y-2, z: 0}]
           data.offset = [
-            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 1.6, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x + 1.6,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 1.6,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(180 + rotate * 180) % 360, (180 + rotate * 180) % 360];
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
@@ -1171,50 +1717,106 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: 0 },
+            {
+              x: buildingOffset.x - 3,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y, z: 0 },
+            {
+              x: buildingOffset.x - 3,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x - 3, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: 0 },
+            {
+              x: buildingOffset.x - 3,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(270 + rotate * 180) % 360, (270 + rotate * 180) % 360];
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y + 2, z: 0 },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y + 2, z: 0 },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x + 0.8, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x + 0.8,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1223,8 +1825,16 @@ class Blueprint {
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1233,8 +1843,16 @@ class Blueprint {
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1248,8 +1866,16 @@ class Blueprint {
       switch (slotIndex) {
         case 8:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y - 3, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y - 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1258,8 +1884,16 @@ class Blueprint {
           break;
         case 7:
           data.offset = [
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y - 3, z: 0 },
+            {
+              x: buildingOffset.x - 1.6,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 1.6,
+              y: buildingOffset.y - 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1268,8 +1902,16 @@ class Blueprint {
           break;
         case 6:
           data.offset = [
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 2, z: 0 },
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y - 3, z: 0 },
+            {
+              x: buildingOffset.x - 2.4,
+              y: buildingOffset.y - 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 2.4,
+              y: buildingOffset.y - 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             180 + ((rotate * 180) % 360),
@@ -1278,8 +1920,16 @@ class Blueprint {
           break;
         case 5:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y - 1, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y - 1, z: 0 },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 5,
+              y: buildingOffset.y - 1,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1288,8 +1938,16 @@ class Blueprint {
           break;
         case 4:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y, z: 0 },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 5,
+              y: buildingOffset.y,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1298,8 +1956,16 @@ class Blueprint {
           break;
         case 3:
           data.offset = [
-            { x: buildingOffset.x - 4, y: buildingOffset.y + 1, z: 0 },
-            { x: buildingOffset.x - 5, y: buildingOffset.y + 1, z: 0 },
+            {
+              x: buildingOffset.x - 4,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 5,
+              y: buildingOffset.y + 1,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [
             270 + ((rotate * 180) % 360),
@@ -1308,22 +1974,46 @@ class Blueprint {
           break;
         case 2:
           data.offset = [
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 2.4, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x - 2.4,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 2.4,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 1:
           data.offset = [
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 1.6, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x - 1.6,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 1.6,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
         case 0:
           data.offset = [
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 2, z: 0 },
-            { x: buildingOffset.x - 0.8, y: buildingOffset.y + 3, z: 0 },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 2,
+              z: buildingOffset.z,
+            },
+            {
+              x: buildingOffset.x - 0.8,
+              y: buildingOffset.y + 3,
+              z: buildingOffset.z,
+            },
           ];
           data.yaw = [(rotate * 180) % 360, (rotate * 180) % 360];
           break;
@@ -1502,27 +2192,51 @@ class Blueprint {
     let distance = 0;
     switch (category) {
       case productionCategory.smelter:
-        offset = { x: buildingOffset.x - 1, y: buildingOffset.y - 2, z: 0 };
+        offset = {
+          x: buildingOffset.x - 1,
+          y: buildingOffset.y - 2,
+          z: buildingOffset.z,
+        };
         distance = 3;
         break;
       case productionCategory.assembling:
-        offset = { x: buildingOffset.x + 2, y: buildingOffset.y - 2, z: 0 };
+        offset = {
+          x: buildingOffset.x + 2,
+          y: buildingOffset.y - 2,
+          z: buildingOffset.z,
+        };
         distance = 3;
         break;
       case productionCategory.plant:
-        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 2, z: 0 };
+        offset = {
+          x: buildingOffset.x + 3,
+          y: buildingOffset.y - 2,
+          z: buildingOffset.z,
+        };
         distance = 7;
         break;
       case productionCategory.refinery:
-        offset = { x: buildingOffset.x - 3, y: buildingOffset.y - 2, z: 0 };
+        offset = {
+          x: buildingOffset.x - 3,
+          y: buildingOffset.y - 2,
+          z: buildingOffset.z,
+        };
         distance = 7;
         break;
       case productionCategory.collider:
-        offset = { x: buildingOffset.x + 1, y: buildingOffset.y - 3, z: 0 };
+        offset = {
+          x: buildingOffset.x + 1,
+          y: buildingOffset.y - 3,
+          z: buildingOffset.z,
+        };
         distance = 10;
         break;
       case productionCategory.lab:
-        offset = { x: buildingOffset.x + 3, y: buildingOffset.y - 3, z: 0 };
+        offset = {
+          x: buildingOffset.x + 3,
+          y: buildingOffset.y - 3,
+          z: buildingOffset.z,
+        };
         distance = 6;
         break;
       default:
@@ -1536,266 +2250,397 @@ class Blueprint {
   }
 
   newProductionBuilding(subRecipe) {
-    let hasTeslaTowerThisLine = false;
-    let teslaTowerDistance = 0;
-    for (let i = 0; i < subRecipe.building.num; i++) {
-      this.buildingIndex++;
-      this.lastProductionBuildingType =
-        buildingMap[subRecipe.building.name].category;
-      let buildingArea, buildingX, buildingY, buildingZ;
-      buildingArea = this.calculateBuildingArea(subRecipe);
-      // }
-      let needNewLine = false;
-      // console.log(this.occupiedArea)
-      // console.log(this.blueprintSize)
-      if (
-        this.blueprintSize.x -
-          this.occupiedArea[this.occupiedArea.length - 1].x2 >=
-        buildingArea.x / 2
-      ) {
-        // 在当前行继续添加
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, sorterList: sorterList})
-        buildingX =
-          this.occupiedArea[this.occupiedArea.length - 1].x2 +
-          1 +
-          buildingArea.centerPoint[3];
-        buildingY =
-          this.occupiedArea[this.occupiedArea.length - 2].y2 +
-          1 +
-          buildingArea.centerPoint[0];
-        buildingZ = 0;
-        this.occupiedArea[this.occupiedArea.length - 1].x2 += buildingArea.x;
-        if (
-          buildingY + buildingArea.centerPoint[2] >
-          this.occupiedArea[this.occupiedArea.length - 1].y2
-        ) {
-          // 当一行中出现更宽（y轴方向为宽度）的建筑时，占地区域的y2需要更新
-          this.occupiedArea[this.occupiedArea.length - 1].y2 =
-            buildingY + buildingArea.centerPoint[2];
-        }
-      } else {
-        // 新的一行
-        needNewLine = true;
-        hasTeslaTowerThisLine = false;
-        teslaTowerDistance = 0;
-        // this.buildingArray.push([{index: this.buildingIndex, sorterList: sorterList}])
-        buildingX = buildingArea.centerPoint[3];
-        buildingY =
-          buildingArea.centerPoint[0] +
-          this.occupiedArea[this.occupiedArea.length - 1].y2 +
-          1;
-        buildingZ = 0;
-        this.occupiedArea.push({
-          x1: 0,
-          y1: buildingY - buildingArea.centerPoint[0],
-          x2: buildingX + buildingArea.centerPoint[1],
-          y2: buildingY + buildingArea.centerPoint[2],
-        });
-      }
-      let acceleratorMode = 0;
-      if (subRecipe.acceleratorMode === 1) {
-        acceleratorMode = 1;
-      }
-      let newBuilding = {
-        index: this.buildingIndex,
-        areaIndex: 0,
-        localOffset: [
-          {
-            x: buildingX,
-            y: buildingY,
-            z: buildingZ,
-          },
-          {
-            x: buildingX,
-            y: buildingY,
-            z: buildingZ,
-          },
-        ],
-        yaw: buildingArea.yaw,
-        itemId: buildingMap[subRecipe.building.name].itemId,
-        modelIndex: buildingMap[subRecipe.building.name].modelIndex,
-        outputObjIdx: -1,
-        inputObjIdx: -1,
-        outputToSlot: 0,
-        inputFromSlot: 0,
-        outputFromSlot: 0,
-        inputToSlot: 0,
-        outputOffset: 0,
-        inputOffset: 0,
-        recipeId: parseInt(subRecipe.recipeID),
-        filterId: 0,
-        parameters: {
-          acceleratorMode: acceleratorMode,
-        },
-      };
+    let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
+    let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
+    let levelHeight = this.config.magic_layer_height; // 单层的高度
 
-      let stackLabBuildingIndexList = [];
-      let layers = 1;
-      if (
-        buildingMap[subRecipe.building.name].category === productionCategory.lab
-      ) {
-        // 堆叠处理研究站
-        newBuilding.outputToSlot = 14;
-        newBuilding.inputFromSlot = 15;
-        newBuilding.outputFromSlot = 15;
-        newBuilding.inputToSlot = 14;
-        newBuilding.parameters.researchMode = 1;
-        this.buildings.push(newBuilding);
-        for (
-          i++;
-          i < subRecipe.building.num && layers < this.config.maxLabLayers;
-          i++, layers++
-        ) {
-          let labBuilding = this.getBuildingTemplate();
-          labBuilding.localOffset = [
-            { x: buildingX, y: buildingY, z: buildingZ },
-            { x: buildingX, y: buildingY, z: buildingZ },
-          ];
-          labBuilding.localOffset[0].z = buildingMap.lab.height * layers;
-          labBuilding.localOffset[1].z = buildingMap.lab.height * layers;
-          labBuilding.yaw = newBuilding.yaw;
-          labBuilding.itemId = buildingMap[subRecipe.building.name].itemId;
-          labBuilding.modelIndex = buildingMap[subRecipe.building.name].modelIndex;
-          labBuilding.recipeId = parseInt(subRecipe.recipeID);
-          labBuilding.inputObjIdx = this.buildingIndex - 1;
-          labBuilding.outputToSlot = 14;
-          labBuilding.inputFromSlot = 15;
-          labBuilding.outputFromSlot = 15;
-          labBuilding.inputToSlot = 14;
-          labBuilding.parameters = {
-            acceleratorMode: acceleratorMode,
-            researchMode: 1,
-          };
-          this.buildings.push(labBuilding);
-          stackLabBuildingIndexList.push(this.buildingIndex);
-        }
-        i--;
-      } else {
-        this.buildings.push(newBuilding);
-      }
-      const nowBuildingIndex = newBuilding.index;
-      if (this.config.generateTeslaTower) {
+    // 当前配方中需要几个生产建筑数量, 就循环几次
+    for (let i = 0; i < subRecipe.building.num; i++) {
+      // 遍历子配方中指定的建筑数量
+      this.buildingIndex++; // 建筑索引自增，用于追踪建筑数量
+      this.lastProductionBuildingType =
+        buildingMap[subRecipe.building.name].category; // 记录上一个生产建筑的类型
+
+      let placed = false; // 标记当前的生产建筑是否已放置
+      // 对于仙术的每一层
+      for (let j = 0; j < this.config.magic_layer_cnt; j++) {
+        if (placed) break; // 如果建筑已放置，跳出循环
+
+        /**
+         * buildingArea 当前配方的建筑面积(不是蓝图面积)
+         * @property {number} area - 面积大小
+         * @property {number} x - x轴方向长度
+         * @property {number} y - y轴方向长度
+         * @property {number} y - z轴方向长度.harry
+         * @property {number[]} centerPoint - 比如[2, 1, 1, 1]数值依次为中心点到y轴负边界、x轴正边界、y轴正边界和x轴负边界的距离
+         * @property {number[]} yaw - 偏航角度数组
+         */
+        let buildingArea;
+
+        /**
+         * 建筑中心点坐标 x (???)
+         */
+        let buildingX;
+        /**
+         * 建筑中心点坐标 y (???)
+         */
+        let buildingY;
+        /**
+         * 建筑中心点坐标 z (???)
+         */
+        let buildingZ;
+
+        buildingArea = this.calculateBuildingArea(subRecipe); // 这里应该是先把当前配方的单个建筑的面积信息计算出来. 后面再复用这个变量,来存放着一行的建筑面积信息(???)
+        let needNewLine = false; // 标记是否需要换行开始新的建筑排列
         if (
-          (this.config.teslaTowerLineInterval > 1 &&
-            ((this.buildingArray.length &&
-              this.buildingArray.length % 2 === 0) ||
-              (needNewLine && this.buildingArray.length % 2 === 1))) ||
-          (this.config.teslaTowerLineInterval === 1 &&
-            this.buildingArray.length)
+          this.blueprintSize.x -
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 >=
+          buildingArea.x / 2
         ) {
-          let teslaTowerOffset = this.calculateTeslaTowerOffset(
-            { x: buildingX, y: buildingY, z: buildingZ },
-            buildingMap[subRecipe.building.name].category
-          );
-          teslaTowerDistance += teslaTowerOffset.distance;
+          // 检查当前行剩余空间是否足够放置新建筑
+          // 在当前行继续添加建筑
+          buildingX =
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 +
+            1 +
+            buildingArea.centerPoint[3]; // 计算建筑的X坐标
+          buildingY =
+            this.occupiedArea[j][this.occupiedArea[j].length - 2].y2 +
+            1 +
+            buildingArea.centerPoint[0]; // 计算建筑的Y坐标
+          buildingZ = levelHeight * j; // 设置建筑的Z坐标
+          this.occupiedArea[j][this.occupiedArea[j].length - 1].x2 +=
+            buildingArea.x; // 更新占用区域的x2坐标
           if (
-            (hasTeslaTowerThisLine &&
-              teslaTowerDistance >= this.config.teslaTowerInterval) ||
-            (!hasTeslaTowerThisLine &&
-              teslaTowerDistance >= this.config.teslaTowerInterval / 2) ||
-            (teslaTowerDistance >= this.config.teslaTowerInterval / 2 &&
-              this.blueprintSize.x - buildingX < this.config.teslaTowerInterval)
+            buildingY + buildingArea.centerPoint[2] >
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].y2
           ) {
-            // 生成电力感应塔
-            let teslaTower = this.getBuildingTemplate();
-            teslaTower.itemId = buildingMap.teslaTower.itemId;
-            teslaTower.modelIndex = buildingMap.teslaTower.modelIndex;
-            teslaTower.localOffset = [
-              teslaTowerOffset.offset,
-              teslaTowerOffset.offset,
+            // 如果建筑的宽度超出当前行的y2坐标
+            // 更新占地区域的y2坐标以适应更宽的建筑
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 =
+              buildingY + buildingArea.centerPoint[2];
+          }
+          placed = true; // 标记建筑已放置
+        } else if (
+          this.blueprintSize.y -
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 >=
+          buildingArea.y / 2
+        ) {
+          // 如果当前行空间不足，并且新的一行没有超出本层的范围,则开始新的一行
+          needNewLine = true;
+          hasTeslaTowerThisLine = false; // 新行中尚未放置电力感应塔
+          teslaTowerDistance = 0; // 重置电力感应塔的距离计数
+          buildingX = buildingArea.centerPoint[3]; // 当前建筑中心点到x轴负边界的距离.  当做
+          buildingY =
+            buildingArea.centerPoint[0] +
+            this.occupiedArea[j][this.occupiedArea[j].length - 1].y2 +
+            1; // 当前建筑中心点到y轴负边界距离 + 整个蓝图倒数第二行区域的结束高度 + 1. (???)
+          buildingZ = levelHeight * j; // 设置新行的建筑Z坐标
+
+          // 向占用区域数组中添加新行的信息
+          this.occupiedArea[j].push({
+            x1: 0,
+            y1: buildingY - buildingArea.centerPoint[0],
+            x2: buildingX + buildingArea.centerPoint[1],
+            y2: buildingY + buildingArea.centerPoint[2],
+          });
+          placed = true; // 标记建筑已放置
+        } else {
+          placed = false; // 当层放不下了,则放到下一层
+          continue;
+        }
+
+        let acceleratorMode = 0; // 初始化加速器模式标记
+        if (subRecipe.acceleratorMode === 1) {
+          // 如果子配方中加速器模式被启用
+          acceleratorMode = 1; // 设置加速器模式
+        }
+
+        let newBuilding = {
+          // 创建新的建筑对象
+          index: this.buildingIndex, // 设置建筑索引
+          areaIndex: 0, // 区域索引，初始设置为0
+          localOffset: [
+            // 设置建筑的本地偏移坐标
+            {
+              x: buildingX, // 建筑的X坐标
+              y: buildingY, // 建筑的Y坐标
+              z: buildingZ, // 建筑的Z坐标
+            },
+            {
+              x: buildingX, //
+              y: buildingY, //
+              z: buildingZ, //
+            },
+          ],
+          yaw: buildingArea.yaw, // 设置建筑的偏航角
+          itemId: buildingMap[subRecipe.building.name].itemId, // 设置建筑的物品ID
+          modelIndex: buildingMap[subRecipe.building.name].modelIndex, // 设置建筑的模型索引
+          outputObjIdx: -1, // 输出对象索引，初始设置为-1
+          inputObjIdx: -1, // 输入对象索引，初始设置为-1
+          outputToSlot: 0, // 输出到槽位，初始设置为0
+          inputFromSlot: 0, // 从槽位输入，初始设置为0
+          outputFromSlot: 0, // 从槽位输出，初始设置为0
+          inputToSlot: 0, // 输入到槽位，初始设置为0
+          outputOffset: 0, // 输出偏移，初始设置为0
+          inputOffset: 0, // 输入偏移，初始设置为0
+          recipeId: parseInt(subRecipe.recipeID), // 解析并设置配方ID
+          filterId: 0, // 过滤器ID，初始设置为0
+          parameters: {
+            // 设置额外参数
+            acceleratorMode: acceleratorMode, // 加速器模式
+          },
+        };
+
+        let stackLabBuildingIndexList = []; // 声明堆叠实验室建筑索引列表
+        let layers = 1; // 初始化层数为1
+        if (
+          buildingMap[subRecipe.building.name].category ===
+          productionCategory.lab
+        ) {
+          // 如果当前建筑是实验室类型
+          // 设置实验室建筑的输入输出槽位
+          newBuilding.outputToSlot = 14;
+          newBuilding.inputFromSlot = 15;
+          newBuilding.outputFromSlot = 15;
+          newBuilding.inputToSlot = 14;
+          newBuilding.parameters.researchMode = 1; // 设置研究模式
+          this.buildings.push(newBuilding); // 将新建筑添加到建筑列表
+          for (
+            i++;
+            i < subRecipe.building.num && layers < this.config.maxLabLayers;
+            i++, layers++
+          ) {
+            // 循环添加实验室建筑直到达到最大层数或建筑数
+            let labBuilding = this.getBuildingTemplate(); // 获取建筑模板
+            labBuilding.localOffset = [
+              // 设置实验室建筑的本地偏移
+              { x: buildingX, y: -buildingY-1, z: buildingZ },
+              { x: buildingX, y: -buildingY-1, z: buildingZ },
             ];
-            teslaTowerDistance = 0;
-            hasTeslaTowerThisLine = true;
-            this.buildingArray[this.buildingArray.length - 1].push({
-              index: teslaTower.index,
-              sorterList: [],
-            });
-            this.buildings.push(teslaTower);
+            labBuilding.localOffset[0].z = buildingMap.lab.height * (layers-1); // 设置堆叠的Z坐标
+            labBuilding.localOffset[1].z = buildingMap.lab.height * (layers-1);
+            labBuilding.yaw = newBuilding.yaw; // 设置堆叠建筑的偏航角
+            labBuilding.itemId = buildingMap[subRecipe.building.name].itemId; // 设置物品ID
+            labBuilding.modelIndex =
+              buildingMap[subRecipe.building.name].modelIndex; // 设置模型索引
+            labBuilding.recipeId = parseInt(subRecipe.recipeID); // 设置配方ID
+            labBuilding.inputObjIdx = this.buildingIndex - 1; // 设置输入对象索引
+            labBuilding.outputToSlot = 14; // 设置输出到槽位
+            labBuilding.inputFromSlot = 15; // 设置从槽位输入
+            labBuilding.outputFromSlot = 15; // 设置从槽位输出
+            labBuilding.inputToSlot = 14; // 设置输入到槽位
+            labBuilding.parameters = {
+              // 设置额外参数
+              acceleratorMode: acceleratorMode, // 加速器模式
+              researchMode: 1, // 研究模式
+            };
+            this.buildings.push(labBuilding); // 将堆叠的实验室添加到建筑列表
+            stackLabBuildingIndexList.push(this.buildingIndex); // 将堆叠实验室的索引添加到列表
+          }
+          i--; // 减少循环变量，以匹配外部循环的增加
+        } else {
+          this.buildings.push(newBuilding); // 如果不是实验室，直接添加新建筑到列表
+        }
+
+        const nowBuildingIndex = newBuilding.index; // 记录当前建筑的索引
+        if (this.config.generateTeslaTower) {
+          // 如果配置中指定生成电力感应塔
+          if (
+            (this.config.teslaTowerLineInterval > 1 && // 根据行间隔设置判断是否需要生成电力感应塔
+              ((this.buildingArray.length &&
+                this.buildingArray.length % 2 === 0) ||
+                (needNewLine && this.buildingArray.length % 2 === 1))) ||
+            (this.config.teslaTowerLineInterval === 1 &&
+              this.buildingArray.length)
+          ) {
+            let teslaTowerOffset = this.calculateTeslaTowerOffset(
+              // 计算电力感应塔的偏移量
+              { x: buildingX, y: buildingY, z: buildingZ },
+              buildingMap[subRecipe.building.name].category
+            );
+            teslaTowerDistance += teslaTowerOffset.distance; // 累加到电力感应塔的距离
+            if (
+              (hasTeslaTowerThisLine && // 如果当前行已经放置了电力感应塔，并且距离已经达到或超过配置的间隔距离，则需要在当前行生成新的电力感应塔。(???)
+                teslaTowerDistance >= this.config.teslaTowerInterval) ||
+              (!hasTeslaTowerThisLine &&
+                teslaTowerDistance >= this.config.teslaTowerInterval / 2) || // 如果当前行尚未放置电力感应塔，并且距离已经达到或超过配置间隔距离的一半，则需要在当前行生成电力感应塔。这是为了确保在每行的中间位置至少有一个电力感应塔，保证电力覆盖范围。(???)
+              (teslaTowerDistance >= this.config.teslaTowerInterval / 2 &&
+                this.blueprintSize.x - buildingX <
+                  this.config.teslaTowerInterval) // 如果当前行的电力感应塔距离已经达到或超过配置间隔距离的一半，并且当前建筑位置到蓝图末端的距离小于配置的间隔距离，则需要在当前行生成电力感应塔。这是为了确保在接近蓝图末端时，电力感应塔的覆盖范围能够覆盖到蓝图的边缘。(???)
+            ) {
+              // 生成电力感应塔
+              let teslaTower = this.getBuildingTemplate(); // 获取建筑模板
+              teslaTower.itemId = buildingMap.teslaTower.itemId; // 设置电力感应塔的物品ID
+              teslaTower.modelIndex = buildingMap.teslaTower.modelIndex; // 设置电力感应塔的模型索引
+              teslaTower.localOffset = [
+                teslaTowerOffset.offset,
+                teslaTowerOffset.offset,
+              ]; // 设置电力感应塔的本地偏移
+              teslaTowerDistance = 0; // 重置电力感应塔距离
+              hasTeslaTowerThisLine = true; // 标记当前行已放置电力感应塔
+              this.buildingArray[this.buildingArray.length - 1].push({
+                index: teslaTower.index,
+                sorterList: [],
+              }); // 将电力感应塔添加到 buildingArray的当前处理行的建筑数组中
+              this.buildings.push(teslaTower); // 将电力感应塔添加到建筑列表
+            }
           }
         }
-      }
 
-      // 添加分拣器
-      let slotIndex = buildingMap[subRecipe.building.name].slotMaxIndex;
-      let productionSpeed =
-        buildingMap[subRecipe.building.name].productionSpeed;
-      let sorterList = [];
-      let actual_building_num = Math.min(1, subRecipe.building.num - i); // 建筑不是整数的时候，最后一个建筑分拣器实际rate会更低
-      if (
-        buildingMap[subRecipe.building.name].category === productionCategory.lab
-      ) {
-        actual_building_num += stackLabBuildingIndexList.length;
-      }
-
-      let extra_rate = 1;
-      if (this.recipe.proliferator) {
-        if (subRecipe.acceleratorMode === 0) {
-          extra_rate += itemMap[this.recipe.proliferator].extra_rate;
-        } else if (subRecipe.acceleratorMode === 1) {
-          extra_rate += itemMap[this.recipe.proliferator].accelerate;
-        }
-      }
-
-      for (let outputItem of subRecipe.output) {
-        let actual_rate =
-          outputItem.rate * productionSpeed * actual_building_num * extra_rate;
-        let sorter = buildingMap.sorterMk1;
-        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
-          // 一级分拣器不够用时直接使用三级分拣器，二级分拣器没太大价值，直接略过
-          sorter = buildingMap.sorterMk3;
-        }
-        if (buildingMap[subRecipe.building.name].category === productionCategory.lab &&
-          actual_rate > buildingMap.sorterMk3.sortingSpeed
+        // 添加分拣器的逻辑
+        let slotIndex = buildingMap[subRecipe.building.name].slotMaxIndex; // 获取最大槽位索引
+        let productionSpeed =
+          buildingMap[subRecipe.building.name].productionSpeed; // 获取生产速度
+        let sorterList = []; // 初始化分拣器列表
+        let actual_building_num = Math.min(1, subRecipe.building.num - i); // 确保 actual_building_num 的值不会超过 1，防止处理超过一个建筑或负值的情况。(???)不能直接给1吗?
+        if (
+          buildingMap[subRecipe.building.name].category ===
+          productionCategory.lab
         ) {
-          // 研究站层数过高时会出现一个3级分拣器无法满足运力的问题
-          let newSorter2 = this.getBuildingTemplate();
-          newSorter2.itemId = sorter.itemId;
-          newSorter2.modelIndex = sorter.modelIndex;
-          newSorter2.inputObjIdx = nowBuildingIndex;
-          newSorter2.outputToSlot = -1;
-          newSorter2.inputToSlot = 1;
-          newSorter2.inputFromSlot = slotIndex - 3;
-          newSorter2.filterId = itemMap[outputItem.name].iconId;
-          newSorter2.parameters = { length: 1 };
-          const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
+          // 如果是实验室类型
+          actual_building_num += stackLabBuildingIndexList.length; // 增加堆叠实验室的数量
+        }
+
+        let extra_rate = 1; // 初始化额外增产比率
+        if (this.recipe.proliferator) {
+          // 如果配方中有增产剂
+          if (subRecipe.acceleratorMode === 0) {
+            // 如果没有启用加速模式
+            extra_rate += itemMap[this.recipe.proliferator].extra_rate; // 增加额外增产比率
+          } else if (subRecipe.acceleratorMode === 1) {
+            // 如果启用了加速模式
+            extra_rate += itemMap[this.recipe.proliferator].accelerate; // 增加加速比率
+          }
+        }
+
+        // 先遍历所有输出项目. 一个配方可能有多个输出物品
+        for (let outputItem of subRecipe.output) {
+          let actual_rate =
+            outputItem.rate *
+            productionSpeed *
+            actual_building_num *
+            extra_rate; // 计算实际产率. 多层lab会增大actual_building_num
+          let sorter = buildingMap.sorterMk1; // 默认使用一级分拣器
+          if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
+            // 如果配置只使用三级分拣器或实际产率超过一级分拣器速度
+            sorter = buildingMap.sorterMk3; // 使用三级分拣器
+          }
+
+          if (
+            buildingMap[subRecipe.building.name].category ===
+              productionCategory.lab &&
+            actual_rate > buildingMap.sorterMk3.sortingSpeed
+          ) {
+            // 如果是实验室且实际产率超过三级分拣器速度
+            let newSorter2 = this.getBuildingTemplate(); // 获取新的分拣器模板
+            newSorter2.itemId = sorter.itemId; // 设置分拣器的物品ID
+            newSorter2.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+            newSorter2.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+            newSorter2.outputToSlot = -1; // 设置输出到槽位
+            newSorter2.inputToSlot = 1; // 设置输入到槽位
+            newSorter2.inputFromSlot = slotIndex - 3; // 设置从槽位输入
+            newSorter2.filterId = itemMap[outputItem.name].iconId; // 设置过滤器ID
+            newSorter2.parameters = { length: 1 }; // 设置参数长度
+            const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
+              { x: buildingX, y: buildingY, z: buildingZ },
+              buildingMap[subRecipe.building.name].category,
+              slotIndex - 3
+            ); // 计算分拣器的本地偏移和偏航角
+            newSorter2.localOffset = offsetInfo2.offset; // 设置分拣器的本地偏移
+            newSorter2.yaw = offsetInfo2.yaw; // 设置分拣器的偏航角
+            this.buildings.push(newSorter2); // 将分拣器添加到建筑列表
+            sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
+            if (this.sorters[outputItem.name]) {
+              // 如果输出项目已存在
+              if (this.sorters[outputItem.name].output) {
+                // 如果输出列表存在
+                this.sorters[outputItem.name].output.push({
+                  index: newSorter2.index,
+                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
+                  ownerName: subRecipe.building.name,
+                  ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                  recipeID: parseInt(subRecipe.recipeID),
+                }); // 添加到输出列表
+              } else {
+                this.sorters[outputItem.name].output = [
+                  {
+                    index: newSorter2.index,
+                    rate: buildingMap.sorterMk3.sortingSpeed,
+                    ownerObjIdx: nowBuildingIndex,
+                    ownerName: subRecipe.building.name,
+                    ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                    recipeID: parseInt(subRecipe.recipeID),
+                  },
+                ]; // 创建新的输出列表
+              }
+            } else {
+              // 如果不存在就新建
+              this.sorters[outputItem.name] = {
+                output: [
+                  {
+                    index: newSorter2.index,
+                    rate: buildingMap.sorterMk3.sortingSpeed,
+                    ownerObjIdx: nowBuildingIndex,
+                    ownerName: subRecipe.building.name,
+                    ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                    recipeID: parseInt(subRecipe.recipeID),
+                  },
+                ],
+              };
+            }
+            actual_rate -= buildingMap.sorterMk3.sortingSpeed; // 减少实际产率
+          }
+
+          let newSorter = this.getBuildingTemplate(); // 获取新的分拣器模板
+          newSorter.itemId = sorter.itemId; // 设置分拣器的物品ID
+          newSorter.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+          newSorter.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+          newSorter.outputToSlot = -1; // 设置输出到槽位
+          newSorter.inputToSlot = 1; // 设置输入到槽位
+          newSorter.inputFromSlot = slotIndex; // 设置从槽位输入
+          newSorter.filterId = itemMap[outputItem.name].iconId; // 设置过滤器ID
+          newSorter.parameters = { length: 1 }; // 设置参数长度
+          const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category,
-            slotIndex - 3
-          );
-          newSorter2.localOffset = offsetInfo2.offset;
-          newSorter2.yaw = offsetInfo2.yaw;
-          this.buildings.push(newSorter2);
-          sorterList.push(this.buildingIndex);
+            slotIndex
+          ); // 计算分拣器的本地偏移和偏航角
+          newSorter.localOffset = offsetInfo.offset; // 设置分拣器的本地偏移
+          newSorter.yaw = offsetInfo.yaw; // 设置分拣器的偏航角
+          this.buildings.push(newSorter); // 将分拣器添加到建筑列表
+          sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
           if (this.sorters[outputItem.name]) {
-            // 已存在就append
+            // 如果输出项目已存在
             if (this.sorters[outputItem.name].output) {
+              // 如果输出列表存在
               this.sorters[outputItem.name].output.push({
-                index: newSorter2.index,
-                rate: buildingMap.sorterMk3.sortingSpeed,
+                index: newSorter.index,
+                rate: actual_rate,
                 ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
                 ownerName: subRecipe.building.name,
                 ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                 recipeID: parseInt(subRecipe.recipeID),
-              });
+              }); // 把所有相同的输出产物,添加到输出列表
             } else {
               this.sorters[outputItem.name].output = [
                 {
-                  index: newSorter2.index,
-                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  index: newSorter.index,
+                  rate: actual_rate,
                   ownerObjIdx: nowBuildingIndex,
                   ownerName: subRecipe.building.name,
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                   recipeID: parseInt(subRecipe.recipeID),
                 },
-              ];
+              ]; // 创建新的输出列表
             }
           } else {
-            // 不存在就新建
+            // 如果不存在就新建
             this.sorters[outputItem.name] = {
               output: [
                 {
-                  index: newSorter2.index,
-                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  index: newSorter.index,
+                  rate: actual_rate,
                   ownerObjIdx: nowBuildingIndex,
                   ownerName: subRecipe.building.name,
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
@@ -1804,128 +2649,134 @@ class Blueprint {
               ],
             };
           }
-          actual_rate -= buildingMap.sorterMk3.sortingSpeed;
-        }
-        let newSorter = this.getBuildingTemplate();
-        newSorter.itemId = sorter.itemId;
-        newSorter.modelIndex = sorter.modelIndex;
-        newSorter.inputObjIdx = nowBuildingIndex;
-        newSorter.outputToSlot = -1;
-        newSorter.inputToSlot = 1;
-        newSorter.inputFromSlot = slotIndex;
-        newSorter.filterId = itemMap[outputItem.name].iconId;
-        newSorter.parameters = { length: 1 };
-        const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          buildingMap[subRecipe.building.name].category,
-          slotIndex
-        );
-        newSorter.localOffset = offsetInfo.offset;
-        newSorter.yaw = offsetInfo.yaw;
-        this.buildings.push(newSorter);
-        sorterList.push(this.buildingIndex);
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, type: buildingType.sorter})
-        if (this.sorters[outputItem.name]) {
-          // 已存在就append
-          if (this.sorters[outputItem.name].output) {
-            this.sorters[outputItem.name].output.push({
-              index: newSorter.index,
-              rate: actual_rate,
-              ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
-              ownerName: subRecipe.building.name,
-              ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-              recipeID: parseInt(subRecipe.recipeID),
-            });
-          } else {
-            this.sorters[outputItem.name].output = [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ];
+          slotIndex--; // 递减槽位索引
+          if (!this.config.compactLayout) {
+            // 如果不是紧凑布局
+            if (
+              buildingMap[subRecipe.building.name].category ===
+                productionCategory.collider &&
+              slotIndex === 5
+            ) {
+              // 如果是对撞机类别并且槽位索引为5
+              slotIndex = 2; // 将槽位索引设置为2
+            }
           }
-        } else {
-          // 不存在就新建
-          this.sorters[outputItem.name] = {
-            output: [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ],
-          };
-        }
-        slotIndex--;
-        if (!this.config.compactLayout) {
-          // 非紧凑布局，调整对撞机的分拣器连接点
-          if (
-            buildingMap[subRecipe.building.name].category ===
-              productionCategory.collider &&
-            slotIndex === 5
-          ) {
-            slotIndex = 2;
-          }
-        }
-      }
-      for (let inputItem of subRecipe.input) {
-        let actual_rate =
-          inputItem.rate * productionSpeed * actual_building_num;
-        if (subRecipe.acceleratorMode === 1) {
-          // 加速时原料也要加速；增产时则不需要
-          actual_rate *= extra_rate;
-        }
-        let sorter = buildingMap.sorterMk1;
-        if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
-          // 一级分拣器不够用时直接使用三级分拣器
-          sorter = buildingMap.sorterMk3;
         }
 
-        if (buildingMap[subRecipe.building.name].category === productionCategory.lab &&
-          actual_rate > buildingMap.sorterMk3.sortingSpeed
-        ) {
-          // 研究站层数过高时会出现一个3级分拣器无法满足运力的问题
-          let newSorter2 = this.getBuildingTemplate();
-          newSorter2.itemId = sorter.itemId;
-          newSorter2.modelIndex = sorter.modelIndex;
-          newSorter2.inputObjIdx = nowBuildingIndex;
-          newSorter2.outputToSlot = slotIndex - 3;
-          newSorter2.inputToSlot = 1;
-          newSorter2.filterId = itemMap[inputItem.name].iconId;
-          newSorter2.parameters = { length: 1 };
-          const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
+        // 再遍历所有输入项目
+        for (let inputItem of subRecipe.input) {
+          let actual_rate =
+            inputItem.rate * productionSpeed * actual_building_num; // 计算输入项目的实际产率
+          if (subRecipe.acceleratorMode === 1) {
+            // 如果启用了加速模式
+            actual_rate *= extra_rate; // 增加输入项目的实际产率
+          }
+          let sorter = buildingMap.sorterMk1; // 默认使用一级分拣器
+          if (this.config.onlySorterMk3 || actual_rate > sorter.sortingSpeed) {
+            // 如果配置只使用三级分拣器或实际产率超过一级分拣器速度
+            sorter = buildingMap.sorterMk3; // 使用三级分拣器
+          }
+
+          if (
+            buildingMap[subRecipe.building.name].category ===
+              productionCategory.lab &&
+            actual_rate > buildingMap.sorterMk3.sortingSpeed
+          ) {
+            // 如果是实验室且实际产率超过三级分拣器速度
+            let newSorter2 = this.getBuildingTemplate(); // 获取新的分拣器模板
+            newSorter2.itemId = sorter.itemId; // 设置分拣器的物品ID
+            newSorter2.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+            newSorter2.inputObjIdx = nowBuildingIndex; // 设置输入对象索引
+            newSorter2.outputToSlot = slotIndex - 3; // 设置输出到槽位
+            newSorter2.inputToSlot = 1; // 设置输入到槽位
+            newSorter2.filterId = itemMap[inputItem.name].iconId; // 设置过滤器ID
+            newSorter2.parameters = { length: 1 }; // 设置参数长度
+            const offsetInfo2 = this.calculateSorterLocalOffsetAndYaw(
+              { x: buildingX, y: buildingY, z: buildingZ },
+              buildingMap[subRecipe.building.name].category,
+              slotIndex - 3,
+              1
+            ); // 计算分拣器的本地偏移和偏航角
+            newSorter2.localOffset = offsetInfo2.offset; // 设置分拣器的本地偏移
+            newSorter2.yaw = offsetInfo2.yaw; // 设置分拣器的偏航角
+            this.buildings.push(newSorter2); // 将分拣器添加到建筑列表
+            sorterList.push(this.buildingIndex); // 将分拣器索引添加到列表
+            if (this.sorters[inputItem.name]) {
+              // 如果输入项目已存在
+              if (this.sorters[inputItem.name].output) {
+                // 如果输出列表存在
+                this.sorters[inputItem.name].output.push({
+                  index: newSorter2.index,
+                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
+                  ownerName: subRecipe.building.name,
+                  ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                  recipeID: parseInt(subRecipe.recipeID),
+                }); // 添加到输出列表
+              } else {
+                this.sorters[inputItem.name].output = [
+                  {
+                    index: newSorter2.index,
+                    rate: buildingMap.sorterMk3.sortingSpeed,
+                    ownerObjIdx: nowBuildingIndex,
+                    ownerName: subRecipe.building.name,
+                    ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                    recipeID: parseInt(subRecipe.recipeID),
+                  },
+                ]; // 创建新的输出列表
+              }
+            } else {
+              // 如果不存在就新建
+              this.sorters[inputItem.name] = {
+                output: [
+                  {
+                    index: newSorter2.index,
+                    rate: buildingMap.sorterMk3.sortingSpeed,
+                    ownerObjIdx: nowBuildingIndex,
+                    ownerName: subRecipe.building.name,
+                    ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
+                    recipeID: parseInt(subRecipe.recipeID),
+                  },
+                ],
+              };
+            }
+            actual_rate -= buildingMap.sorterMk3.sortingSpeed; // 减少实际产率
+          }
+
+          let newSorter = this.getBuildingTemplate(); // 获取新的分拣器模板
+          newSorter.itemId = sorter.itemId; // 设置分拣器的物品ID
+          newSorter.modelIndex = sorter.modelIndex; // 设置分拣器的模型索引
+          newSorter.outputObjIdx = nowBuildingIndex; // 设置输出对象索
+          newSorter.outputToSlot = slotIndex; // 设置输出到的槽位
+          newSorter.inputToSlot = 1; // 设置输入到的槽位
+          newSorter.filterId = itemMap[inputItem.name].iconId; // 设置过滤器ID，用于识别处理的特定物品
+          newSorter.parameters = { length: 1 }; // 设置参数，这里的长度用于定义分拣器的工作范围
+          const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
             { x: buildingX, y: buildingY, z: buildingZ },
             buildingMap[subRecipe.building.name].category,
-            slotIndex - 3,
+            slotIndex,
             1
-          );
-          newSorter2.localOffset = offsetInfo2.offset;
-          newSorter2.yaw = offsetInfo2.yaw;
-          this.buildings.push(newSorter2);
-          sorterList.push(this.buildingIndex);
+          ); // 计算分拣器的位置偏移和偏航角度
+          newSorter.localOffset = offsetInfo.offset; // 设置分拣器的本地偏移
+          newSorter.yaw = offsetInfo.yaw; // 设置分拣器的偏航角
+          this.buildings.push(newSorter); // 将配置好的新分拣器添加到建筑列表中
+          sorterList.push(this.buildingIndex); // 将新分拣器的索引添加到分拣器列表中
+          // 如果存在对应物品的分拣器配置，则添加或更新分拣器配置
           if (this.sorters[inputItem.name]) {
-            // 已存在就append
-            if (this.sorters[inputItem.name].output) {
-              this.sorters[inputItem.name].output.push({
-                index: newSorter2.index,
-                rate: buildingMap.sorterMk3.sortingSpeed,
-                ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
+            if (this.sorters[inputItem.name].input) {
+              this.sorters[inputItem.name].input.push({
+                index: newSorter.index,
+                rate: actual_rate,
+                ownerObjIdx: nowBuildingIndex, // 分拣器附属的建筑索引
                 ownerName: subRecipe.building.name,
                 ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
                 recipeID: parseInt(subRecipe.recipeID),
               });
             } else {
-              this.sorters[inputItem.name].output = [
+              this.sorters[inputItem.name].input = [
                 {
-                  index: newSorter2.index,
-                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  index: newSorter.index,
+                  rate: actual_rate,
                   ownerObjIdx: nowBuildingIndex,
                   ownerName: subRecipe.building.name,
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
@@ -1934,12 +2785,12 @@ class Blueprint {
               ];
             }
           } else {
-            // 不存在就新建
+            // 如果不存在，则创建新的分拣器配置
             this.sorters[inputItem.name] = {
-              output: [
+              input: [
                 {
-                  index: newSorter2.index,
-                  rate: buildingMap.sorterMk3.sortingSpeed,
+                  index: newSorter.index,
+                  rate: actual_rate,
                   ownerObjIdx: nowBuildingIndex,
                   ownerName: subRecipe.building.name,
                   ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
@@ -1948,104 +2799,54 @@ class Blueprint {
               ],
             };
           }
-          actual_rate -= buildingMap.sorterMk3.sortingSpeed;
+          slotIndex--; // 更新槽位索引，为下一个分拣器配置做准备
+          if (!this.config.compactLayout) {
+            // 如果不是紧凑布局，特别处理对撞机分拣器的连接点
+            if (
+              buildingMap[subRecipe.building.name].category ===
+                productionCategory.collider &&
+              slotIndex === 5
+            ) {
+              slotIndex = 2; // 调整对撞机分拣器的槽位索引
+            }
+          }
         }
 
-        let newSorter = this.getBuildingTemplate();
-        newSorter.itemId = sorter.itemId;
-        newSorter.modelIndex = sorter.modelIndex;
-        newSorter.outputObjIdx = nowBuildingIndex;
-        newSorter.outputToSlot = slotIndex;
-        newSorter.inputToSlot = 1;
-        newSorter.filterId = itemMap[inputItem.name].iconId;
-        newSorter.parameters = { length: 1 };
-        const offsetInfo = this.calculateSorterLocalOffsetAndYaw(
-          { x: buildingX, y: buildingY, z: buildingZ },
-          buildingMap[subRecipe.building.name].category,
-          slotIndex,
-          1
-        );
-        newSorter.localOffset = offsetInfo.offset;
-        newSorter.yaw = offsetInfo.yaw;
-        this.buildings.push(newSorter);
-        sorterList.push(this.buildingIndex);
-        // this.buildingArray[this.buildingArray.length-1].push({index: this.buildingIndex, type: buildingType.sorter})
-        if (this.sorters[inputItem.name]) {
-          // 已存在就append
-          if (this.sorters[inputItem.name].input) {
-            this.sorters[inputItem.name].input.push({
-              index: newSorter.index,
-              rate: actual_rate,
-              ownerObjIdx: nowBuildingIndex, // 分拣器附属生产建筑的index
-              ownerName: subRecipe.building.name,
-              ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-              recipeID: parseInt(subRecipe.recipeID),
-            });
-          } else {
-            this.sorters[inputItem.name].input = [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ];
-          }
+        if (needNewLine) {
+          // 如果需要新的一行，将当前建筑和分拣器配置添加到新的行中
+          this.buildingArray.push([
+            { index: nowBuildingIndex, sorterList: sorterList },
+          ]);
         } else {
-          // 不存在就新建
-          this.sorters[inputItem.name] = {
-            input: [
-              {
-                index: newSorter.index,
-                rate: actual_rate,
-                ownerObjIdx: nowBuildingIndex,
-                ownerName: subRecipe.building.name,
-                ownerOffset: { x: buildingX, y: buildingY, z: buildingZ },
-                recipeID: parseInt(subRecipe.recipeID),
-              },
-            ],
-          };
+          // 否则，继续在当前行添加建筑和分拣器配置
+          this.buildingArray[this.buildingArray.length - 1].push({
+            index: nowBuildingIndex,
+            sorterList: sorterList,
+          });
         }
-        slotIndex--;
-        if (!this.config.compactLayout) {
-          // 非紧凑布局，调整对撞机的分拣器连接点
-          if (
-            buildingMap[subRecipe.building.name].category ===
-              productionCategory.collider &&
-            slotIndex === 5
-          ) {
-            slotIndex = 2;
-          }
-        }
-      }
 
-      if (needNewLine) {
-        // 新的一行
-        this.buildingArray.push([
-          { index: nowBuildingIndex, sorterList: sorterList },
-        ]);
-      } else {
-        // 在当前行继续添加
-        this.buildingArray[this.buildingArray.length - 1].push({
-          index: nowBuildingIndex,
-          sorterList: sorterList,
-        });
+        for (let labIndex of stackLabBuildingIndexList) {
+          // 遍历堆叠的实验室建筑索引列表，将它们也添加到当前行
+          this.buildingArray[this.buildingArray.length - 1].push({
+            index: labIndex,
+            sorterList: [],
+          });
+        }
       }
-      for (let labIndex of stackLabBuildingIndexList) {
-        // 把堆叠的研究站加进去
-        this.buildingArray[this.buildingArray.length - 1].push({
-          index: labIndex,
-          sorterList: [],
-        });
+      if (!placed) {
+        // 如果所有层都放不下，则报错或处理异常情况
+        throw new Error("无法放置所有建筑，建筑面积超出所有层的总面积");
       }
     }
   }
 
   init() {
-    this.mapRecipeID();
-    this.calculateBlueprintArea();
+    this.mapRecipeID(); // 拿到recipe列表. 比如处理器的配方在网页UI上就是9个"操作", 就包含了9个子配方(处理器,电路板,铁块,铁矿,铜块,铜矿,微晶芯片,硅块,硅矿). 每个子配方不一定有数输入和输出, 比如铁矿就是没有输入的在将来也不会被算作需要生产设备的"空配方"
+
+    this.sortRecipeId();
+
+    // this.calculateBlueprintArea();
+    this.calculateBlueprintArea2(this.config.magic_layer_cnt);
     if (this.config.onlyConveyorBeltMk3Downgrade) {
       buildingMap.conveyorBeltMK3.transportSpeed = 28;
     } else {
@@ -2057,127 +2858,163 @@ class Blueprint {
 
   sortItemSummary(itemSummary) {
     // 排序，增产剂(取最高等级)、原料、终产物、多余产物(精炼油、氢、石墨烯、重氢)、其余中间产物
-		let newSummary = {};
-		let proliferator = ['proliferatorMk3', 'proliferatorMk2', 'proliferatorMk1'];
-		let outItem = ['refinedOil', 'hydrogen', 'graphene', 'deuterium'];
-		for (let key in proliferator) {
-			if (itemSummary[proliferator[key]] && itemSummary[proliferator[key]].toBuildingNum === 0) {
-				newSummary[proliferator[key]] = itemSummary[proliferator[key]];
-				break;
-			}
-		}
-		for (let key in itemSummary) {
-			if (itemSummary[key].fromBuildingNum === 0) {
-				newSummary[key] = itemSummary[key];
-			}
-		}
-		for (let key in itemSummary) {
-			if (itemSummary[key].toBuildingNum === 0) {
-				newSummary[key] = itemSummary[key];
-			}
-		}
-		for (let key in outItem) {
-			if (itemSummary[outItem[key]] &&
-				itemSummary[outItem[key]].fromBuildingNum - itemSummary[outItem[key]].toBuildingNum > 0) {
-				newSummary[outItem[key]] = itemSummary[outItem[key]];
-			}
-		}
-		for (let key in itemSummary) {
-			if (itemSummary[key].toBuildingNum !== 0 && itemSummary[key].fromBuildingNum !== 0) {
-				newSummary[key] = itemSummary[key];
-			}
-		}
-		return newSummary;
+    let newSummary = {};
+    let proliferator = [
+      "proliferatorMk3",
+      "proliferatorMk2",
+      "proliferatorMk1",
+    ];
+    let outItem = ["refinedOil", "hydrogen", "graphene", "deuterium"];
+    for (let key in proliferator) {
+      if (
+        itemSummary[proliferator[key]] &&
+        itemSummary[proliferator[key]].toBuildingNum === 0
+      ) {
+        newSummary[proliferator[key]] = itemSummary[proliferator[key]];
+        break;
+      }
+    }
+    for (let key in itemSummary) {
+      if (itemSummary[key].fromBuildingNum === 0) {
+        newSummary[key] = itemSummary[key];
+      }
+    }
+    for (let key in itemSummary) {
+      if (itemSummary[key].toBuildingNum === 0) {
+        newSummary[key] = itemSummary[key];
+      }
+    }
+    for (let key in outItem) {
+      if (
+        itemSummary[outItem[key]] &&
+        itemSummary[outItem[key]].fromBuildingNum -
+          itemSummary[outItem[key]].toBuildingNum >
+          0
+      ) {
+        newSummary[outItem[key]] = itemSummary[outItem[key]];
+      }
+    }
+    for (let key in itemSummary) {
+      if (
+        itemSummary[key].toBuildingNum !== 0 &&
+        itemSummary[key].fromBuildingNum !== 0
+      ) {
+        newSummary[key] = itemSummary[key];
+      }
+    }
+    return newSummary;
   }
 
   generateConveyorBelts() {
-    let itemSummary = {};
+    let itemSummary = {}; // 定义一个对象用于存储物料统计信息
     // 计算物料统计信息，每个物料的产出速率、从多少个建筑产出、供给多少个建筑使用
     for (let subRecipe of this.recipe.subRecipes) {
-      let extra_rate = 1;
+      // 遍历每个子配方
+      let extra_rate = 1; // 初始化额外速率为1
       if (this.recipe.proliferator) {
+        // 如果有增产剂
         if (subRecipe.acceleratorMode === 0) {
-          extra_rate += itemMap[this.recipe.proliferator].extra_rate;
+          // 加速模式为0
+          extra_rate += itemMap[this.recipe.proliferator].extra_rate; // 增加额外速率
         } else if (subRecipe.acceleratorMode === 1) {
-          extra_rate += itemMap[this.recipe.proliferator].accelerate;
+          // 加速模式为1
+          extra_rate += itemMap[this.recipe.proliferator].accelerate; // 增加加速速率
         }
       }
       for (let outputItem of subRecipe.output) {
-        let outputRate = 0;
-        let fromBuildingNum = 0;
+        // 遍历子配方的输出项目
+        let outputRate = 0; // 初始化输出速率
+        let fromBuildingNum = 0; // 初始化来源建筑数量
         if (subRecipe.input === null) {
-          outputRate = outputItem.rate;
+          // 如果没有输入
+          outputRate = outputItem.rate; // 直接使用输出速率
         } else {
-          if (buildingMap[subRecipe.building.name].category === productionCategory.lab) {
-            // 研究站可堆叠，需特殊处理
+          // 如果有输入
+          if (
+            buildingMap[subRecipe.building.name].category ===
+            productionCategory.lab
+          ) {
+            // 如果是实验室，需特殊处理
             fromBuildingNum = Math.ceil(
               subRecipe.building.num / this.config.maxLabLayers
-            );
+            ); // 计算来源建筑数量
           } else {
-            fromBuildingNum = subRecipe.building.num;
+            fromBuildingNum = subRecipe.building.num; // 直接使用建筑数量
           }
           outputRate =
             outputItem.rate *
             buildingMap[subRecipe.building.name].productionSpeed *
             subRecipe.building.num *
-            extra_rate;
+            extra_rate; // 计算输出速率
         }
         if (itemSummary[outputItem.name]) {
-          itemSummary[outputItem.name].fromBuildingNum += fromBuildingNum;
-          itemSummary[outputItem.name].rate += outputRate;
+          // 如果物料已在统计信息中
+          itemSummary[outputItem.name].fromBuildingNum += fromBuildingNum; // 累加来源建筑数量
+          itemSummary[outputItem.name].rate += outputRate; // 累加输出速率
         } else {
+          // 如果物料不在统计信息中
           itemSummary[outputItem.name] = {
             rate: outputRate,
             fromBuildingNum: fromBuildingNum,
             toBuildingNum: 0,
-          };
+          }; // 创建新的物料统计信息
         }
       }
       if (subRecipe.input === null) {
+        // 如果没有输入，继续下一个子配方
         continue;
       }
       for (let inputItem of subRecipe.input) {
-        let toBuildingNum = 0;
-        if (buildingMap[subRecipe.building.name].category === productionCategory.lab) {
+        // 遍历子配方的输入项目
+        let toBuildingNum = 0; // 初始化供给建筑数量
+        if (
+          buildingMap[subRecipe.building.name].category ===
+          productionCategory.lab
+        ) {
+          // 如果是实验室
           toBuildingNum = Math.ceil(
             subRecipe.building.num / this.config.maxLabLayers
-          );
+          ); // 计算供给建筑数量
         } else {
-          toBuildingNum = subRecipe.building.num;
+          toBuildingNum = subRecipe.building.num; // 直接使用建筑数量
         }
         if (itemSummary[inputItem.name]) {
-          itemSummary[inputItem.name].toBuildingNum += toBuildingNum;
+          // 如果物料已在统计信息中
+          itemSummary[inputItem.name].toBuildingNum += toBuildingNum; // 累加供给建筑数量
           if (
             !itemSummary[inputItem.name].needProliferator &&
             subRecipe.acceleratorMode !== -1
           ) {
-            itemSummary[inputItem.name].needProliferator = true;
+            // 如果不需要增产剂并且加速模式不为-1
+            itemSummary[inputItem.name].needProliferator = true; // 标记需要增产剂
           }
           if (subRecipe.acceleratorMode === 1) {
+            // 如果加速模式为1
             // 加速时原料额外消耗
             itemSummary[inputItem.name].inputRate +=
               inputItem.rate *
               buildingMap[subRecipe.building.name].productionSpeed *
               subRecipe.building.num *
-              extra_rate;
+              extra_rate; // 累加输入速率
           } else {
             // 无增产剂或增产时原料速率不变
             itemSummary[inputItem.name].inputRate +=
               inputItem.rate *
               buildingMap[subRecipe.building.name].productionSpeed *
-              subRecipe.building.num;
+              subRecipe.building.num; // 累加输入速率
           }
         } else {
+          // 如果物料不在统计信息中
           let itemInputRate =
             inputItem.rate *
             buildingMap[subRecipe.building.name].productionSpeed *
-            subRecipe.building.num;
+            subRecipe.building.num; // 计算输入速率
           if (subRecipe.acceleratorMode === 1) {
-            itemInputRate *= extra_rate;
+            itemInputRate *= extra_rate; // 如果加速模式为1，增加输入速率
           }
-          let needProliferator = false;
+          let needProliferator = false; // 初始化不需要增产剂
           if (subRecipe.acceleratorMode !== -1) {
-            needProliferator = true;
+            needProliferator = true; // 标记需要增产剂
           }
           itemSummary[inputItem.name] = {
             rate: 0,
@@ -2185,111 +3022,125 @@ class Blueprint {
             fromBuildingNum: 0,
             toBuildingNum: toBuildingNum,
             needProliferator: needProliferator,
-          };
+          }; // 创建新的物料统计信息
         }
       }
     }
     for (let key in itemSummary) {
       // rate为0（rate是按output计算的）但inputRate不为0，说明该物品是被排除的中间产物， 把inputRate赋值给rate，生成蓝图时该产物就会被当作原料
       if (itemSummary[key].rate === 0 && itemSummary[key].inputRate !== 0) {
-        itemSummary[key].rate = itemSummary[key].inputRate;
+        itemSummary[key].rate = itemSummary[key].inputRate; // 将inputRate赋值给rate
       }
     }
-    // console.log(itemSummary)
-    // throw `break`
-    itemSummary = this.sortItemSummary(itemSummary);
-    this.itemSummary = itemSummary;
+    itemSummary = this.sortItemSummary(itemSummary); // 对物料统计信息进行排序
+    this.itemSummary = itemSummary; // 将排序后的物料统计信息赋值给实例属性
 
-    this.conveyorStartOffsetX =
-      this.occupiedArea[this.occupiedArea.length - 1].x2;
-    this.occupiedArea[this.occupiedArea.length - 1].x2++; // x轴方向空一格用于喷涂剂走线
-    this.occupiedArea[this.occupiedArea.length - 2].y2++; // y轴方向空一格避免喷涂机和建筑碰撞
+    // this.conveyorStartOffsetX =
+    //   this.occupiedArea[this.occupiedArea.length - 1].x2; // 设置传送带起始的X偏移
+    // this.occupiedArea[this.occupiedArea.length - 1].x2++; // x轴方向空一格用于喷涂剂走线
+    // this.occupiedArea[this.occupiedArea.length - 2].y2++; // y轴方向空一格避免喷涂机和建筑碰撞
+    this.conveyorStartOffsetX = this.occupiedArea[0][0].x2 + 1; // 设置传送带起始的X偏移
+    this.occupiedArea[0][0].x2++; // x轴方向空一格用于喷涂剂走线
+
     // 生成传送带并连接到分拣器
     const zero = 0.0000000001; // rate是每秒生产量，除不尽时会有精度误差，小数点后16位都是准确的，取0.0000000001为判断标准足够了。
     for (let item in itemSummary) {
-      const itemName = item;
-      // console.log(itemName)
-      item = itemSummary[item];
+      const itemName = item; // 记录物料名称
+      item = itemSummary[item]; // 获取物料统计信息
 
-      let conveyorBelt = buildingMap.conveyorBeltMk1;
+      let conveyorBelt = buildingMap.conveyorBeltMk1; // 默认使用一级传送带
       if (this.config.onlyConveyorBeltMk3) {
-        conveyorBelt = buildingMap.conveyorBeltMK3;
+        // 如果配置只使用三级传送带
+        conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
       } else if (item.rate >= conveyorBelt.transportSpeed) {
-        if (
-          item.rate === conveyorBelt.transportSpeed &&
-          this.config.upgradeConveyorBelt
-        ) {
-          conveyorBelt = buildingMap.conveyorBeltMK3; // 直接使用三级传送带，跳过二级
-        } else if (item.rate > conveyorBelt.transportSpeed) {
-          conveyorBelt = buildingMap.conveyorBeltMK3;
-        }
+        // // 如果物料速率大于等于一级传送带速度
+        // if (
+        //   item.rate === conveyorBelt.transportSpeed &&
+        //   this.config.upgradeConveyorBelt
+        // ) {
+        //   conveyorBelt = buildingMap.conveyorBeltMK3; // 直接使用三级传送带，跳过二级
+        // } else if (item.rate > conveyorBelt.transportSpeed) {
+        //   conveyorBelt = buildingMap.conveyorBeltMK3; // 使用三级传送带
+        // }
       }
 
-      let maxTransportSpeed = buildingMap.conveyorBeltMK3.transportSpeed;
+      let maxTransportSpeed = buildingMap.conveyorBeltMK3.transportSpeed; // 获取三级传送带的最大运输速度
       if (item.fromBuildingNum === 0) {
         // 只有原料可以堆叠，中间产物不支持堆叠
         maxTransportSpeed =
           buildingMap.conveyorBeltMK3.transportSpeed *
-          this.config.conveyorBeltStackLayer;
+          this.config.conveyorBeltStackLayer; // 原料堆叠时的最大运输速度
       }
 
       for (let totalDoneRate = 0; item.rate - totalDoneRate > zero; ) {
-        let needSprayCoater = item.needProliferator;
-        let doneRate = 0;
-        let parameters = null;
-        let inputRate = Math.min(maxTransportSpeed, item.rate - totalDoneRate);
-        let inputData = [];
-        let outputData = [];
-        let doneSorterNum = 0;
+        let needSprayCoater = item.needProliferator; // 是否需要喷涂机
+        let doneRate = 0; // 初始化已完成速率
+        let parameters = null; // 初始化参数
+        let inputRate = Math.min(maxTransportSpeed, item.rate - totalDoneRate); // 计算输入速率
+        let inputData = []; // 初始化输入数据
+        let outputData = []; // 初始化输出数据
+        let doneSorterNum = 0; // 初始化已完成分拣器数量
         if (item.fromBuildingNum !== 0) {
+          // 如果不是原材料
           for (let j = this.sorters[itemName].output.length - 1; j >= 0; j--) {
+            // 遍历输出分拣器
             if (this.sorters[itemName].output[j].rate - inputRate > zero) {
               // if ((j>0)&&(i+1 >= Math.ceil(item.rate/maxTransportSpeed))){
               //     // 有分拣器还未连接 并且 不会再生成新的传送带了
               //     // 这种情况就是建筑非整数时计算误差导致的，继续处理未连接的分拣器就可以了
 
-              // 当前带接受运力不能满足分拣器，则该分拣器连接下一个带上的节点
-              break;
+              break; // 当前带接受运力不能满足分拣器，则该分拣器连接下一个带上的节点
             }
             if (doneSorterNum % this.config.maxSorterNumOneBelt === 0) {
-              inputData.push([this.sorters[itemName].output[j].index]);
+              inputData.push([this.sorters[itemName].output[j].index]); // 添加分拣器索引到输入数据
             } else {
               inputData[inputData.length - 1].push(
                 this.sorters[itemName].output[j].index
               );
             }
-            inputRate -= this.sorters[itemName].output[j].rate;
-            doneRate += this.sorters[itemName].output[j].rate;
-            this.sorters[itemName].output.pop();
-            doneSorterNum++;
+            inputRate -= this.sorters[itemName].output[j].rate; // 减少输入速率
+            doneRate += this.sorters[itemName].output[j].rate; // 增加已完成速率
+            this.sorters[itemName].output.pop(); // 移除已处理的分拣器
+            doneSorterNum++; // 已完成分拣器数量增加
           }
         } else {
-          // 说明是原料
+          // 如果是原材料
           inputData.push([]);
-          parameters = {
-            iconId: itemMap[itemName].iconId,
-            count: (inputRate * 60).toFixed(0),
-          };
           doneRate += inputRate;
-          // inputRate = 0
         }
+        parameters = {
+          iconId: itemMap[itemName].iconId,
+          count: (inputRate * 60).toFixed(0),
+        };
         totalDoneRate += doneRate;
         let outputRate = doneRate; // 当前传送带实际运力
         doneSorterNum = 0;
         let refineryNum = 0; // X射线裂解/重整精炼工厂数量
-        // 重新排序以提高输出传送带中，X射线裂解(氢)和重整精炼(精炼油)的输入优先级
-        if (["hydrogen", "refinedOil"].includes(itemName) && item.toBuildingNum !== 0) {
+        if (
+          ["hydrogen", "refinedOil"].includes(itemName) &&
+          item.toBuildingNum !== 0
+        ) {
           let input2 = [];
           for (let j = this.sorters[itemName].input.length - 1; j >= 0; j--) {
-            if (!((itemName === "hydrogen" && this.sorters[itemName].input[j].recipeID === 58) ||
-            (itemName === "refinedOil" && this.sorters[itemName].input[j].recipeID === 121))){
+            if (
+              !(
+                (itemName === "hydrogen" &&
+                  this.sorters[itemName].input[j].recipeID === 58) ||
+                (itemName === "refinedOil" &&
+                  this.sorters[itemName].input[j].recipeID === 121)
+              )
+            ) {
               input2.push(this.sorters[itemName].input[j]);
             }
           }
           refineryNum = this.sorters[itemName].input.length - input2.length;
           for (let j = this.sorters[itemName].input.length - 1; j >= 0; j--) {
-            if ((itemName === "hydrogen" && this.sorters[itemName].input[j].recipeID === 58) ||
-            (itemName === "refinedOil" && this.sorters[itemName].input[j].recipeID === 121)){
+            if (
+              (itemName === "hydrogen" &&
+                this.sorters[itemName].input[j].recipeID === 58) ||
+              (itemName === "refinedOil" &&
+                this.sorters[itemName].input[j].recipeID === 121)
+            ) {
               input2.push(this.sorters[itemName].input[j]);
             }
           }
@@ -2307,7 +3158,10 @@ class Blueprint {
               const newSorterRate =
                 this.sorters[itemName].input[j].rate - outputRate;
               let sorter = buildingMap.sorterMk1;
-              if (this.config.onlySorterMk3 || newSorterRate > sorter.sortingSpeed) {
+              if (
+                this.config.onlySorterMk3 ||
+                newSorterRate > sorter.sortingSpeed
+              ) {
                 // 一级分拣器不够用时直接使用三级分拣器，先不支持二级分拣器
                 sorter = buildingMap.sorterMk3;
               }
@@ -2411,7 +3265,12 @@ class Blueprint {
             }
 
             // 当前传送带连接分拣器达到上限，或在X射线裂解(氢)/重整精炼(精炼油)后，连接下一个传送带
-            if ((doneSorterNum - refineryNum) % this.config.maxSorterNumOneBelt === 0 || doneSorterNum === 0) {
+            if (
+              (doneSorterNum - refineryNum) %
+                this.config.maxSorterNumOneBelt ===
+                0 ||
+              doneSorterNum === 0
+            ) {
               outputData.push([this.sorters[itemName].input[j].index]);
             } else {
               outputData[outputData.length - 1].push(
@@ -3818,3 +4677,6 @@ class Blueprint {
     return result;
   }
 }
+
+// todo:
+// buildingZ = 10; buildingZ = 0; 需要确定用什么

@@ -139,6 +139,10 @@
             <!-- <span class="label">电线杆间隔</span><input type="number" id="teslaTowerInterval" min="1" max="15" value="15" class="textbox"><br/> -->
             <span class="label">蓝图长宽比</span><input type="number" id="x_y_ratio" min="1" step="0.1" value="2"
               class="textbox"><br />
+            <span class="label">仙术蓝图层数</span><input type="number" id="magic_layer_cnt" min="1" max="16" step="1" value="3" class="textbox"><br />
+            <span class="label">仙术蓝图每层高度</span><input type="number" id="magic_layer_height" min="4" max="10" step="1" value="4" class="textbox"><br />
+            <span class="label" title="如果早期科技没解锁垂直传送带,那么中间产物的带子就不用垂直的带子">仙术蓝图-已经解锁垂直传送带</span><input type="checkbox" id="magic_vertical_conveyor_belt_enabled"><br />
+            <span class="label" title="前期建议0.5, 后期建议1. 早期没有垂直传送带的时候, 不同产物平铺带子之间的间隔高度." >仙术蓝图-过渡产物传送带间隔</span><input type="number" id="magic_vertical_conveyor_belt_gap_height" min="0.5" max="2" step="0.5" value="0.5" ><br />
           </div>
         </div>
       </div>
@@ -172,18 +176,7 @@
         戴森球计划工具交流讨论QQ群：<a
           href="http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=UzzPv3ic7Fk9EDCyHo_4gkWQLR3WEA9Y&authKey=ysjOY0JQOSpT2ZCLkttSzI73sXyzu%2FXEqJXMmY2O645LpO6GOD5lRBrjdalqpO5k&noverify=0&group_code=53309723"
           target="_blank">53309723</a>
-        <!-- <br/> -->
-        <!-- <span id="blueprintConfig" style="display: none">蓝图配置： -->
-        <!-- <div style="margin-left: 2%"> -->
-        <!-- <input type="checkbox" id="compactLayout"><label for="compactLayout">紧凑布局（高纬度可能出现碰撞）</label> -->
-        <!-- <input type="checkbox" id="upgradeConveyorBelt"><label for="upgradeConveyorBelt">临界运力传送带自升级</label> -->
-        <!-- <input type="checkbox" id="onlyConveyorBeltMk3"><label for="onlyConveyorBeltMk3">只使用三级传送带</label> -->
-        <!-- <input type="checkbox" id="onlySorterMk3"><label for="onlySorterMk3">只使用三级分拣器</label> -->
-        <!-- <br/> -->
-        <!-- <label for="conveyorBeltStackLayer">传送带物品堆叠层数</label><input type="number" id="conveyorBeltStackLayer" min="1" max="4" value="4"> -->
-        <!-- <label for="x_y_ratio">蓝图长宽比</label><input type="number" id="x_y_ratio" min="1" step="0.1" value="2"> -->
-        <!-- </div> -->
-        <!-- </span> -->
+
         <br /><small>(右键可取消单项需求；单击数字可编辑数量)</small>
       </span>
       </span>

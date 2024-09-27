@@ -6502,10 +6502,10 @@ function getRecipe() {
 }
 
 function generateBlueprint() {
-  if (!location.href.startsWith("https")) {
-    cocoMessage.warning("请使用 https 协议访问以启用复制到剪切板功能");
-    return;
-  }
+  // if (!location.href.startsWith("https")) {
+  //   cocoMessage.warning("请使用 https 协议访问以启用复制到剪切板功能");
+  //   return;
+  // }
   const recipe = getRecipe();
   const outputRecipe = {
     proliferator: recipe.proliferator,
@@ -6522,6 +6522,10 @@ function generateBlueprint() {
       document.getElementById("conveyorBeltStackLayer").value
     ), // 传送带物品最大堆叠层数
     x_y_ratio: parseFloat(document.getElementById("x_y_ratio").value), // 长宽比
+    magic_layer_cnt: parseFloat(document.getElementById("magic_layer_cnt").value), // 仙术蓝图的堆叠层数
+    magic_layer_height: parseFloat(document.getElementById("magic_layer_height").value), // 仙术蓝图的堆叠层数
+    magic_vertical_conveyor_belt_enabled: document.getElementById("magic_vertical_conveyor_belt_enabled").checked, // 当前的科技是否支持垂直传送带
+    magic_vertical_conveyor_belt_gap_height: document.getElementById("magic_vertical_conveyor_belt_gap_height").value, // 早期没有垂直传送带的时候, 不同产物平铺带子之间的间隔高度
     // compactLayout: document.getElementById('compactLayout').checked,  // 是否采用紧凑布局（紧凑布局的蓝图中炼油厂、化工厂和对撞机在布局上会更紧凑，适合摆放在赤道带，在高纬度可能会出现碰撞问题）
     compactLayout: false,
     upgradeConveyorBelt: false, // 360/min的运力时使用3级传送带（无带流情况下，原料的需求和供应都是集中处理，1级传送带满运力情况下可能会有运送不及时问题导致产量低于预期
@@ -6549,7 +6553,12 @@ function generateBlueprint() {
   b1.generateConveyorBelts();
   b1.generateConveyorBeltsForSprayCoater();
   b1.blueprintTemplate.buildings = b1.buildings;
+  if (config.magic_layer_cnt > 0){
+    recipe.blueprintDesc += `仙术蓝图堆叠层数: ${config.magic_layer_cnt}\n` + `每层高度: ${config.magic_layer_height}\n`;
+  }
   b1.blueprintTemplate.header.desc = recipe.blueprintDesc.trimEnd();
+
+
   switch (recipe.blueprintIcon.length) {
     case 1:
       b1.blueprintTemplate.header.layout = 10;

@@ -1,0 +1,38 @@
+
+- 每一层的边缘有时候会缺少电线杆
+- 不同层的同一个xy位置的电线杆会上下碰撞, 需要优化
+- 生产单元需要支持多输入, 这样可以用黄带不用蓝带. 后期入料带不会那么长
+- 大规模蓝图,比如360绿糖5层, 有爪子偏角太大的问题
+- 悬空需要地基的问题, 需要优化(暂时可以用editDSP网站解决)
+
+
+- 多层仙术需要支持带lab的情况. done
+- conveyor需要优化, 一些中转的传送带不需要一路排开. done
+- 中间产物带子上贴上产物icon. done
+
+
+歪曲的爪子例子:
+    {
+      "index": 135,
+      "areaIndex": 0,
+      "localOffset": [
+        { "x": 23, "y": 0.3375, "z": 0 },
+        { "x": 23, "y": -1, "z": 0 }
+      ],
+      "yaw": [180, 180],
+      "tilt": 0,
+      "itemId": 2013,
+      "modelIndex": 43,
+      "outputObjIdx": 298,
+      "inputObjIdx": 163,
+      "outputToSlot": -1,
+      "inputFromSlot": 4,
+      "outputFromSlot": 0,
+      "inputToSlot": 1,
+      "outputOffset": 0,
+      "inputOffset": 0,
+      "recipeId": 0,
+      "filterId": 5205,
+      "parameters": { "length": 1 },
+      "itemName": "极速分拣器"
+    },
