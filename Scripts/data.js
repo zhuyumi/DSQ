@@ -6541,7 +6541,12 @@ function generateBlueprint() {
     // onlyConveyorBeltMk3Downgrade: document.getElementById('onlyConveyorBeltMk3Downgrade').checked  // 三级传送带运力降级
     onlyConveyorBeltMk3Downgrade: false, // 三级传送带运力降级
   };
-  // console.log(config)
+  console.info("[BlueprintGen] inputs", {
+    recipeInput: recipe,
+    outputRecipe,
+    config,
+    icons: recipe.blueprintIcon.concat(Array(5).fill(0)).slice(0, 5),
+  });
   let b1 = new Blueprint(
     recipe.blueprintTitle,
     recipe.blueprintIcon.concat(Array(5).fill(0)).slice(0, 5),
