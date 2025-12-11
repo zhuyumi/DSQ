@@ -2251,7 +2251,8 @@ class Blueprint {
 
   newProductionBuilding(subRecipe) {
     let hasTeslaTowerThisLine = false; // 标记当前行是否已放置电力感应塔
-    let teslaTowerDistance = 0; // 记录当前行中电力感应塔之间的距离
+    const towerInterval = Math.max(1, this.config.teslaTowerInterval || 1);
+    let teslaTowerDistance = towerInterval / 2; // 记录当前行中电力感应塔之间的距离
     let levelHeight = this.config.magic_layer_height; // 单层的高度
 
     // 当前配方中需要几个生产建筑数量, 就循环几次
@@ -2328,7 +2329,7 @@ class Blueprint {
           // 如果当前行空间不足，并且新的一行没有超出本层的范围,则开始新的一行
           needNewLine = true;
           hasTeslaTowerThisLine = false; // 新行中尚未放置电力感应塔
-          teslaTowerDistance = 0; // 重置电力感应塔的距离计数
+          teslaTowerDistance = towerInterval / 2; // 重置电力感应塔的距离计数
           buildingX = buildingArea.centerPoint[3]; // 当前建筑中心点到x轴负边界的距离.  当做
           buildingY =
             buildingArea.centerPoint[0] +
@@ -2461,12 +2462,12 @@ class Blueprint {
             teslaTowerDistance += teslaTowerOffset.distance; // 累加到电力感应塔的距离
             if (
               (hasTeslaTowerThisLine && // 如果当前行已经放置了电力感应塔，并且距离已经达到或超过配置的间隔距离，则需要在当前行生成新的电力感应塔。(???)
-                teslaTowerDistance >= this.config.teslaTowerInterval) ||
+                teslaTowerDistance >= towerInterval) ||
               (!hasTeslaTowerThisLine &&
-                teslaTowerDistance >= this.config.teslaTowerInterval / 2) || // 如果当前行尚未放置电力感应塔，并且距离已经达到或超过配置间隔距离的一半，则需要在当前行生成电力感应塔。这是为了确保在每行的中间位置至少有一个电力感应塔，保证电力覆盖范围。(???)
-              (teslaTowerDistance >= this.config.teslaTowerInterval / 2 &&
+                teslaTowerDistance >= towerInterval / 2) || // 如果当前行尚未放置电力感应塔，并且距离已经达到或超过配置间隔距离的一半，则需要在当前行生成电力感应塔。这是为了确保在每行的中间位置至少有一个电力感应塔，保证电力覆盖范围。(???)
+              (teslaTowerDistance >= towerInterval / 2 &&
                 this.blueprintSize.x - buildingX <
-                  this.config.teslaTowerInterval) // 如果当前行的电力感应塔距离已经达到或超过配置间隔距离的一半，并且当前建筑位置到蓝图末端的距离小于配置的间隔距离，则需要在当前行生成电力感应塔。这是为了确保在接近蓝图末端时，电力感应塔的覆盖范围能够覆盖到蓝图的边缘。(???)
+                  towerInterval) // 如果当前行的电力感应塔距离已经达到或超过配置间隔距离的一半，并且当前建筑位置到蓝图末端的距离小于配置的间隔距离，则需要在当前行生成电力感应塔。这是为了确保在接近蓝图末端时，电力感应塔的覆盖范围能够覆盖到蓝图的边缘。(???)
             ) {
               // 生成电力感应塔
               let teslaTower = this.getBuildingTemplate(); // 获取建筑模板
@@ -2476,7 +2477,7 @@ class Blueprint {
                 teslaTowerOffset.offset,
                 teslaTowerOffset.offset,
               ]; // 设置电力感应塔的本地偏移
-              teslaTowerDistance = 0; // 重置电力感应塔距离
+              teslaTowerDistance = towerInterval / 2; // 重置电力感应塔距离
               hasTeslaTowerThisLine = true; // 标记当前行已放置电力感应塔
               this.buildingArray[this.buildingArray.length - 1].push({
                 index: teslaTower.index,
@@ -4680,3 +4681,9 @@ class Blueprint {
 
 // todo:
 // buildingZ = 10; buildingZ = 0; 需要确定用什么
+
+
+
+
+
+
