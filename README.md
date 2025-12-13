@@ -14,6 +14,13 @@
 
 - 使用PHPStudy或宝塔急速部署。
 
+```python
+python -m http.server 8000
+```
+浏览器打开 http://localhost:8001/index.html 访问页面。
+
+
+
 ## 项目结构
 
 ```
